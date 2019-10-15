@@ -1,7 +1,5 @@
 package SpaceInvader;
 
- 
-
 import java.awt.Color;
 
 import java.awt.Dimension;
@@ -18,15 +16,11 @@ import java.awt.event.KeyAdapter;
 
 import java.awt.event.KeyEvent;
 
- 
-
 import java.util.ArrayList;
 
 import java.util.Iterator;
 
 import java.util.Random;
-
- 
 
 import javax.swing.ImageIcon;
 
@@ -34,537 +28,640 @@ import javax.swing.JOptionPane;
 
 import javax.swing.JPanel;
 
- 
-
 public class Board extends JPanel implements Runnable, Commons {
 
- 
+	private Dimension d;
 
-    private Dimension d;
+	private ArrayList<Alien> aliens;
+	private ArrayList<Boss> bosses;
 
-    private ArrayList<Alien> aliens;
-    private Player player;
-    private Shot shot;
-    //TODO
-    private Boss boss;
-    
-    private int level = 1;
+	private Player player;
 
-    private final int BOSS_INIT_X = 150;
-    private final int BOSS_INIT_Y = 5;
-    private final int ALIEN_INIT_X = 150;
-    private final int ALIEN_INIT_Y = 5;
-    private int direction = -1;
-    
-    private int deaths = 0;
-    private int aliencount = 0;
-    private boolean ingame = true;
-    
-    private final String explImg = "src/images/explosion.png";
-    private String message = "Game Over";
-    
-    private Thread animator;
-    
-    public Board() {
-        initBoard();
-    }
-    private void initBoard() {
-        addKeyListener(new TAdapter());
-        setFocusable(true);
-        d = new Dimension(BOARD_WIDTH, BOARD_HEIGHT);
-        setBackground(Color.black);
-        gameInit();
-        setDoubleBuffered(true);
-    }
-    @Override
-    public void addNotify() {
-        super.addNotify();
-        gameInit();
-    }
+	private Shot shot;
 
-    public void gameInit() {      
-        aliens = new ArrayList<>();
-        for (int i = 0; i <= 1 * level; i++) {
-               aliencount++;
-            for (int j = 0; j <= 1 * level; j++) {
-                Alien alien = new Alien(ALIEN_INIT_X + 18 * j, ALIEN_INIT_Y + 18 * i);
-                aliens.add(alien);
-                System.out.println(aliencount);
-            }
-        }
-        if(level > 1)
-        {
-               aliencount *= aliencount;
-               System.out.println(aliencount);
-        }
-        player = new Player();
-        shot = new Shot();
-        boss = new Boss(BOSS_INIT_X, BOSS_INIT_Y);
-        
-        if (animator == null || !ingame) {
-            animator = new Thread(this);
-            animator.start();
-        }
-    }
-public void drawBoss(Graphics g) {
- //TODO
-        if (boss.isVisible()) {
-            g.drawImage(boss.getImage(), boss.getX(), boss.getY(), this);
-        }
-        if (boss.isDying()) {
-            boss.die();
-            ingame = false;
-        }
-    }
+	private int level = 1;
 
-    	
-    public void drawAliens(Graphics g) {
-        Iterator it = aliens.iterator();
-        for (Alien alien: aliens) {
-            if (alien.isVisible()) {
-                g.drawImage(alien.getImage(), alien.getX(), alien.getY(), this);
-            }
-            if (alien.isDying()) {
-                alien.die();
-            }
-        }
-    }
+	private Boss boss;
 
- 
+	private final int ALIEN_INIT_X = 150;
 
-    public void drawPlayer(Graphics g) {
-        if (player.isVisible()) {
-            g.drawImage(player.getImage(), player.getX(), player.getY(), this);
+	private final int ALIEN_INIT_Y = 5;
 
-        }
-        if (player.isDying()) {
-            player.die();
-            ingame = false;
-        }
-    }
- 
+	private int direction = -1;
 
-    public void drawShot(Graphics g) {
-        if (shot.isVisible()) {
-            g.drawImage(shot.getImage(), shot.getX(), shot.getY(), this);
-        }
-    }
- 
+	private int deaths = 0;
 
-    public void drawBombing(Graphics g) {
-        for (Alien a : aliens) {
-            Alien.Bomb b = a.getBomb();
-            if (!b.isDestroyed()) {
-                g.drawImage(b.getImage(), b.getX(), b.getY(), this);
-            }
-        }
-    }
+	public int aliencount = 0;
+	public int bosscount = 0;
 
-    @Override
+	private boolean ingame = true;
 
-    public void paintComponent(Graphics g) {
+	private final String explImg = "src/images/explosion.png";
 
-        super.paintComponent(g);
+	private String message = "Game Over";
 
- 
+	private Thread animator;
 
-        g.setColor(Color.black);
+	public Board() {
 
-        g.fillRect(0, 0, d.width, d.height);
+		initBoard();
 
-        g.setColor(Color.green);
+	}
 
- 
+	private void initBoard() {
 
-        if (ingame) {
-            g.drawLine(0, GROUND, BOARD_WIDTH, GROUND);
+		addKeyListener(new TAdapter());
+
+		setFocusable(true);
+
+		d = new Dimension(BOARD_WIDTH, BOARD_HEIGHT);
+
+		setBackground(Color.black);
+
+		gameInit();
+
+		setDoubleBuffered(true);
+
+	}
+
+	@Override
+
+	public void addNotify() {
+
+		super.addNotify();
+
+		gameInit();
+
+	}
+
+	public void gameInit() {
+
+		aliens = new ArrayList<>();
+		bosses = new ArrayList<>();
+
+		for (int i = 0; i <= 1 * level; i++) {
+
+			aliencount++;
+
+			for (int j = 0; j <= 1 * level; j++) {
+
+				Alien alien = new Alien(ALIEN_INIT_X + 18 * j, ALIEN_INIT_Y + 18 * i);
+
+				aliens.add(alien);
+
+				// System.out.println(aliencount);
+
+			}
+
+		}
+		for(int i = 0; i <=1; i++) {
+			bosscount++;
+			for (int j = 0; j <= 1; j++) {
+				boss = new Boss(ALIEN_INIT_X, ALIEN_INIT_Y);
+				bosses.add(boss);
+			}
+			
+			
+		}
+		
+		
+
+		if (level > 1)
+
+		{
+
+			aliencount *= aliencount;
+
+			System.out.println("Number of Aliens: " + aliencount);
+
+		}
+
+		player = new Player();
+		
+
+		shot = new Shot();
+
+		if (animator == null || !ingame) {
+
+			animator = new Thread(this);
+
+			animator.start();
+
+		}
+
+	}
+
+	public void drawBoss(Graphics g) {
+		if (boss.isVisible()) {
+			g.drawImage(boss.getImage(), boss.getX(), boss.getY(), this);
+		}
+		if (boss.isDying()) {
+			boss.die();
+			
+		}
+	}
+
+	public void drawAliens(Graphics g) {
+
+		Iterator it = aliens.iterator();
+
+		for (Alien alien : aliens) {
+
+			if (alien.isVisible()) {
+
+				g.drawImage(alien.getImage(), alien.getX(), alien.getY(), this);
+
+			}
+
+			if (alien.isDying()) {
+
+				alien.die();
+
+			}
+
+		}
+
+	}
+
+	public void drawPlayer(Graphics g) {
+
+		if (player.isVisible()) {
+
+			g.drawImage(player.getImage(), player.getX(), player.getY(), this);
+
+		}
+
+		if (player.isDying()) {
+
+			player.die();
+
+			ingame = false;
+
+		}
+
+	}
+
+	public void drawShot(Graphics g) {
+
+		if (shot.isVisible()) {
+
+			g.drawImage(shot.getImage(), shot.getX(), shot.getY(), this);
+
+		}
+
+	}
+
+	public void drawBombing(Graphics g) {
+
+		for (Alien a : aliens) {
+
+			Alien.Bomb b = a.getBomb();
+
+			if (!b.isDestroyed()) {
+
+				g.drawImage(b.getImage(), b.getX(), b.getY(), this);
+
+			}
+
+		}
+
+	}
+	public void drawBombs(Graphics g) {
+		for(Boss b: bosses) {
+
+			Boss.Bomb bo  = b.getBomb();
+
+			if (!bo.isDestroyed()) {
+
+				g.drawImage(bo.getImage(), bo.getX(), bo.getY(), this);
+
+			}
+
+		}
+	}
+
+	@Override
+
+	public void paintComponent(Graphics g) {
+
+		super.paintComponent(g);
+
+		g.setColor(Color.black);
+
+		g.fillRect(0, 0, d.width, d.height);
+
+		g.setColor(Color.green);
+
+		if (ingame) {
+
+			g.drawLine(0, GROUND, BOARD_WIDTH, GROUND);
+
+			drawAliens(g);
+
+			drawPlayer(g);
+
+			drawShot(g); 
+			
+            drawBombs(g);
             
-            //TODO draw
-            drawAliens(g);
-            drawPlayer(g);
-            drawShot(g);
-            drawBombing(g);
-            drawBoss(g);
+			drawBombing(g);
+			
+			drawBoss(g);
 
-        }
-        Toolkit.getDefaultToolkit().sync();
-        g.dispose();
-    }
+		}
 
- 
+		Toolkit.getDefaultToolkit().sync();
 
-    public void gameOver() {
+		g.dispose();
 
- 
+	}
 
-        Graphics g = this.getGraphics();
+	public void gameOver() {
 
- 
+		Graphics g = this.getGraphics();
 
-        g.setColor(Color.black);
+		g.setColor(Color.black);
 
-        g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+		g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
 
-        g.setColor(new Color(0, 32, 48));
+		g.setColor(new Color(0, 32, 48));
 
-        g.fillRect(50, BOARD_WIDTH / 2 - 30, BOARD_WIDTH - 100, 50);
+		g.fillRect(50, BOARD_WIDTH / 2 - 30, BOARD_WIDTH - 100, 50);
 
-        g.setColor(Color.white);
+		g.setColor(Color.white);
 
-        g.drawRect(50, BOARD_WIDTH / 2 - 30, BOARD_WIDTH - 100, 50);
+		g.drawRect(50, BOARD_WIDTH / 2 - 30, BOARD_WIDTH - 100, 50);
 
- 
+		Font small = new Font("Helvetica", Font.BOLD, 14);
 
-        Font small = new Font("Helvetica", Font.BOLD, 14);
+		FontMetrics metr = this.getFontMetrics(small);
 
-        FontMetrics metr = this.getFontMetrics(small);
+		g.setColor(Color.white);
 
- 
+		g.setFont(small);
 
-        g.setColor(Color.white);
+		g.drawString(message, (BOARD_WIDTH - metr.stringWidth(message)) / 2,
 
-        g.setFont(small);
+				BOARD_WIDTH / 2);
 
-        g.drawString(message, (BOARD_WIDTH - metr.stringWidth(message)) / 2,
+	}
 
-                BOARD_WIDTH / 2);
+	public void checkIfLevelComplete()
 
-    }
+	{
 
-    public void checkIfLevelComplete()
+		if (aliencount == 0)
 
-    {
+		{
 
-               if(aliencount == 0)
-               {
-                              level++;
-                     // Graphics g = this.getGraphics();
-                     //  g.setColor(Color.black);
-                       //g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
-                       //g.setColor(new Color(0, 32, 48));
-                       //g.fillRect(50, BOARD_WIDTH / 2 - 30, BOARD_WIDTH - 100, 50);
-                       //g.setColor(Color.white);
-                       //g.drawRect(50, BOARD_WIDTH / 2 - 30, BOARD_WIDTH - 100, 50);
-                       //Font small = new Font("Helvetica", Font.BOLD, 14);
-                       //FontMetrics metr = this.getFontMetrics(small);
-                       //g.setColor(Color.white);
-                       //g.setFont(small);
-                       //g.drawString(message, (BOARD_WIDTH - metr.stringWidth(message)) / 2, BOARD_WIDTH / 2);
-                              if(level < 4)
-                              {
-                                             JOptionPane.showMessageDialog(null, "Level Completed");
-                              }
-                              gameInit();
-               }
-    }
+			level++;
 
-    public void animationCycle() {
-        if (deaths == NUMBER_OF_ALIENS_TO_DESTROY) {
-            ingame = false;
-            message = "Game won!";
-        }
-        // player
+			if (level < 21 || level != 2)
 
-        player.act();
+			{
 
-        //boss
-        
-        boss.act();
+				JOptionPane.showMessageDialog(null, "Good work Level " + (level - 1) + " Completed ");
 
-        // shot
+			}
 
-        if (shot.isVisible()) {
-            int shotX = shot.getX();
-            int shotY = shot.getY();
+			/*
+			 * else { ingame = false; message = "Game Won!"; }
+			 */
 
-            for (Alien alien: aliens) {
-                int alienX = alien.getX();
-                int alienY = alien.getY();
+			gameInit();
 
-                if (alien.isVisible() && shot.isVisible()) {
+		}
 
-                    if (shotX >= (alienX)
+	}
 
-                            && shotX <= (alienX + ALIEN_WIDTH)
+	public void animationCycle() {
 
-                            && shotY >= (alienY)
+		if (deaths == NUMBER_OF_ALIENS_TO_DESTROY) {
 
-                            && shotY <= (alienY + ALIEN_HEIGHT)) {
+			ingame = false;
 
-                        ImageIcon ii = new ImageIcon(explImg);
-                        alien.setImage(ii.getImage());
-                        alien.setDying(true);
-                        deaths++;
-                        shot.die();
-                        aliencount--;
-                    }
-                }
-            }
+			message = "Game won!";
 
-            int y = shot.getY();
-            y -= 7;
-            
-            if (y < 0) {
-                shot.die();
-            } else {
-                shot.setY(y);
-            }
-        }
-        // aliens
+		}
 
- 
+		// player and boss
 
-        for (Alien alien: aliens) {
-            int x = alien.getX();
-            if (x >= BOARD_WIDTH - BORDER_RIGHT && direction != -1) {
-                direction = -1;
-                Iterator i1 = aliens.iterator();
-                while (i1.hasNext()) {
-                    Alien a2 = (Alien) i1.next();
-                    a2.setY(a2.getY() + GO_DOWN);
-                }
-            }
-            if (x <= BORDER_LEFT && direction != 1) {
-                direction = 1;
-                Iterator i2 = aliens.iterator();
-                while (i2.hasNext()) {
-                    Alien a = (Alien) i2.next();
-                    a.setY(a.getY() + GO_DOWN);
-                }
-            }
-        }
- 
+		player.act();
+		boss.act();
 
-        Iterator it = aliens.iterator();
-        while (it.hasNext()) {
-            Alien alien = (Alien) it.next();
-            if (alien.isVisible()) {
-                int y = alien.getY();
-                if (y > GROUND - ALIEN_HEIGHT) {
-                    ingame = false;
+		// shot
 
-                    message = "Invasion!";
+		if (shot.isVisible()) {
 
-                }
+			int shotX = shot.getX();
 
- 
+			int shotY = shot.getY();
 
-                alien.act(direction);
+			for (Alien alien : aliens) {
 
-            }
+				int alienX = alien.getX();
 
-        }
+				int alienY = alien.getY();
 
- 
+				if (alien.isVisible() && shot.isVisible()) {
 
-        // bombs
+					if (shotX >= (alienX)
 
-        Random generator = new Random();
+							&& shotX <= (alienX + ALIEN_WIDTH)
 
- 
+							&& shotY >= (alienY)
 
-        for (Alien alien: aliens) {
+							&& shotY <= (alienY + ALIEN_HEIGHT)) {
 
- 
+						ImageIcon ii
 
-            int shot = generator.nextInt(15);
+								= new ImageIcon(explImg);
 
-            Alien.Bomb b = alien.getBomb();
+						alien.setImage(ii.getImage());
 
- 
+						alien.setDying(true);
 
-            if (shot == CHANCE && alien.isVisible() && b.isDestroyed()) {
+						deaths++;
 
- 
+						shot.die();
 
-                b.setDestroyed(false);
+						aliencount--;
 
-               b.setX(alien.getX());
+					}
 
-                b.setY(alien.getY());
+				}
 
-            }
+			}
+			
+			 for (Boss b : bosses) {
 
- 
+				int bossX = b.getX();
 
-            int bombX = b.getX();
+				int bossY = b.getY();
 
-            int bombY = b.getY();
+				if (b.isVisible() && shot.isVisible()) {
 
-            int playerX = player.getX();
+					if (shotX >= (bossX)
 
-            int playerY = player.getY();
+							&& shotX <= (bossX + ALIEN_WIDTH)
 
- 
+							&& shotY >= (bossY)
 
-            if (player.isVisible() && !b.isDestroyed()) {
+							&& shotY <= (bossY + ALIEN_HEIGHT)) {
 
- 
+						ImageIcon ii
 
-                if (bombX >= (playerX)
+					 			= new ImageIcon(explImg);
 
-                        && bombX <= (playerX + PLAYER_WIDTH)
+						b.setImage(ii.getImage());
 
-                        && bombY >= (playerY)
+						b.setDying(true);
 
-                        && bombY <= (playerY + PLAYER_HEIGHT)) {
+						deaths++;
 
-                    ImageIcon ii
+						shot.die();
+						bosscount--;
 
-                            = new ImageIcon(explImg);
+					}
 
-                    player.setImage(ii.getImage());
+				}
 
-                    player.setDying(true);
+			}
 
-                    b.setDestroyed(true);
+			 
+			 
+			 
 
-                }
+			int y = shot.getY();
 
-            }
+			y -= 12;
 
- 
+			if (y < 0) {
 
-            if (!b.isDestroyed()) {
+				shot.die();
 
-               
+			} else {
 
-                b.setY(b.getY() + 1);
+				shot.setY(y);
 
-               
+			}
 
-                if (b.getY() >= GROUND - BOMB_HEIGHT) {
+		}
 
-                    b.setDestroyed(true);
+		// aliens
 
-                }
+		for (Alien alien : aliens) {
 
-            }
+			int x = alien.getX();
 
-        }
+			if (x >= BOARD_WIDTH - BORDER_RIGHT && direction != -1) {
 
-    }
+				direction = -1;
 
- 
+				Iterator i1 = aliens.iterator();
 
-    @Override
+				while (i1.hasNext()) {
 
-    public void run() {
+					Alien a2 = (Alien) i1.next();
 
- 
+					a2.setY(a2.getY() + GO_DOWN);
 
-        long beforeTime, timeDiff, sleep;
+				}
 
- 
+			}
 
-        beforeTime = System.currentTimeMillis();
+			if (x <= BORDER_LEFT && direction != 1) {
 
- 
+				direction = 1;
 
-        while (ingame) {
+				Iterator i2 = aliens.iterator();
 
-               checkIfLevelComplete();
+				while (i2.hasNext()) {
 
-            repaint();
+					Alien a = (Alien) i2.next();
 
-            animationCycle();
+					a.setY(a.getY() + GO_DOWN);
 
- 
+				}
 
-            timeDiff = System.currentTimeMillis() - beforeTime;
+			}
 
-            sleep = DELAY - timeDiff;
+		}
 
- 
+		Iterator it = aliens.iterator();
 
-            if (sleep < 0) {
+		while (it.hasNext()) {
 
-                sleep = 2;
+			Alien alien = (Alien) it.next();
 
-            }
+			if (alien.isVisible()) {
 
- 
+				int y = alien.getY();
 
-            try {
+				if (y > GROUND - ALIEN_HEIGHT) {
 
-                Thread.sleep(sleep);
+					ingame = false;
 
-            } catch (InterruptedException e) {
+					message = "Invasion!";
 
-                System.out.println("interrupted");
+				}
 
-            }
+				alien.act(direction);
 
-           
+			}
 
-            beforeTime = System.currentTimeMillis();
+		}
 
-        }
+		// bombs
 
- 
+		Random generator = new Random();
 
-        gameOver();
+		for (Alien alien : aliens) {
 
-    }
+			int shot = generator.nextInt(15);
 
- 
+			Alien.Bomb b = alien.getBomb();
 
-    private class TAdapter extends KeyAdapter {
+			if (shot == CHANCE && alien.isVisible() && b.isDestroyed()) {
 
- 
+				b.setDestroyed(false);
 
-        @Override
+				b.setX(alien.getX());
 
-        public void keyReleased(KeyEvent e) {
+				b.setY(alien.getY());
 
- 
+			}
 
-            player.keyReleased(e);
+			int bombX = b.getX();
 
-        }
+			int bombY = b.getY();
 
- 
+			int playerX = player.getX();
 
-        @Override
+			int playerY = player.getY();
 
-        public void keyPressed(KeyEvent e) {
+			if (player.isVisible() && !b.isDestroyed()) {
 
- 
+				if (bombX >= (playerX)
 
-            player.keyPressed(e);
+						&& bombX <= (playerX + PLAYER_WIDTH)
 
- 
+						&& bombY >= (playerY)
 
-            int x = player.getX();
+						&& bombY <= (playerY + PLAYER_HEIGHT)) {
 
-            int y = player.getY();
+					ImageIcon ii
 
- 
+							= new ImageIcon(explImg);
 
-            int key = e.getKeyCode();
+					player.setImage(ii.getImage());
 
- 
+					player.setDying(true);
 
-            if (key == KeyEvent.VK_SPACE) {
+					b.setDestroyed(true);
 
+				}
 
-                if (ingame) {
+			}
 
-                    if (!shot.isVisible()) {
+			if (!b.isDestroyed()) {
 
-                        shot = new Shot(x, y);
+				b.setY(b.getY() + 1);
 
-                    }
+				if (b.getY() >= GROUND - BOMB_HEIGHT) {
 
-                }
+					b.setDestroyed(true);
 
-            }
+				}
 
-        }
+			}
 
-    }
+		}
+
+	}
+
+	@Override
+
+	public void run() {
+
+		long beforeTime, timeDiff, sleep;
+
+		beforeTime = System.currentTimeMillis();
+
+		while (ingame) {
+
+			checkIfLevelComplete();
+
+			repaint();
+
+			animationCycle();
+
+			timeDiff = System.currentTimeMillis() - beforeTime;
+
+			sleep = DELAY - timeDiff;
+
+			if (sleep < 0) {
+
+				sleep = 2;
+
+			}
+
+			try {
+
+				Thread.sleep(sleep);
+
+			} catch (InterruptedException e) {
+
+				System.out.println("interrupted");
+
+			}
+
+			beforeTime = System.currentTimeMillis();
+
+		}
+
+		gameOver();
+
+	}
+
+	private class TAdapter extends KeyAdapter {
+
+		@Override
+
+		public void keyReleased(KeyEvent e) {
+
+			player.keyReleased(e);
+
+		}
+
+		@Override
+
+		public void keyPressed(KeyEvent e) {
+
+			player.keyPressed(e);
+
+			int x = player.getX();
+
+			int y = player.getY();
+
+			int key = e.getKeyCode();
+
+			if (key == KeyEvent.VK_SPACE) {
+
+				if (ingame) {
+
+					if (!shot.isVisible()) {
+
+						shot = new Shot(x, y);
+
+					}
+
+				}
+
+			}
+
+		}
+
+	}
 
 }
-
-
-
