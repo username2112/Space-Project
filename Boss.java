@@ -4,7 +4,7 @@ import javax.swing.ImageIcon;
 
 public class Boss extends Sprite {
 
-   private String direction = "left";
+   private String direction = "right";
    private Bomb bomb;
    private int startX;
    private final String bossImg = "src/images/Boss.png";
@@ -25,19 +25,26 @@ public class Boss extends Sprite {
    }
 
    public void act(){
-       direction = "right";
-	   if(x < Commons.BOARD_WIDTH - 128) {
-		   this.x += 3;
-		   //System.out.println("right");
-	   	   direction = "left";
-	   	   System.out.println("can move left " + direction + ", " + x);
-	   } else if(x > 128) {
-		   this.x -= 3;
-		   System.out.println("left");
-	   	   direction = "right";
+       
+	   if(direction == "right") {
+		   moveRight(3);
+	   } else {
+		   moveLeft(3);
 	   }
    }
    
+   private void moveRight(int speed) {
+	   if(x < Commons.BOARD_WIDTH - 128)
+		   this.x += speed;
+	   else if(x >= Commons.BOARD_WIDTH - 128)
+		   direction = "left";
+   }
+   private void moveLeft(int speed) {
+	   if(x > 0)
+		   this.x -= speed;
+	   else if(x <= 0)
+		   direction = "right";
+   }
    
    public Bomb getBomb() {
        return bomb;
