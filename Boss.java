@@ -31,6 +31,7 @@ public class Boss extends Sprite {
 	   } else {
 		   moveLeft(3);
 	   }
+	   Bomb bomb = new Bomb(x, y);
    }
    
    private void moveRight(int speed) {
@@ -38,6 +39,7 @@ public class Boss extends Sprite {
 		   this.x += speed;
 	   else if(x >= Commons.BOARD_WIDTH - 128)
 		   direction = "left";
+
    }
    private void moveLeft(int speed) {
 	   if(x > 0)
