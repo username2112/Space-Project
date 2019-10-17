@@ -70,4 +70,5 @@ public class Boss extends Sprite {
            return destroyed;
        }
    }
-}
+} 
+//test
