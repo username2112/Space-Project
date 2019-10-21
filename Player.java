@@ -31,6 +31,7 @@ public class Player extends Sprite implements Commons {
     public void act() {
         
         x += dx;
+        y += dy;
         
         if (x <= 2) {
             x = 2;
@@ -54,8 +55,18 @@ public class Player extends Sprite implements Commons {
         
             dx = 2;
         }
+        if (key == KeyEvent.VK_UP) {
+            
+            dy = -2;
+        }
+
+        if (key == KeyEvent.VK_DOWN) {
+        
+            dy = 2;
+        }
     }
 
+    
     public void keyReleased(KeyEvent e) {
         
         int key = e.getKeyCode();
@@ -68,6 +79,15 @@ public class Player extends Sprite implements Commons {
         if (key == KeyEvent.VK_RIGHT) {
         
             dx = 0;
+        }
+        if (key == KeyEvent.VK_UP) {
+            
+            dy = 0;
+        }
+
+        if (key == KeyEvent.VK_DOWN) {
+        
+            dy = 0;
         }
     }
 }
