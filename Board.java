@@ -284,12 +284,8 @@ public void drawBoss(Graphics g) {
                 if (alien.isVisible() && shot.isVisible()) {
 
                     if (shotX >= (alienX)
-
                             && shotX <= (alienX + ALIEN_WIDTH)
-
-                            && shotY >= (alienY)
-
-                            && shotY <= (alienY + ALIEN_HEIGHT)) {
+                            && shotY >= (alienY) &&  shotY <= (alienY + ALIEN_HEIGHT)) {
 
                         ImageIcon ii = new ImageIcon(explImg);
                         alien.setImage(ii.getImage());
@@ -321,7 +317,7 @@ public void drawBoss(Graphics g) {
                 Iterator i1 = aliens.iterator();
                 while (i1.hasNext()) {
                     Alien a2 = (Alien) i1.next();
-                    a2.setY(a2.getY() + GO_DOWN);
+                    a2.setY(a2.getY());
                 }
             }
             if (x <= BORDER_LEFT && direction != 1) {
@@ -329,7 +325,7 @@ public void drawBoss(Graphics g) {
                 Iterator i2 = aliens.iterator();
                 while (i2.hasNext()) {
                     Alien a = (Alien) i2.next();
-                    a.setY(a.getY() + GO_DOWN);
+                    a.setY(a.getY());
                 }
             }
         }
