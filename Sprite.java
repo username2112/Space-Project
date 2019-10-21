@@ -10,6 +10,7 @@ public class Sprite {
     protected int y;
     protected boolean dying;
     protected int dx;
+    protected int dy;
 
     public Sprite() {
     
