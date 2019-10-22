@@ -45,6 +45,7 @@ public class Board extends JPanel implements Runnable, Commons {
     private ArrayList<Alien> aliens;
     private Player player;
     private Shot shot;
+    private sshot boss_shot;
     //TODO
     private Boss boss;
     
@@ -89,13 +90,12 @@ public class Board extends JPanel implements Runnable, Commons {
             for (int j = 0; j <= 1 * level; j++) {
                 Alien alien = new Alien(ALIEN_INIT_X + 18 * j, ALIEN_INIT_Y + 18 * i);
                 aliens.add(alien);
-                System.out.println(aliencount);
             }
         }
         if(level > 1)
         {
                aliencount *= aliencount;
-               System.out.println(aliencount);
+               System.out.println("Number of Aliens: " + aliencount);
         }
         player = new Player();
         shot = new Shot();
@@ -149,6 +149,12 @@ public void drawBoss(Graphics g) {
             g.drawImage(shot.getImage(), shot.getX(), shot.getY(), this);
         }
     }
+    
+    public void drawbshot(Graphics g) {
+    	if (boss_shot.isVisible()) {
+            g.drawImage(boss_shot.getImage(), boss_shot.getX(), boss_shot.getY(), this);
+        }
+    }
  
 
     public void drawBombing(Graphics g) {
@@ -186,6 +192,7 @@ public void drawBoss(Graphics g) {
             drawBombing(g);
             if(level == 3) {
             	drawBoss(g);
+            	//drawbshot(g);
             }
         }
         Toolkit.getDefaultToolkit().sync();
@@ -239,7 +246,7 @@ public void drawBoss(Graphics g) {
     		level++;
     		if(level < 20)
             {
-    			JOptionPane.showMessageDialog(null, "Level Completed");
+    			JOptionPane.showMessageDialog(null, "Level " + (level-1) + " Completed");
             }
             gameInit();
         }
@@ -258,8 +265,22 @@ public void drawBoss(Graphics g) {
         
         boss.act();
 
-        // shot
+      //TODO       // shot
+       /* if(boss_shot.isVisible()) {
+        	int shotX = boss_shot.getX();
+            int shotY = boss_shot.getY();
 
+            int y = boss_shot.getY();
+            y -= 12;
+            
+            if (y < 0) {
+                boss_shot.die();
+            } else {
+                boss_shot.setY(y);
+            }
+        }
+        
+*/
         if (shot.isVisible()) {
             int shotX = shot.getX();
             int shotY = shot.getY();
@@ -285,7 +306,7 @@ public void drawBoss(Graphics g) {
             }
 
             int y = shot.getY();
-            y -= 7;
+            y -= 12;
             
             if (y < 0) {
                 shot.die();
@@ -548,6 +569,4 @@ public void drawBoss(Graphics g) {
     }
 
 }
-
-
 
