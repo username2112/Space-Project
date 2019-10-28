@@ -43,6 +43,7 @@ public class Board extends JPanel implements Runnable, Commons {
     private Dimension d;
 
     private ArrayList<Alien> aliens;
+    private ArrayList<Boss> bosss;
     private Player player;
     private Shot shot;
     //TODO
@@ -58,6 +59,7 @@ public class Board extends JPanel implements Runnable, Commons {
     
     private int deaths = 0;
     private int aliencount = 0;
+    private int bosscount = 1;
     private boolean ingame = true;
     
     private final String explImg = "src/images/explosion.png";
@@ -83,13 +85,17 @@ public class Board extends JPanel implements Runnable, Commons {
     }
 
     public void gameInit() {      
+        
+        bosss = new ArrayList<>();
+
+        
         aliens = new ArrayList<>();
         for (int i = 0; i <= 1 * level; i++) {
-               aliencount++;
+            aliencount++;
             for (int j = 0; j <= 1 * level; j++) {
                 Alien alien = new Alien(ALIEN_INIT_X + 18 * j, ALIEN_INIT_Y + 18 * i);
                 aliens.add(alien);
-                System.out.println(aliencount);
+                //System.out.println(aliencount);
             }
         }
         if(level > 1)
@@ -113,7 +119,8 @@ public void drawBoss(Graphics g) {
         }
         if (boss.isDying()) {
             boss.die();
-            ingame = false;
+            bosscount--;
+            //ingame = false;
         }
     }
 
@@ -185,6 +192,7 @@ public void drawBoss(Graphics g) {
             drawShot(g);
             drawBombing(g);
             if(level == 3) {
+                bosss.add(boss);
             	drawBoss(g);
             }
         }
@@ -234,14 +242,24 @@ public void drawBoss(Graphics g) {
 
     public void checkIfLevelComplete()
     {
-    	if(aliencount == 0)
+    	if(aliencount == 0 && level != 3)
         {
     		level++;
     		if(level < 20)
             {
-    			JOptionPane.showMessageDialog(null, "Level Completed");
+    			JOptionPane.showMessageDialog(null, "Level " + (level - 1) + " Completed");
             }
+    		if(level == 3) {
+    			JOptionPane.showMessageDialog(null, "one more wave");
+    		}
             gameInit();
+        } else if(aliencount == 0 && level == 3 && bosscount == 0) {
+        	level++;
+        	if(level < 20)
+       		{
+       			JOptionPane.showMessageDialog(null, "boss defeated");
+       		}
+       		gameInit();
         }
     }
 
@@ -281,11 +299,28 @@ public void drawBoss(Graphics g) {
                         shot.die();
                         aliencount--;
                     }
+              }//TODO
+              if(boss.isVisible()) {
+                	//int bossY = boss.getY();
+                	//int bossX = boss.getY();
+                	
+                	if (boss.isVisible() && shot.isVisible()) {
+                        if (shotX >= (boss.getX())
+                                && shotX <= (boss.getX() + BOSS_WIDTH)
+                                && shotY >= (boss.getY()) &&  shotY <= (boss.getY() + BOSS_HEIGHT)) {
+
+                            boss.setDying(true);
+                            shot.die();
+                            bosscount--;
+                            deaths++;
+                        }
+                	}   
                 }
+            
             }
 
             int y = shot.getY();
-            y -= 7;
+            y -= 12;
             
             if (y < 0) {
                 shot.die();
