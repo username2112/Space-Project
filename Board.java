@@ -1,75 +1,70 @@
 package SpaceInvader;
 
  
-
+//imports
 import java.awt.Color;
-
 import java.awt.Dimension;
-
 import java.awt.Font;
-
 import java.awt.FontMetrics;
-
 import java.awt.Graphics;
-
 import java.awt.Toolkit;
-
 import java.awt.event.KeyAdapter;
-
 import java.awt.event.KeyEvent;
-
- 
-
 import java.util.ArrayList;
-
 import java.util.Iterator;
-
 import java.util.Random;
 
- 
-
+//visual imports
 import javax.swing.ImageIcon;
-
 import javax.swing.JOptionPane;
-
 import javax.swing.JPanel;
 
- 
-
 public class Board extends JPanel implements Runnable, Commons {
-
  
-
     private Dimension d;
 
+    //TODO OBJECT/LIST DECLARATIONS
     private ArrayList<Alien> aliens;
     private ArrayList<Boss> bosss;
+    
     private Player player;
     private Shot shot;
-    //TODO
-    private Boss boss;
     
-    private int level = 1;
-
+    private Boss boss;
+    private BShot bshot;
+    
+    //INITIAL VALUES
     private final int BOSS_INIT_X = 150;
     private final int BOSS_INIT_Y = 5;
+    
     private final int ALIEN_INIT_X = 150;
     private final int ALIEN_INIT_Y = 5;
+    
     private int direction = -1;
     
+    //CORE VARIABLES
     private int deaths = 0;
     private int aliencount = 0;
     private int bosscount = 1;
-    private boolean ingame = true;
+    private boolean ingame = true; //MAIN LOOP VAR
+    private int level = 1; //LEVELS COMPLETED + 1
     
+    //FAIL
     private final String explImg = "src/images/explosion.png";
     private String message = "Game Over";
     
+    //ANIMATOR
     private Thread animator;
     
+    //CONSTRUCTOR
     public Board() {
         initBoard();
     }
+    
+    //---------\\
+    //TODO INIT\\
+    //---------\\
+    
     private void initBoard() {
         addKeyListener(new TAdapter());
         setFocusable(true);
@@ -78,12 +73,7 @@ public class Board extends JPanel implements Runnable, Commons {
         gameInit();
         setDoubleBuffered(true);
     }
-    @Override
-    public void addNotify() {
-        super.addNotify();
-        gameInit();
-    }
-
+    
     public void gameInit() {      
         
         bosss = new ArrayList<>();
@@ -105,6 +95,7 @@ public class Board extends JPanel implements Runnable, Commons {
         }
         player = new Player();
         shot = new Shot();
+        bshot = new BShot();
         boss = new Boss(BOSS_INIT_X, BOSS_INIT_Y);
         
         if (animator == null || !ingame) {
@@ -112,8 +103,18 @@ public class Board extends JPanel implements Runnable, Commons {
             animator.start();
         }
     }
-public void drawBoss(Graphics g) {
- //TODO
+    
+    @Override
+    public void addNotify() {
+        super.addNotify();
+        gameInit();
+    }
+
+    //-----------------\\
+    //TODO DRAW METHODS\\
+    //-----------------\\
+    
+    public void drawBoss(Graphics g) {
         if (boss.isVisible()) {
             g.drawImage(boss.getImage(), boss.getX(), boss.getY(), this);
         }
@@ -123,8 +124,7 @@ public void drawBoss(Graphics g) {
             //ingame = false;
         }
     }
-
-    	
+ 	
     public void drawAliens(Graphics g) {
         Iterator it = aliens.iterator();
         for (Alien alien: aliens) {
@@ -137,8 +137,6 @@ public void drawBoss(Graphics g) {
         }
     }
 
- 
-
     public void drawPlayer(Graphics g) {
         if (player.isVisible()) {
             g.drawImage(player.getImage(), player.getX(), player.getY(), this);
@@ -150,13 +148,17 @@ public void drawBoss(Graphics g) {
         }
     }
  
-
     public void drawShot(Graphics g) {
         if (shot.isVisible()) {
             g.drawImage(shot.getImage(), shot.getX(), shot.getY(), this);
         }
     }
- 
+    
+    public void drawBShot(Graphics g) {
+        if (bshot.isVisible()) {
+            g.drawImage(bshot.getImage(), bshot.getX(), bshot.getY(), this);
+        }
+    } 
 
     public void drawBombing(Graphics g) {
         for (Alien a : aliens) {
@@ -167,6 +169,10 @@ public void drawBoss(Graphics g) {
         }
     }
 
+    //-----------------\\
+    //TODO CORE SYSTEMS\\
+    //-----------------\\
+    
     @Override
 
     public void paintComponent(Graphics g) {
@@ -186,10 +192,11 @@ public void drawBoss(Graphics g) {
         if (ingame) {
             g.drawLine(0, GROUND, BOARD_WIDTH, GROUND);
             
-            //TODO draw
+            //TODO DRAW
             drawAliens(g);
             drawPlayer(g);
             drawShot(g);
+            drawBShot(g);
             drawBombing(g);
             if(level == 3) {
                 bosss.add(boss);
@@ -200,15 +207,9 @@ public void drawBoss(Graphics g) {
         g.dispose();
     }
 
- 
-
     public void gameOver() {
-
- 
-
+    	//RUNS ON FAIL
         Graphics g = this.getGraphics();
-
- 
 
         g.setColor(Color.black);
 
@@ -242,7 +243,8 @@ public void drawBoss(Graphics g) {
 
     public void checkIfLevelComplete()
     {
-    	if(aliencount == 0 && level != 3)
+    	//TODO FAIL CONDITIONS
+    	if(aliencount == 0 && level != 4)
         {
     		level++;
     		if(level < 20)
@@ -253,7 +255,7 @@ public void drawBoss(Graphics g) {
     			JOptionPane.showMessageDialog(null, "one more wave");
     		}
             gameInit();
-        } else if(aliencount == 0 && level == 3 && bosscount == 0) {
+        } else if(aliencount == 0 && level == 4 && bosscount == 0) {
         	level++;
         	if(level < 20)
        		{
@@ -301,9 +303,6 @@ public void drawBoss(Graphics g) {
                     }
               }//TODO
               if(boss.isVisible()) {
-                	//int bossY = boss.getY();
-                	//int bossX = boss.getY();
-                	
                 	if (boss.isVisible() && shot.isVisible()) {
                         if (shotX >= (boss.getX())
                                 && shotX <= (boss.getX() + BOSS_WIDTH)
@@ -463,8 +462,6 @@ public void drawBoss(Graphics g) {
 
     }
 
- 
-
     @Override
 
     public void run() {
@@ -524,8 +521,6 @@ public void drawBoss(Graphics g) {
         gameOver();
 
     }
-
- 
 
     private class TAdapter extends KeyAdapter {
 
