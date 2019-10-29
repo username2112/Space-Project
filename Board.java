@@ -179,15 +179,9 @@ public class Board extends JPanel implements Runnable, Commons {
 
         super.paintComponent(g);
 
- 
-
         g.setColor(Color.black);
-
         g.fillRect(0, 0, d.width, d.height);
-
         g.setColor(Color.green);
-
- 
 
         if (ingame) {
             g.drawLine(0, GROUND, BOARD_WIDTH, GROUND);
@@ -210,35 +204,24 @@ public class Board extends JPanel implements Runnable, Commons {
     public void gameOver() {
     	//RUNS ON FAIL
         Graphics g = this.getGraphics();
-
         g.setColor(Color.black);
-
         g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
-
         g.setColor(new Color(0, 32, 48));
-
         g.fillRect(50, BOARD_WIDTH / 2 - 30, BOARD_WIDTH - 100, 50);
-
         g.setColor(Color.white);
-
         g.drawRect(50, BOARD_WIDTH / 2 - 30, BOARD_WIDTH - 100, 50);
 
  
 
         Font small = new Font("Helvetica", Font.BOLD, 14);
-
         FontMetrics metr = this.getFontMetrics(small);
 
  
 
         g.setColor(Color.white);
-
         g.setFont(small);
-
         g.drawString(message, (BOARD_WIDTH - metr.stringWidth(message)) / 2,
-
                 BOARD_WIDTH / 2);
-
     }
 
     public void checkIfLevelComplete()
@@ -271,11 +254,9 @@ public class Board extends JPanel implements Runnable, Commons {
             message = "Game won!";
         }
         // player
-
         player.act();
 
         //boss
-        
         boss.act();
 
         // shot
@@ -363,60 +344,33 @@ public class Board extends JPanel implements Runnable, Commons {
                     message = "Invasion!";
 
                 }
-
- 
-
                 alien.act(direction);
-
             }
-
         }
 
- 
-
         // bombs
-
         Random generator = new Random();
-
- 
 
         for (Alien alien: aliens) {
 
- 
-
             int shot = generator.nextInt(15);
-
             Alien.Bomb b = alien.getBomb();
-
- 
 
             if (shot == CHANCE && alien.isVisible() && b.isDestroyed()) {
 
- 
-
                 b.setDestroyed(false);
-
-               b.setX(alien.getX());
-
+                b.setX(alien.getX());
                 b.setY(alien.getY());
 
             }
 
- 
-
             int bombX = b.getX();
-
             int bombY = b.getY();
 
             int playerX = player.getX();
-
             int playerY = player.getY();
 
- 
-
-            if (player.isVisible() && !b.isDestroyed()) {
-
- 
+            if (player.isVisible() && !b.isDestroyed()) { 
 
                 if (bombX >= (playerX)
 
@@ -444,79 +398,51 @@ public class Board extends JPanel implements Runnable, Commons {
 
             if (!b.isDestroyed()) {
 
-               
-
-                b.setY(b.getY() + 1);
-
-               
+                b.setY(b.getY() + 1);               
 
                 if (b.getY() >= GROUND - BOMB_HEIGHT) {
-
                     b.setDestroyed(true);
-
                 }
-
             }
-
         }
-
     }
 
     @Override
 
     public void run() {
 
- 
-
         long beforeTime, timeDiff, sleep;
-
- 
-
         beforeTime = System.currentTimeMillis();
 
  
 
         while (ingame) {
 
-               checkIfLevelComplete();
+            checkIfLevelComplete();
 
             repaint();
-
             animationCycle();
 
- 
 
             timeDiff = System.currentTimeMillis() - beforeTime;
-
             sleep = DELAY - timeDiff;
 
  
 
             if (sleep < 0) {
-
                 sleep = 2;
-
             }
-
- 
-
             try {
-
                 Thread.sleep(sleep);
 
             } catch (InterruptedException e) {
-
                 System.out.println("interrupted");
 
             }
 
-           
-
             beforeTime = System.currentTimeMillis();
 
         }
-
- 
 
         gameOver();
 
@@ -524,60 +450,32 @@ public class Board extends JPanel implements Runnable, Commons {
 
     private class TAdapter extends KeyAdapter {
 
- 
-
         @Override
 
         public void keyReleased(KeyEvent e) {
-
- 
-
             player.keyReleased(e);
-
         }
-
- 
-
         @Override
 
         public void keyPressed(KeyEvent e) {
 
- 
-
             player.keyPressed(e);
 
- 
-
             int x = player.getX();
-
             int y = player.getY();
 
- 
-
             int key = e.getKeyCode();
-
- 
-
+            
             if (key == KeyEvent.VK_SPACE) {
-
-
                 if (ingame) {
-
                     if (!shot.isVisible()) {
-
                         shot = new Shot(x, y);
-
-                    }
-
-                }
-
-            }
-
-        }
-
-    }
-
-}
+                    }//not shot.isVisible()
+                }//ingame if loop
+            }//keyEvent
+        }//keyPressed
+    }//TAdaptor
+}//class ending
 
 
 
