@@ -87,11 +87,15 @@ public class Board extends JPanel implements Runnable, Commons {
             for (int j = 0; j <= 1 * level; j++) {
                 Alien alien = new Alien(ALIEN_INIT_X + (ALIEN_WIDTH + 4) * j, ALIEN_INIT_Y + 18 * i);
                 aliens.add(alien);
+           
+                
             }
         }
         if(level > 1)
         {
                aliencount *= aliencount;
+               System.out.println("Number of Aliens: " + aliencount);
+               System.out.println("Deaths: " + deaths);
         }
         //defi ne player, shot, Bshot, and the boss
         player = new Player();
@@ -315,6 +319,9 @@ public class Board extends JPanel implements Runnable, Commons {
                         aliencount--;
                     }
               }
+            if(shotY >= GROUND) {
+            	shot.die();
+            }
               if(boss.isVisible()) {
             	  //boss hit detection
                 	if (boss.isVisible() && shot.isVisible()) {
@@ -331,7 +338,7 @@ public class Board extends JPanel implements Runnable, Commons {
             
             }
             
-            //TODO BULLET SPEED
+            //TODO BULLET SPEED / SHOT SPEED
             int y = shot.getY();
             y -= 12;
             //shot border
@@ -341,10 +348,11 @@ public class Board extends JPanel implements Runnable, Commons {
                 shot.setY(y);
             }
         }
+        
         if(bshot.isVisible()) {
-	        //BOSS BULLET SPEED
+	        //BOSS BULLET SPEED / BOSS SHOT SPEED
 	        int by = bshot.getY();
-	        by += 1;
+	        by += 3;
 	        //shot border
 	        if (by > BOARD_HEIGHT) {
 	            bshot.die();
@@ -376,7 +384,7 @@ public class Board extends JPanel implements Runnable, Commons {
  
 
         Iterator it = aliens.iterator();
-        //TODO LOSE CONDITION (TOUCH GREEN LINE)
+        //TODO LOSE CONDITION (ALIENS TOUCH GREEN LINE)
         while (it.hasNext()) {
             Alien alien = (Alien) it.next();
             if (alien.isVisible()) {
@@ -511,6 +519,3 @@ public class Board extends JPanel implements Runnable, Commons {
         }//end key pressed
     }//end TAdapter
 }//class closure
-
-
-
