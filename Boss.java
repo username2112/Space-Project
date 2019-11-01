@@ -10,7 +10,8 @@ public class Boss extends Sprite {
    private Bomb bomb;
    private int startX;
    private final String bossImg = "src/images/Boss.png";
-
+   public boolean shoot = false;
+   
    public Boss(int x, int y) {
        initBoss(x, y);
        startX = x;
@@ -27,19 +28,17 @@ public class Boss extends Sprite {
    }
 
    public void act(){
-       
-	   if(direction == "right") {
-		   moveRight(3);
-	   } else {
-		   moveLeft(3);
-	   }
-	   
+       if(this.isVisible()) {
+    	   if(direction == "right") {
+    		   moveRight(3);
+    	   } else {
+    		   moveLeft(3);
+    	   }
+       }
        Random ra = new Random() ;
        int r = ra.nextInt(1000) + 1;
 	   if(r <= 6 && this.isVisible()){
-		   //System.out.println("T: " + r);
-		   
-		   
+		   shoot = true;
 	   }
    }
    
