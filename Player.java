@@ -1,57 +1,100 @@
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsEnvironment;
-import java.awt.Image;
-import java.awt.Point;
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.HashSet;
+package SpaceInvader;
 
-public class Player extends GameObject implements Ship, Serializable {
-	private static final long serialVersionUID = 6037236323540109415L;
+import java.awt.event.KeyEvent;
 
-	public static HashSet<Laser> laserList = new HashSet<Laser>();
-	
-	private transient Image img;
-	
-	public Player(String imageLocation, Point position, Dimension size) {
-		super(imageLocation, position, size);
-		GraphicsConfiguration gc = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
+import javax.swing.ImageIcon;
 
-		try {
-			img = GameCanvas.getImage(imageLocation, gc);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	@Override
-	public void draw(Graphics g) {
-		Point position = getPosition();
-		Dimension size = getSize();
-		
-		g.drawImage(img, position.x, position.y, size.width, size.height, null);
-	}
+public class Player extends Sprite implements Commons {
 
-	@Override
-	public void move(int x, int y) {
-		Point position = getPosition();
-		Dimension size = getSize();
-		position.x = x;
-		getRectangle().setRect(position.x, position.y, size.width, size.height);
-	}
+    private final int START_Y = BOARD_HEIGHT - 200;
+    private final int START_X = BOARD_WIDTH / 2 - 32;
 
-	@Override
-	public void fire() {
-		Point pos = new Point(getPosition());
-		pos.x = pos.x + getSize().width/2;
-		pos.y = pos.y - 20;
-		Laser l = new Laser(pos, Color.WHITE);
-		l.setySpeed(5);
-		
-		GameCanvas.addGameObject(l);
-		laserList.add(l);
-	}
+    private final String playerImg = "src/images/player.png";
+    private int width;
+    private int height;
+
+    public Player() {
+        initPlayer();
+    }
+
+    private void initPlayer() {
+        
+        ImageIcon ii = new ImageIcon(playerImg);
+
+        width = ii.getImage().getWidth(null);
+        height = ii.getImage().getHeight(null);
+        
+        setImage(ii.getImage());
+        setX(START_X);
+        setY(START_Y);
+    }
+
+    public void act() {
+        
+        x += dx;
+        y += dy;
+        
+        if (x <= 2) {
+            x = 2;
+        }
+        if (y <= Board.lowest_y) {
+            y = Board.lowest_y;
+        }
+        
+        if (x >= BOARD_WIDTH - 2 * width) {
+            x = BOARD_WIDTH - 2 * width;
+        }
+        if (y >= BOARD_HEIGHT - 2 * height) {
+            y = BOARD_HEIGHT - 2 * height;
+        }
+    }
+
+    public void keyPressed(KeyEvent e) {
+        
+        int key = e.getKeyCode();
+
+        if (key == KeyEvent.VK_A) {
+        
+            dx = -2;
+        }
+
+        if (key == KeyEvent.VK_D) {
+        
+            dx = 2;
+        }
+        if (key == KeyEvent.VK_W) {
+            
+            dy = -2;
+        }
+
+        if (key == KeyEvent.VK_S) {
+        
+            dy = 2;
+        }
+    }
+
+    
+    public void keyReleased(KeyEvent e) {
+        
+        int key = e.getKeyCode();
+
+        if (key == KeyEvent.VK_A) {
+        
+            dx = 0;
+        }
+
+        if (key == KeyEvent.VK_D) {
+        
+            dx = 0;
+        }
+        if (key == KeyEvent.VK_W) {
+            
+            dy = 0;
+        }
+
+        if (key == KeyEvent.VK_S) {
+        
+            dy = 0;
+        }
+    }
 }

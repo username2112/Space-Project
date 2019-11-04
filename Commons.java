@@ -48,7 +48,7 @@ public interface Commons {
     
     //chance enemy will shoot
     public static final int CHANCE = 5;
-    public static final int BCHANCE = 5;
+    public static final int BCHANCE = 10;
     
     //game tick sleep delay
     public static final int DELAY = 10;
