@@ -71,6 +71,26 @@ public class Player extends Sprite implements Commons {
         
             dy = 2;
         }
+        
+        //ARROW
+        if (key == KeyEvent.VK_LEFT) {
+            
+            dx = -2;
+        }
+
+        if (key == KeyEvent.VK_RIGHT) {
+        
+            dx = 2;
+        }
+        if (key == KeyEvent.VK_UP) {
+            
+            dy = -2;
+        }
+
+        if (key == KeyEvent.VK_DOWN) {
+        
+            dy = 2;
+        }
     }
 
     
@@ -93,6 +113,26 @@ public class Player extends Sprite implements Commons {
         }
 
         if (key == KeyEvent.VK_S) {
+        
+            dy = 0;
+        }
+        
+        //arrow
+        if (key == KeyEvent.VK_LEFT) {
+            
+            dx = 0;
+        }
+
+        if (key == KeyEvent.VK_RIGHT) {
+        
+            dx = 0;
+        }
+        if (key == KeyEvent.VK_UP) {
+            
+            dy = 0;
+        }
+
+        if (key == KeyEvent.VK_DOWN) {
         
             dy = 0;
         }
