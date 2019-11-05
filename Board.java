@@ -50,7 +50,7 @@ public class Board extends JPanel implements Runnable, Commons {
     private int bosscount = 1;
     private boolean ingame = true; //MAIN LOOP VAR
     private int level = 1; //LEVELS COMPLETED + 1
-    
+    private int delay = 10;
     //FAIL
     private final String explImg = "src/images/explosion.png";
     private String message = "Game Over";
@@ -98,7 +98,7 @@ public class Board extends JPanel implements Runnable, Commons {
         if(level > 1)
         {
                aliencount *= aliencount;
-
+              
         }
         //define player, shot, Bshot, and the boss
         player = new Player();
@@ -221,6 +221,10 @@ public class Board extends JPanel implements Runnable, Commons {
                     GROUND + 50);
             g.drawString("level: " + level, metr.stringWidth(message) - 100,
                     GROUND + 30);
+            g.drawString("Aliens Remaining: " + aliencount, metr.stringWidth(message) - 100,
+                    GROUND + 70);
+           
+           
         }
         Toolkit.getDefaultToolkit().sync();
         g.dispose();
@@ -259,7 +263,7 @@ public class Board extends JPanel implements Runnable, Commons {
 	    			JOptionPane.showMessageDialog(null, "Level " + (level - 1) + " Completed");
 	            }
 	    		if(level == 3) {
-	    			JOptionPane.showMessageDialog(null, "one more wave");
+	    			JOptionPane.showMessageDialog(null, "One more wave...");
 	    		}
 	            gameInit();
     		}
@@ -267,12 +271,17 @@ public class Board extends JPanel implements Runnable, Commons {
         	if(aliencount == 0 && bosscount <= 0) {
         		level++;
         		//ERR not working
+        		if(level >= 4) {
+        			delay -= 2;
+        		}
         		if(level < 2147483647)
         		{
         			JOptionPane.showMessageDialog(null, "Boss defeated");
         		}
+        		
        		gameInit();
         	}
+    	
     }
 
     public void animationCycle() {
@@ -485,7 +494,7 @@ public class Board extends JPanel implements Runnable, Commons {
 
             //time
             timeDiff = System.currentTimeMillis() - beforeTime;
-            sleep = DELAY - timeDiff;
+            sleep = delay - timeDiff;
 
             if (sleep < 0) {
                 sleep = 2;
@@ -501,6 +510,7 @@ public class Board extends JPanel implements Runnable, Commons {
             beforeTime = System.currentTimeMillis();
 
         }
+        
         //runs if exiting ingame
         gameOver();
 
@@ -535,6 +545,5 @@ public class Board extends JPanel implements Runnable, Commons {
         }//end key pressed
     }//end TAdapter
 }//class closure
-
 
 
