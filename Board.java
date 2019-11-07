@@ -10,13 +10,9 @@ import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
-import java.util.Scanner;
 
 //visual imports
 import javax.swing.ImageIcon;
@@ -53,8 +49,8 @@ public class Board extends JPanel implements Runnable, Commons {
     private int aliencount = 0;
     private int bosscount = 1;
     private boolean ingame = true; //MAIN LOOP VAR
-    private int level = 1; //LEVELS COMPLETED
-    
+    private int level = 1; //LEVELS COMPLETED + 1
+    private int delay = 10;
     //FAIL
     private final String explImg = "src/images/explosion.png";
     private String message = "Game Over";
@@ -102,7 +98,7 @@ public class Board extends JPanel implements Runnable, Commons {
         if(level > 1)
         {
                aliencount *= aliencount;
-
+              
         }
         //define player, shot, Bshot, and the boss
         player = new Player();
@@ -217,7 +213,6 @@ public class Board extends JPanel implements Runnable, Commons {
             	}
             }
             //display score and level in bottom left
-            
             Font small = new Font("ZapfDingbats", Font.BOLD, 20);
             FontMetrics metr = this.getFontMetrics(small);
             g.setColor(Color.white);
@@ -226,13 +221,16 @@ public class Board extends JPanel implements Runnable, Commons {
                     GROUND + 50);
             g.drawString("level: " + level, metr.stringWidth(message) - 100,
                     GROUND + 30);
+            g.drawString("Aliens Remaining: " + aliencount, metr.stringWidth(message) - 100,
+                    GROUND + 70);
+           
+           
         }
         Toolkit.getDefaultToolkit().sync();
         g.dispose();
     }
 
-    @SuppressWarnings("resource")
-	public void gameOver() throws FileNotFoundException {
+    public void gameOver() {
     	//RUNS ON FAIL
         Graphics g = this.getGraphics();
         g.setColor(Color.black);
@@ -241,44 +239,16 @@ public class Board extends JPanel implements Runnable, Commons {
         g.fillRect(50, BOARD_WIDTH / 2 - 30, BOARD_WIDTH - 100, 50);
         g.setColor(Color.white);
         g.drawRect(50, BOARD_WIDTH / 2 - 30, BOARD_WIDTH - 100, 50);
-        //scanner for high score
-        File t = new File("src/High Scores.txt");
-        Scanner sc = new Scanner(t);
         
         //game fail text display
         Font small = new Font("Helvetica", Font.BOLD, 14);
         FontMetrics metr = this.getFontMetrics(small);
  
-        //set text color and font
+        //set text color
         g.setColor(Color.white);
         g.setFont(small);
         g.drawString(message, (BOARD_WIDTH - metr.stringWidth(message)) / 2,
                 BOARD_WIDTH / 2);
-        
-        //set score font
-        Font ssmall = new Font("Helvetica", Font.BOLD, 14);
-        FontMetrics mmetr = this.getFontMetrics(small);
-        
-        int sci = sc.nextInt();
-        
-        if(sci >= level) {
-            //no new high score
-            g.setColor(Color.white);
-            g.setFont(ssmall);    
-            g.drawString("HIGH SCORE: " + sci, ((BOARD_WIDTH - mmetr.stringWidth("HIGH SCORE: " + sci)) / 2) - 5,
-                    (BOARD_WIDTH / 2) + 13);
-
-		} else if(sci < level) {
-			//new high score
-            PrintStream pr = new PrintStream("src/High Scores.txt");
-            pr.println(level);
-           
-            g.setColor(Color.white);
-            g.setFont(ssmall);
-            g.drawString("NEW HIGH SCORE: " + level, ((BOARD_WIDTH - mmetr.stringWidth("NEW HIGH SCORE: " + level)) / 2) - 5,
-                    (BOARD_WIDTH / 2) + 13);
-        }
-    
     }
 
     public void checkIfLevelComplete()
@@ -293,7 +263,7 @@ public class Board extends JPanel implements Runnable, Commons {
 	    			JOptionPane.showMessageDialog(null, "Level " + (level - 1) + " Completed");
 	            }
 	    		if(level == 3) {
-	    			JOptionPane.showMessageDialog(null, "BOSS WAVE INCOMING");
+	    			JOptionPane.showMessageDialog(null, "One more wave...");
 	    		}
 	            gameInit();
     		}
@@ -301,12 +271,17 @@ public class Board extends JPanel implements Runnable, Commons {
         	if(aliencount == 0 && bosscount <= 0) {
         		level++;
         		//ERR not working
+        		if(level >= 4) {
+        			delay -= 2;
+        		}
         		if(level < 2147483647)
         		{
         			JOptionPane.showMessageDialog(null, "Boss defeated");
         		}
+        		
        		gameInit();
         	}
+    	
     }
 
     public void animationCycle() {
@@ -385,11 +360,12 @@ public class Board extends JPanel implements Runnable, Commons {
                         }
                 	}   
                 }
+            
             }
             
             //TODO BULLET SPEED / SHOT SPEED
             int y = shot.getY();
-            y -= 10;
+            y -= 12;
             //shot border 
             if (y < 0) {
                 shot.die();
@@ -449,7 +425,8 @@ public class Board extends JPanel implements Runnable, Commons {
         // bombs
         Random generator = new Random();
         
-        if(boss.shoot == true && boss.isVisible()) {
+        //boss shooting
+        if(boss.shoot == true && boss.isVisible() && !bshot.isVisible()) {
         	boss.shoot = false;
             bshot = new BShot(boss.x, boss.y);
         }
@@ -518,7 +495,7 @@ public class Board extends JPanel implements Runnable, Commons {
 
             //time
             timeDiff = System.currentTimeMillis() - beforeTime;
-            sleep = DELAY - timeDiff;
+            sleep = delay - timeDiff;
 
             if (sleep < 0) {
                 sleep = 2;
@@ -534,13 +511,9 @@ public class Board extends JPanel implements Runnable, Commons {
             beforeTime = System.currentTimeMillis();
 
         }
+        
         //runs if exiting ingame
-        try {
-			gameOver();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        gameOver();
 
     }
 
@@ -573,6 +546,3 @@ public class Board extends JPanel implements Runnable, Commons {
         }//end key pressed
     }//end TAdapter
 }//class closure
-
-
-
