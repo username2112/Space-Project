@@ -421,6 +421,23 @@ public class Board extends JPanel implements Runnable, Commons {
         for (Alien alien: aliens) {
             int x = alien.getX();
             //set movement limits
+	    //irregular movement
+            if(x % 28 == 0)
+            {
+            	if( alien.getY()< BOARD_HEIGHT/2)
+            	{
+            		alien.setY(alien.getY()+ 10);
+            	}
+            	else if(alien.getY() >= BOARD_HEIGHT/2)
+            	{
+            		while(alien.getY() >= ALIEN_INIT_Y )
+            		{
+            			alien.setY(alien.getY() - 5);
+            		}
+            		
+            	}
+            		
+            }
             if (x >= BOARD_WIDTH - BORDER_RIGHT && direction != -1) {
                 direction = -1;
                 Iterator i1 = aliens.iterator();
