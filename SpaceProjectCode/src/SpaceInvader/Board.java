@@ -1,5 +1,6 @@
 package SpaceInvader;
-//cloud
+//Local
+//delete this
 //keep this
  
 //imports
@@ -426,7 +427,8 @@ public class Board extends JPanel implements Runnable, Commons {
         // bombs
         Random generator = new Random();
         
-        if(boss.shoot == true && boss.isVisible()) {
+        //boss shooting
+        if(boss.shoot == true && boss.isVisible() && !bshot.isVisible()) {
         	boss.shoot = false;
             bshot = new BShot(boss.x, boss.y);
         }
