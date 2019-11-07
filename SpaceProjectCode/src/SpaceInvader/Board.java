@@ -1,7 +1,5 @@
 package SpaceInvader;
-//Local
-//delete this
-//keep this
+
  
 //imports
 import java.awt.Color;
