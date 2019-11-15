@@ -33,19 +33,21 @@ public class Board extends JPanel implements Runnable, Commons {
     
     private Player player;
     private Shot shot;
+    private int Plives = 3;
     
     private Boss boss;
     private BShot bshot;
-    private int Blives = 3;
+    private int Blives = 5;
     
     //INITIAL VALUES
     private final int BOSS_INIT_X = 150;
     private final int BOSS_INIT_Y = 60;
     
     private final int ALIEN_INIT_X = 150;
-    private final int ALIEN_INIT_Y = 5;
+    private final int ALIEN_INIT_Y = 15;
     
     private int direction = -1;
+    private int Bspeed = 12;
     
     //CORE VARIABLES
     public static int lowest_y = 0;
@@ -57,7 +59,7 @@ public class Board extends JPanel implements Runnable, Commons {
     private int delay = 10;
     //FAIL
     private final String explImg = "src/images/explosion.png";
-    private String message = "Game Over";
+    private String message = "GAME OVER";
     
     //ANIMATOR
     private Thread animator;
@@ -209,21 +211,34 @@ public class Board extends JPanel implements Runnable, Commons {
             drawBShot(g);
             drawBombing(g);
             if(level == 3) {
-          	  	lowest_y = boss.getY() + 105;
+                g.setColor(Color.gray);
+            	g.fillRect(BOARD_WIDTH/2 - ((Blives*100)/2) - 3, 3, Blives*100 + 6, 16);
+                g.setColor(Color.red);
+                
+                //health bar
+            	lowest_y = boss.getY() + 105;
                 bosss.add(boss);
             	drawBoss(g);
             	if(bosscount == 1) {
                     boss.setVisible(true);
             	}
+            	g.fillRect(BOARD_WIDTH/2 - (Blives*100 / 2), 6, Blives*100, 10);
+            }
+            if(player.isVisible()) {
+            	g.setColor(Color.gray);
+             	g.fillRect(BOARD_WIDTH/2 - ((Plives*100)/2) - 3,GROUND + 77, Plives*100 + 6, 16);
+                g.setColor(Color.green);
+             	g.fillRect(BOARD_WIDTH/2 - (Plives*100 / 2), GROUND + 80, Plives*100, 10);
+             	
             }
             //display score and level in bottom left
             Font small = new Font("ZapfDingbats", Font.BOLD, 20);
             FontMetrics metr = this.getFontMetrics(small);
             g.setColor(Color.white);
             g.setFont(small);
-            g.drawString("score: " + deaths + "00", metr.stringWidth(message) - 100,
+            g.drawString("Score: " + deaths + "00", metr.stringWidth(message) - 100,
                     GROUND + 50);
-            g.drawString("level: " + level, metr.stringWidth(message) - 100,
+            g.drawString("Level: " + level, metr.stringWidth(message) - 100,
                     GROUND + 30);
             g.drawString("Aliens Remaining: " + aliencount, metr.stringWidth(message) - 100,
                     GROUND + 70);
@@ -267,7 +282,7 @@ public class Board extends JPanel implements Runnable, Commons {
             //no new high score
             g.setColor(Color.white);
             g.setFont(ssmall);    
-            g.drawString("HIGH SCORE + sci", ((BOARD_WIDTH - mmetr.stringWidth("HIGH SCORE: " + sci)) / 2) - 5,
+            g.drawString("HIGH SCORE: " + sci, ((BOARD_WIDTH - mmetr.stringWidth("HIGH SCORE: " + sci)) / 2) - 5,
                     (BOARD_WIDTH / 2) + 13);
 
 		} else if(sci < level) {
@@ -294,9 +309,6 @@ public class Board extends JPanel implements Runnable, Commons {
 	            {
 	    			JOptionPane.showMessageDialog(null, "Level " + (level - 1) + " Completed");
 	            }
-	    		if(level == 3) {
-	    			JOptionPane.showMessageDialog(null, "One more wave...");
-	    		}
 	            gameInit();
     		}
         } else if(level == 3) 
@@ -397,7 +409,8 @@ public class Board extends JPanel implements Runnable, Commons {
             
             //TODO BULLET SPEED / SHOT SPEED
             int y = shot.getY();
-            y -= 12;
+            Bspeed = 8;
+            y -= Bspeed;
             //shot border 
             if (y < 0) {
                 shot.die();
@@ -420,19 +433,26 @@ public class Board extends JPanel implements Runnable, Commons {
         // aliens
         for (Alien alien: aliens) {
             int x = alien.getX();
-            //set movement limits
 	    //irregular movement
             if(x % 28 == 0)
             {
-            	if( alien.getY()< BOARD_HEIGHT/2)
+            	if( alien.getY() < GROUND - 20)
             	{
-            		alien.setY(alien.getY()+ 10);
+            		//alien.setY(alien.getY()+ 10);
+            		alien.setY(alien.getY() + 10);
             	}
-            	else if(alien.getY() >= BOARD_HEIGHT/2)
+            	else if(alien.getY() >= GROUND - 20)//BOARD_HEIGHT/2
             	{
-            		while(alien.getY() >= ALIEN_INIT_Y )
+            		while(alien.getY() > ALIEN_INIT_Y + 16)
             		{
-            			alien.setY(alien.getY() - 5);
+            			alien.setY(16);
+            		}
+            		if(level == 3) {
+	            		while(alien.getY() > ALIEN_INIT_Y + 40)
+	            		{
+	            			alien.setY(40);
+	            			System.out.println(alien.getY());
+	            		}
             		}
             		
             	}
@@ -463,10 +483,10 @@ public class Board extends JPanel implements Runnable, Commons {
             Alien alien = (Alien) it.next();
             if (alien.isVisible()) {
                 int y = alien.getY();
-                if (y > GROUND - ALIEN_HEIGHT) {
+                /*if (y > GROUND - ALIEN_HEIGHT) {
                     ingame = false;
                     message = "Invasion!";
-                }
+                }*/
                 alien.act(direction);
             }
         }
@@ -508,9 +528,12 @@ public class Board extends JPanel implements Runnable, Commons {
                         && bombY <= (playerY + PLAYER_HEIGHT)) {
 
                 	//player dying
-                    ImageIcon ii = new ImageIcon(explImg);
-                    player.setImage(ii.getImage());
-                    player.setDying(true);
+                    Plives--;
+                    if(Plives <= 0) {
+                        ImageIcon ii = new ImageIcon(explImg);
+                        player.setImage(ii.getImage());
+                        player.setDying(true);
+                    }
                     b.setDestroyed(true);
 
                 }
