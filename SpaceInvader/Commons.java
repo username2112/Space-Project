@@ -41,7 +41,7 @@ public interface Commons {
    	public static final int BORDER_LEFT = 5;
     
    	//IDK i don't think its used	
-    public static final int GO_DOWN = 15;
+    //public static final int GO_DOWN = 15;
     
     //integer limit, the number of aliens you need to kill to win
     public static final int NUMBER_OF_ALIENS_TO_DESTROY = 2147483647;

@@ -24,6 +24,7 @@ public class Player extends Sprite implements Commons {
         width = ii.getImage().getWidth(null);
         height = ii.getImage().getHeight(null);
         
+        
         setImage(ii.getImage());
         setX(START_X);
         setY(START_Y);
@@ -37,8 +38,8 @@ public class Player extends Sprite implements Commons {
         if (x <= 2) {
             x = 2;
         }
-        if (y <= Board.lowest_y) {
-            y = Board.lowest_y;
+        if (y <= 2) {
+            y = 2;
         }
         
         if (x >= BOARD_WIDTH - 2 * width) {
