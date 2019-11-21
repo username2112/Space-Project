@@ -58,7 +58,7 @@ public class Board extends JPanel implements Runnable, Commons {
     private int bosscount = 1;
     private boolean ingame = true; //MAIN LOOP VAR
     private int level = 1; //LEVELS COMPLETED + 1
-    private int delay = 10;
+    private int DELAY = 10;
     //FAIL
     private final String explImg = "src/images/explosion.png";
     private String message = "GAME OVER";
@@ -262,7 +262,7 @@ public class Board extends JPanel implements Runnable, Commons {
         g.drawRect(50, BOARD_WIDTH / 2 - 30, BOARD_WIDTH - 100, 50);
         
         //scanner for high score
-        File t = new File("src/High Score.txt");
+        File t = new File("src/High Scores.txt");
         Scanner sc = new Scanner(t);
         
         //game fail text display
@@ -281,42 +281,63 @@ public class Board extends JPanel implements Runnable, Commons {
         int sci = sc.nextInt();
         int sci1 = sc.nextInt();
         int sci2 = sc.nextInt();
-        
+        PrintStream pr = new PrintStream("src/High Scores.txt");
        
         if(sci >= level) {
             //no new high score
             g.setColor(Color.white);
             g.setFont(ssmall);    
-            g.drawString("HIGH SCORE: " + sci + " 2nd HIGH: " + sci1 + " 3rd HIGH: " + sci2, ((BOARD_WIDTH - mmetr.stringWidth("HIGH SCORE: " + sci + " 2nd HIGH: " +  sci1 + " 3rd HIGH: " + sci2)) / 2) - 5,
-                    (BOARD_WIDTH / 2) + 13);
+            g.drawString("HIGH SCORE: " + sci, ((BOARD_WIDTH - mmetr.stringWidth("HIGH SCORE: " + sci)) / 2) - 5,
+                    (BOARD_WIDTH / 2) + 40);
+            g.drawString("2nd: " + sci1, ((BOARD_WIDTH - mmetr.stringWidth("2nd: " +  sci1)) / 2) - 5,
+                    (BOARD_WIDTH / 2) + 60);
+            g.drawString("3rd: " + sci2, ((BOARD_WIDTH - mmetr.stringWidth("3rd: " + sci2)) / 2) - 5,
+                    (BOARD_WIDTH / 2) + 80);
+            
+        	pr.println(sci);
+            pr.println(sci1);
+            pr.println(sci2);
 
 		} else if(sci < level) {
 			//new high score
-            PrintStream pr = new PrintStream("src/High Score.txt");
+           
             pr.println(level);
+            pr.println(sci);
+            pr.println(sci1);
 
             g.setColor(Color.white);
             g.setFont(ssmall);
             g.drawString("NEW HIGH SCORE: " + level, ((BOARD_WIDTH - mmetr.stringWidth("NEW HIGH SCORE: " + level)) / 2) - 5,
                     (BOARD_WIDTH / 2) + 13);
+            //SET NEW 2ND TO CURRENT FIRST
+            //SET NEW 3RD TO CURRENT 2ND
         } else if(sci1 < level) {
 			//new high score
-            PrintStream pr1 = new PrintStream("src/High Score.txt");
-            pr1.println(level);
+            pr.println(sci);
+            pr.println(level);
+            pr.println(sci1);
+            
 
             g.setColor(Color.white);
             g.setFont(ssmall);
-            g.drawString(" NEW 2nd HIGH SCORE: " + level, ((BOARD_WIDTH - mmetr.stringWidth("2nd HIGH SCORE: " + level)) / 2) - 5,
+            g.drawString("NEW 2ND PLACE: " + level, ((BOARD_WIDTH - mmetr.stringWidth("NEW 2ND PLACE: " + level)) / 2) - 5,
                     (BOARD_WIDTH / 2) + 13);
+            //SET 3RD TO CURRENT 2ND
+            
         } else if(sci2 < level) {
 			//new high score
-            PrintStream pr2 = new PrintStream("src/High Score.txt");
-            pr2.println(level);
+            pr.println(sci);
+            pr.println(sci1);
+            pr.println(level);
 
             g.setColor(Color.white);
             g.setFont(ssmall);
-            g.drawString("NEW 3rd HIGH SCORE: " + level, ((BOARD_WIDTH - mmetr.stringWidth("3rd HIGH SCORE: " + level)) / 2) - 5,
+            g.drawString("NEW 3RD PLACE: " + level, ((BOARD_WIDTH - mmetr.stringWidth("NEW 3RD PLACE: " + level)) / 2) - 5,
                     (BOARD_WIDTH / 2) + 13);
+        } else {
+        	pr.println(sci);
+            pr.println(sci1);
+            pr.println(sci2);
         }
     }
 
@@ -338,7 +359,7 @@ public class Board extends JPanel implements Runnable, Commons {
         		level++;
         		//ERR not working
         		if(level >= 4) {
-        			delay -= 2;
+        			DELAY -= 2;
         		}
         		if(level < 2147483647)
         		{
@@ -439,6 +460,7 @@ public class Board extends JPanel implements Runnable, Commons {
                 shot.setY(y);
             }
         }
+        //player alien collision / player boss collision
         if (player.isVisible()) {
             int playerX = player.getX();
             int playerY = player.getY();
@@ -454,10 +476,17 @@ public class Board extends JPanel implements Runnable, Commons {
                             && playerY >= (alienY) &&  playerY <= (alienY + ALIEN_HEIGHT)) {
                         
                     	player.setDying(true);
-                        //fix
                     }
                 }
             }
+            if (playerX >= (boss.getX())
+                    && playerX <= (boss.getX() + BOSS_WIDTH)
+                    && playerY >= (boss.getY()) &&  playerY <= (boss.getY() + BOSS_HEIGHT)) {
+            	
+            	player.setDying(true);
+            	
+            }
+            
         }
         
         if(bshot.isVisible()) {
@@ -606,22 +635,15 @@ public class Board extends JPanel implements Runnable, Commons {
             repaint();
             animationCycle();
 
-            //time
-            timeDiff = System.currentTimeMillis() - beforeTime;
-            sleep = delay - timeDiff;
+            //timE
+            sleep = DELAY;
 
-            if (sleep < 0) {
-                sleep = 2;
-            }
             try {
                 Thread.sleep(sleep);
 
             } catch (InterruptedException e) {
-                System.out.println("interrupted");
-
+                System.err.println("interrupted");
             }
-
-            beforeTime = System.currentTimeMillis();
 
         }
         
