@@ -33,15 +33,17 @@ public class Board extends JPanel implements Runnable, Commons {
     
     private Player player;
     private Shot shot;
+    private final int Plives_Init = 3;
     private int Plives = 3;
     
     private Boss boss;
     private BShot bshot;
+    private final int Blives_Init = 5;
     private int Blives = 5;
     
     //INITIAL VALUES
-    private final int BOSS_INIT_X = 150;
-    private final int BOSS_INIT_Y = 60;
+    private final int BOSS_INIT_X = 269;
+    private final int BOSS_INIT_Y = 30;
     
     private final int ALIEN_INIT_X = 150;
     private final int ALIEN_INIT_Y = 15;
@@ -212,7 +214,7 @@ public class Board extends JPanel implements Runnable, Commons {
             drawBombing(g);
             if(level == 3) {
                 g.setColor(Color.gray);
-            	g.fillRect(BOARD_WIDTH/2 - ((Blives*100)/2) - 3, 3, Blives*100 + 6, 16);
+            	g.fillRect(BOARD_WIDTH/2 - ((Blives_Init*100)/2) - 3, 3, Blives_Init*100 + 6, 16);
                 g.setColor(Color.red);
                 
                 //health bar
@@ -226,7 +228,7 @@ public class Board extends JPanel implements Runnable, Commons {
             }
             if(player.isVisible()) {
             	g.setColor(Color.gray);
-             	g.fillRect(BOARD_WIDTH/2 - ((Plives*100)/2) - 3,GROUND + 77, Plives*100 + 6, 16);
+             	g.fillRect(BOARD_WIDTH/2 - ((Plives_Init*100)/2) - 3,GROUND + 77, Plives_Init*100 + 6, 16);
                 g.setColor(Color.green);
              	g.fillRect(BOARD_WIDTH/2 - (Plives*100 / 2), GROUND + 80, Plives*100, 10);
              	
@@ -360,7 +362,7 @@ public class Board extends JPanel implements Runnable, Commons {
                 	
                 }
         	}   
-       }
+        }
         
         //shot
         if (shot.isVisible()) {
@@ -406,7 +408,6 @@ public class Board extends JPanel implements Runnable, Commons {
                 }
             
             }
-            
             //TODO BULLET SPEED / SHOT SPEED
             int y = shot.getY();
             Bspeed = 8;
@@ -416,6 +417,26 @@ public class Board extends JPanel implements Runnable, Commons {
                 shot.die();
             } else {
                 shot.setY(y);
+            }
+        }
+        if (player.isVisible()) {
+            int playerX = player.getX();
+            int playerY = player.getY();
+            for (Alien alien: aliens) {
+            	//alien hit detection
+                int alienX = alien.getX();
+                int alienY = alien.getY();
+
+                if (alien.isVisible()) {
+                	
+                    if (playerX >= (alienX)
+                            && playerX <= (alienX + ALIEN_WIDTH)
+                            && playerY >= (alienY) &&  playerY <= (alienY + ALIEN_HEIGHT)) {
+                        
+                    	player.setDying(true);
+                        //fix
+                    }
+                }
             }
         }
         
