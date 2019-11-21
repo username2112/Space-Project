@@ -262,7 +262,7 @@ public class Board extends JPanel implements Runnable, Commons {
         g.drawRect(50, BOARD_WIDTH / 2 - 30, BOARD_WIDTH - 100, 50);
         
         //scanner for high score
-        File t = new File("src/High Scores.txt");
+        File t = new File("src/High Score.txt");
         Scanner sc = new Scanner(t);
         
         //game fail text display
@@ -279,25 +279,45 @@ public class Board extends JPanel implements Runnable, Commons {
         FontMetrics mmetr = this.getFontMetrics(small);
 
         int sci = sc.nextInt();
-
+        int sci1 = sc.nextInt();
+        int sci2 = sc.nextInt();
+        
+       
         if(sci >= level) {
             //no new high score
             g.setColor(Color.white);
             g.setFont(ssmall);    
-            g.drawString("HIGH SCORE: " + sci, ((BOARD_WIDTH - mmetr.stringWidth("HIGH SCORE: " + sci)) / 2) - 5,
+            g.drawString("HIGH SCORE: " + sci + " 2nd HIGH: " + sci1 + " 3rd HIGH: " + sci2, ((BOARD_WIDTH - mmetr.stringWidth("HIGH SCORE: " + sci + " 2nd HIGH: " +  sci1 + " 3rd HIGH: " + sci2)) / 2) - 5,
                     (BOARD_WIDTH / 2) + 13);
 
 		} else if(sci < level) {
 			//new high score
-            PrintStream pr = new PrintStream("src/High Scores.txt");
+            PrintStream pr = new PrintStream("src/High Score.txt");
             pr.println(level);
 
             g.setColor(Color.white);
             g.setFont(ssmall);
             g.drawString("NEW HIGH SCORE: " + level, ((BOARD_WIDTH - mmetr.stringWidth("NEW HIGH SCORE: " + level)) / 2) - 5,
                     (BOARD_WIDTH / 2) + 13);
-        }
+        } else if(sci1 < level) {
+			//new high score
+            PrintStream pr1 = new PrintStream("src/High Score.txt");
+            pr1.println(level);
 
+            g.setColor(Color.white);
+            g.setFont(ssmall);
+            g.drawString(" NEW 2nd HIGH SCORE: " + level, ((BOARD_WIDTH - mmetr.stringWidth("2nd HIGH SCORE: " + level)) / 2) - 5,
+                    (BOARD_WIDTH / 2) + 13);
+        } else if(sci2 < level) {
+			//new high score
+            PrintStream pr2 = new PrintStream("src/High Score.txt");
+            pr2.println(level);
+
+            g.setColor(Color.white);
+            g.setFont(ssmall);
+            g.drawString("NEW 3rd HIGH SCORE: " + level, ((BOARD_WIDTH - mmetr.stringWidth("3rd HIGH SCORE: " + level)) / 2) - 5,
+                    (BOARD_WIDTH / 2) + 13);
+        }
     }
 
     public void checkIfLevelComplete()
@@ -639,7 +659,7 @@ public class Board extends JPanel implements Runnable, Commons {
                         shot = new Shot(x, y);
                         GAME_SOUND.shot();
                     }
-                }
+                 }
             }
         }//end key pressed
     }//end TAdapter
