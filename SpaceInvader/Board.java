@@ -59,6 +59,8 @@ public class Board extends JPanel implements Runnable, Commons {
     private boolean ingame = true; //MAIN LOOP VAR
     private int level = 1; //LEVELS COMPLETED + 1
     private int DELAY = 10;
+    private int pausedI = 1;
+    private boolean paused = false;
     //FAIL
     private final String explImg = "src/images/explosion.png";
     private String message = "GAME OVER";
@@ -429,7 +431,7 @@ public class Board extends JPanel implements Runnable, Commons {
                         aliencount--;
                     }
               }
-            if(shotY >= GROUND) {
+            if(shotY >= GROUND - 10) {
             	shot.die();
             }
               if(boss.isVisible()) {
@@ -625,24 +627,40 @@ public class Board extends JPanel implements Runnable, Commons {
 
         long beforeTime, timeDiff, sleep;
         beforeTime = System.currentTimeMillis();
-
+        
+		Thread pause = new Thread(() -> {
+						
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+                System.err.println("pause interrupted");
+			}
+			
+		});
  
 
         while (ingame) {
+        	if(!paused) {
         	//looping methods
             checkIfLevelComplete();
             //visuals
             repaint();
             animationCycle();
-
+        	}
             //timE
             sleep = DELAY;
-
+            
             try {
-                Thread.sleep(sleep);
+
+                if(paused) {
+                	pause.run();
+                } else {
+                    Thread.sleep(sleep);
+                	pause.stop();
+                }
 
             } catch (InterruptedException e) {
-                System.err.println("interrupted");
+                System.err.println("main interrupted");
             }
 
         }
@@ -682,6 +700,16 @@ public class Board extends JPanel implements Runnable, Commons {
                         GAME_SOUND.shot();
                     }
                  }
+            }
+            if (key == KeyEvent.VK_ESCAPE) {
+            	System.out.println("t");
+                pausedI++;
+                if(pausedI%2==0) {
+                	System.out.println(pausedI);
+                	paused = true;
+                } else {
+                	paused = false;
+                }
             }
         }//end key pressed
     }//end TAdapter
