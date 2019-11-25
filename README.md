@@ -11,7 +11,7 @@ if you have any asset submmissions email Parker at either s-ivesp@bsd405.org or 
 	 * boss: 128 x 128
 	 * boss shot: 16 x 16
 	 * alien: 32 x 32
-	 * alien bomb: 16 x 16
+	 * alien bomb: 8 x 8
 	 * 
 	 * all audio must be in .wav format
 	 * all images must be .png with no background
