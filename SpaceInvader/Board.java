@@ -16,6 +16,7 @@ import java.util.Random;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.time.Clock;
 import java.util.Scanner;
 
 //visual imports
@@ -58,9 +59,15 @@ public class Board extends JPanel implements Runnable, Commons {
     private int bosscount = 1;
     private boolean ingame = true; //MAIN LOOP VAR
     private int level = 1; //LEVELS COMPLETED + 1
-    private int DELAY = 10;
     private int pausedI = 1;
     private boolean paused = false;
+    private int DELAY = Commons.DELAY;
+    
+    private static long ST = System.currentTimeMillis(); //time at start of run
+    private static long time; //current time
+    private static long oldTime; //time last checked
+    private static long FPS;
+    private static long DFPS;
     //FAIL
     private final String explImg = "src/images/explosion.png";
     private String message = "GAME OVER";
@@ -73,9 +80,11 @@ public class Board extends JPanel implements Runnable, Commons {
         initBoard();
     }
     
+    
     //---------\\
     //TODO INIT\\
     //---------\\
+    
     
     private void initBoard() {
         addKeyListener(new TAdapter());
@@ -87,13 +96,14 @@ public class Board extends JPanel implements Runnable, Commons {
         GAME_SOUND.Background();
     }
     
-    public void gameInit() {      
+    public void gameInit() {
         
     	//array list declarations
         bosss = new ArrayList<>();
         aliens = new ArrayList<>();
         //number of aliens doubles / increment aliencount
         //alien spawning
+        
         for (int i = 0; i <= 1 * level; i++) {
             aliencount++;
             for (int j = 0; j <= 1 * level; j++) {
@@ -124,6 +134,7 @@ public class Board extends JPanel implements Runnable, Commons {
             animator = new Thread(this);
             animator.start();
         }
+        
     }
     
     @Override
@@ -132,9 +143,11 @@ public class Board extends JPanel implements Runnable, Commons {
         gameInit();
     }
 
+    
     //-----------------\\
     //TODO DRAW METHODS\\
     //-----------------\\
+    
     
     public void drawBoss(Graphics g) {
         if (boss.isVisible()) {
@@ -191,14 +204,18 @@ public class Board extends JPanel implements Runnable, Commons {
         }
     }
 
+    
     //-----------------\\
     //TODO CORE SYSTEMS\\
     //-----------------\\
+    
     
     @Override
 
     public void paintComponent(Graphics g) {
 
+    	//visuals + some boss code
+    	
         super.paintComponent(g);
         //draw line on screen
         g.setColor(Color.black);
@@ -206,6 +223,19 @@ public class Board extends JPanel implements Runnable, Commons {
         g.setColor(Color.green);
 
         if (ingame) {
+        	//manage fps
+        	time = getTime();
+        	FPS = 1000 / getRunTime();
+        	long DFPS = 60;
+            if(FPS >= 66) {
+            	DELAY += 3;
+            } else if(FPS < 60) {
+            	DELAY -= 2;
+            } else {
+            	//System.out.println(FPS);
+            	DFPS = FPS;
+            }
+
             g.drawLine(0, GROUND, BOARD_WIDTH, GROUND);
             
             //TODO DRAW
@@ -240,14 +270,17 @@ public class Board extends JPanel implements Runnable, Commons {
             FontMetrics metr = this.getFontMetrics(small);
             g.setColor(Color.white);
             g.setFont(small);
+            
+            g.drawString("Time: " + (getTime() / 1000), 20,
+                    GROUND + 90);
+            g.drawString("Aliens Remaining: " + aliencount, metr.stringWidth(message) - 100,
+                    GROUND + 70);
             g.drawString("Score: " + deaths + "00", metr.stringWidth(message) - 100,
                     GROUND + 50);
             g.drawString("Level: " + level, metr.stringWidth(message) - 100,
                     GROUND + 30);
-            g.drawString("Aliens Remaining: " + aliencount, metr.stringWidth(message) - 100,
-                    GROUND + 70);
-           
-           
+            g.drawString("FPS: " + DFPS, BOARD_WIDTH - metr.stringWidth(message),
+                    GROUND + 30);
         }
         Toolkit.getDefaultToolkit().sync();
         g.dispose();
@@ -283,9 +316,10 @@ public class Board extends JPanel implements Runnable, Commons {
         int sci = sc.nextInt();
         int sci1 = sc.nextInt();
         int sci2 = sc.nextInt();
+        
         PrintStream pr = new PrintStream("src/High Scores.txt");
        
-        if(sci >= level) {
+        if(sci2 >= level) {
             //no new high score
             g.setColor(Color.white);
             g.setFont(ssmall);    
@@ -336,10 +370,6 @@ public class Board extends JPanel implements Runnable, Commons {
             g.setFont(ssmall);
             g.drawString("NEW 3RD PLACE: " + level, ((BOARD_WIDTH - mmetr.stringWidth("NEW 3RD PLACE: " + level)) / 2) - 5,
                     (BOARD_WIDTH / 2) + 13);
-        } else {
-        	pr.println(sci);
-            pr.println(sci1);
-            pr.println(sci2);
         }
     }
 
@@ -359,10 +389,6 @@ public class Board extends JPanel implements Runnable, Commons {
         } else if(level == 3) 
         	if(aliencount == 0 && bosscount <= 0) {
         		level++;
-        		//ERR not working
-        		if(level >= 4) {
-        			DELAY -= 2;
-        		}
         		if(level < 2147483647)
         		{
         			JOptionPane.showMessageDialog(null, "Boss defeated");
@@ -428,11 +454,13 @@ public class Board extends JPanel implements Runnable, Commons {
                         alien.setDying(true);
                         deaths++;
                         shot.die();
+        	            shot.resetBD();
                         aliencount--;
                     }
               }
             if(shotY >= GROUND - 10) {
             	shot.die();
+	            shot.resetBD();
             }
               if(boss.isVisible()) {
             	  //boss hit detection
@@ -446,6 +474,7 @@ public class Board extends JPanel implements Runnable, Commons {
                                 boss.setDying(true);
                             }
                             shot.die();
+            	            shot.resetBD();
                         }
                 	}   
                 }
@@ -458,8 +487,13 @@ public class Board extends JPanel implements Runnable, Commons {
             //shot border 
             if (y < 0) {
                 shot.die();
-            } else {
+	            shot.resetBD();
+            } else if(Shot.getType() == 0) {
                 shot.setY(y);
+            } else if(Shot.getType() == 1) {
+                shot.ricL();
+            } else if(Shot.getType() == 2) {
+                shot.ricR();
             }
         }
         //player alien collision / player boss collision
@@ -662,7 +696,6 @@ public class Board extends JPanel implements Runnable, Commons {
             } catch (InterruptedException e) {
                 System.err.println("main interrupted");
             }
-
         }
         
         //runs if exiting ingame
@@ -674,7 +707,32 @@ public class Board extends JPanel implements Runnable, Commons {
 		}
 
     }
+    
+    public static long getTime() {
+		long time2 = System.currentTimeMillis() - ST;
+    	return time2;
+    }
+    
+    public static long getRunTime() {
+    	if(oldTime == 0) {
+    		oldTime = ST;
+    	}
+		long tt = time - oldTime;
+    	oldTime = time;
+		return tt;
+    }
+    
+    public static long getFPS() {
+    	FPS = 1000 / getRunTime();
+    	return FPS;
+    }
 
+    
+    //-----------------\\
+    //TODO KEY LISTENER\\
+    //-----------------\\
+    
+    
     private class TAdapter extends KeyAdapter {
 
         @Override
@@ -696,16 +754,30 @@ public class Board extends JPanel implements Runnable, Commons {
             if (key == KeyEvent.VK_SPACE) {
                 if (ingame) {
                     if (!shot.isVisible()) {
-                        shot = new Shot(x, y);
+                        shot = new Shot(x, y, 0);
+                        GAME_SOUND.shot();
+                    }
+                 }
+            }
+            if (key == KeyEvent.VK_Q || key == KeyEvent.VK_V || key == KeyEvent.VK_PAGE_UP) {
+                if (ingame) {
+                    if (!shot.isVisible()) {
+                        shot = new Shot(x, y, 1);
+                        GAME_SOUND.shot();
+                    }
+                 }
+            }
+            if (key == KeyEvent.VK_E || key == KeyEvent.VK_N || key == KeyEvent.VK_PAGE_DOWN) {
+                if (ingame) {
+                    if (!shot.isVisible()) {
+                        shot = new Shot(x, y, 2);
                         GAME_SOUND.shot();
                     }
                  }
             }
             if (key == KeyEvent.VK_ESCAPE) {
-            	System.out.println("t");
                 pausedI++;
                 if(pausedI%2==0) {
-                	System.out.println(pausedI);
                 	paused = true;
                 } else {
                 	paused = false;

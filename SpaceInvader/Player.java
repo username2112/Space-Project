@@ -92,6 +92,7 @@ public class Player extends Sprite implements Commons {
         
             dy = 2;
         }
+
     }
 
     
