@@ -51,7 +51,7 @@ public interface Commons {
     public static final int BCHANCE = 10;
     
     //game tick sleep delay
-    public static final int DELAY = 10;
+    public static final int DELAY = 15;
 
 }
  

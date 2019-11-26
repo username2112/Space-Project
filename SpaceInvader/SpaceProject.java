@@ -4,9 +4,10 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
  
 public class SpaceProject extends JFrame implements Commons {
- 
-    public SpaceProject() { 
- 
+
+	private static final long serialVersionUID = -3707317083523991011L;
+
+	public SpaceProject() { 
         initUI();
     }
  
@@ -28,4 +29,3 @@ public class SpaceProject extends JFrame implements Commons {
         });
     }
 }
- 
