@@ -3,7 +3,7 @@ Space project is an ST Comp sci semester 1 game project attempting to combine el
 
 if oyu are trying to download from the merge-requested branch then you will need to copy all the files present in that branch to the empty src of a java project and run space invader.
 
-if you have any asset submmissions email Parker at either s-ivesp@bsd405.org or parker.school69@gmail.com
+if you have any asset submmissions email Parker at either s-ivesp@bsd405.org or parker.school69@gmail.com.
 
 /* Dimentions for sprites:
 	 * player: 32 x 32
