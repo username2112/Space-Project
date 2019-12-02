@@ -4,7 +4,7 @@ import javax.swing.ImageIcon;
 
 public class BShot extends Sprite {
 
-   private final String shotImg = "src/images/SBomb.png";
+   private final String shotImg = "images/SBomb.png";
    private final int H_SPACE = 64;
    private final int V_SPACE = 64;
 
