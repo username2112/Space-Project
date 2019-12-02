@@ -63,7 +63,7 @@ public class GAME_SOUND {
 	public static void shot() {
 		 try
 	        { 
-	            filePath = "src/sound/3543.wav"; 
+	            filePath = "src\\sound\\3543.wav"; 
 	            GAME_SOUND audioPlayer = new GAME_SOUND(); 
 	            clip.start();
 	        }  

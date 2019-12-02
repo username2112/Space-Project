@@ -10,12 +10,12 @@ public class Boss extends Sprite {
    private Bomb bomb;
    private int startX;
    private String[] imgList = new String[6]; {
-	   imgList[0] =  "src/images/Boss.png";
-	   imgList[1] =  "src/images/Boss0.png";
-	   imgList[2] =  "src/images/Boss0Glow.png";
-	   imgList[3] =  "src/images/boss1.png";
-	   imgList[4] =  "src/images/boss2.png";
-	   imgList[5] =  "src/images/Cthulhu.png";
+	   imgList[0] =  "src\\images\\Boss.png";
+	   imgList[1] =  "src\\images\\Boss0.png";
+	   imgList[2] =  "src\\images\\Boss0Glow.png";
+	   imgList[3] =  "src\\images\\boss1.png";
+	   imgList[4] =  "src\\images\\boss2.png";
+	   imgList[5] =  "src\\images\\Cthulhu.png";
    }
    public boolean shoot = false;
    public int Boss_Type;
@@ -140,7 +140,7 @@ public class Boss extends Sprite {
    }
 
  public class Bomb extends Sprite {
-       private final String bombImg = "src/images/bomb.png";
+       private final String bombImg = "src\\images\\bomb.png";
        private boolean destroyed;
        public Bomb(int x, int y) {
            initBomb(x, y);
