@@ -603,20 +603,35 @@ public class Board extends JPanel implements Runnable, Commons {
 					int alienY = alien.getY();
 
 					if (alien.isVisible()) {
-
-						if (playerX >= (alienX) && playerX <= (alienX + ALIEN_WIDTH) && playerY >= (alienY)
-								&& playerY <= (alienY + ALIEN_HEIGHT)) {
-
-							player.setDying(true);
-						}
+						/*if (playerX >= (alienX) && playerX <= (alienX + ALIEN_WIDTH) && playerY >= (alienY)
+								&& playerY <= (alienY + ALIEN_HEIGHT)) {*/
+						/*
+						System.out.println("player X: " + player.leftX() + " " + player.rightX());
+						System.out.println("Alien X: " + alien.leftX() + " " + alien.rightX());
+						System.out.println("player Y: " + player.topY() + " " + player.bottomY());
+						System.out.println("Alien Y: " + alien.topY() + " " + alien.bottomY());
+						*/
+						
+							if(player.isTouching(alien)) {
+								/*
+								System.err.println(
+								"\nplayer X: \t" + "left: " + player.leftX() + "\t right: " + player.rightX()
+								+"\nAlien X: \t" + "left: " +alien.leftX() + "\t right: " + alien.rightX()
+								+"\nplayer Y: \t"+ "top: " + player.topY() + " \t bottom: " + player.bottomY()
+								+"\nAlien Y: \t" + "top: " + alien.topY()  + "\t bottom: " + alien.bottomY() + "\n\n");
+								*/
+								player.setDying(true);
+							}
+						//}
 					}
 				}
-				if (playerX >= (boss.getX()) && playerX <= (boss.getX() + BOSS_WIDTH) && playerY >= (boss.getY())
-						&& playerY <= (boss.getY() + BOSS_HEIGHT)) {
-
-					player.setDying(true);
-
-				}
+				if(boss.isVisible())
+					if (playerX >= (boss.getX()) && playerX <= (boss.getX() + BOSS_WIDTH) && playerY >= (boss.getY())
+							&& playerY <= (boss.getY() + BOSS_HEIGHT)) {
+	
+						player.setDying(true);
+	
+					}
 
 			}
 
@@ -691,7 +706,10 @@ public class Board extends JPanel implements Runnable, Commons {
 			// boss shooting
 			if (boss.shoot == true && boss.isVisible() && !bshot.isVisible()) {
 				boss.shoot = false;
-				bshot = new BShot(boss.x, boss.y);
+				//System.out.println("Boss(" + boss.x + ", " + boss.y +")" + "\t" + "bShot(" + bshot.x + ", " + bshot.y +")");
+				//System.err.println("Boss(" + boss.getX() + ", " + boss.getY() +")" + "\t" + "bShot(" + bshot.x + ", " + bshot.y +")");
+				System.out.println(boss.getWidth());
+				bshot = new BShot(boss.getX(), boss.getY());
 			}
 
 			// will alien bomb?

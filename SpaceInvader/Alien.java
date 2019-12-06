@@ -11,6 +11,8 @@ public class Alien extends Sprite {
    public Alien(int x, int y) {
        initAlien(x, y);
        startX = x;
+       height = 32;
+       width = 32;
    }
 
    private void initAlien(int x, int y) {

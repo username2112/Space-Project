@@ -10,6 +10,7 @@ public interface Commons {
 	 * boss shot: 16 x 16
 	 * alien: 32 x 32
 	 * alien bomb: 16 x 16
+	 * bossBomb/missile: 16 x 16
 	 * 
 	 * all audio must be in .wav format
 	 * all images must be .png with no background

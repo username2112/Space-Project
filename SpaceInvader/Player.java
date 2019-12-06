@@ -10,11 +10,12 @@ public class Player extends Sprite implements Commons {
     private final int START_X = BOARD_WIDTH / 2 - 32;
 
     private final String playerImg = "src\\images\\player.png";
-    private int width;
-    private int height;
+
 
     public Player() {
         initPlayer();
+        height = 32;
+        width = 32;
     }
 
     private void initPlayer() {

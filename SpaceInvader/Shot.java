@@ -25,6 +25,8 @@ public class Shot extends Sprite {
     		   initRicochet(x, y, type); 
     		   break;
        }
+       height = 8;
+       width = 8;
    }
 
    private void initShot(int x, int y) {
