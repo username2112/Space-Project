@@ -38,7 +38,8 @@ public class Boss extends Sprite {
        String bossImg = imgList[r.nextInt(imgList.length - 1)];
        
        bomb = new Bomb(x, y);
-     
+       Boss_Type = 1;
+       BossImg = imgList[2];
        if(Boss_Type == 0) {
     	   ImageIcon ii = new ImageIcon(bossImg);
     	   setImage(ii.getImage());
