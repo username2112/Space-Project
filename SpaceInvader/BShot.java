@@ -1,5 +1,7 @@
 package SpaceInvader;
 
+import java.util.Random;
+
 import javax.swing.ImageIcon;
 
 public class BShot extends Sprite {
@@ -12,14 +14,16 @@ public class BShot extends Sprite {
    }
 
    public BShot(int x, int y) {
-       initShot(x, y);
+	   initShot(x, y);
+       height = 16;
+       width = 16;
    }
 
    private void initShot(int x, int y) {
-
-       ImageIcon ii = new ImageIcon(shotImg);
-       setImage(ii.getImage());
-       
+	   
+	   ImageIcon ii = new ImageIcon(shotImg);
+	   setImage(ii.getImage());
+	   
        this.setVisible(true);
        
        setX(x + H_SPACE);

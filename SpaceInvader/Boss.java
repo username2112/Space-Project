@@ -24,6 +24,8 @@ public class Boss extends Sprite {
    public Boss(int x, int y) {
        initBoss(x, y);
        startX = x;
+       height = 128;
+       width = 128;
    }
 
    private void initBoss(int x, int y) {
@@ -31,15 +33,12 @@ public class Boss extends Sprite {
        this.x = x;
        this.y = y;
        
-
-       
        Random r = new Random();
        Boss_Type = r.nextInt(2);
        String bossImg = imgList[r.nextInt(imgList.length - 1)];
        
        bomb = new Bomb(x, y);
-       Boss_Type = 1;
-       BossImg = imgList[2];
+     
        if(Boss_Type == 0) {
     	   ImageIcon ii = new ImageIcon(bossImg);
     	   setImage(ii.getImage());
