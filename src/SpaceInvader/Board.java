@@ -35,6 +35,7 @@ public class Board extends JPanel implements Runnable, Commons {
 	private ArrayList<Asteroid> asteroids;
 
 	private Player player;
+	private BombShot bombc;
 	private Shot shot;
 	private Asteroid asteroid;
 	private final int Plives_Init = 3;
@@ -63,6 +64,7 @@ public class Board extends JPanel implements Runnable, Commons {
 	// CORE VARIABLES
 	public static int lowest_y = 0;
 	private int deaths = 0;
+	private int exk = 0;
 	private int aliencount = 2;
 	private int bosscount = 1;
 	private boolean ingame = true; // MAIN LOOP VAR
@@ -212,6 +214,7 @@ public class Board extends JPanel implements Runnable, Commons {
 		player = new Player();
 		shot = new Shot();
 		bshot = new BShot();
+		bombc = new BombShot();
 		boss = new Boss(BOSS_INIT_X, BOSS_INIT_Y);
 
 		// idk why but boss doesn't have this by default
@@ -280,6 +283,13 @@ public class Board extends JPanel implements Runnable, Commons {
 			}
 		}
 	}
+	
+	public void drawBombConsumable(Graphics g) {
+		if (bombc.isVisible()) {
+			g.drawImage(bombc.getImage(), bombc.getX(), bombc.getY(), this);
+		}
+	}
+
 
 	public void drawShot(Graphics g) {
 		if (shot.isVisible()) {
@@ -381,6 +391,7 @@ public class Board extends JPanel implements Runnable, Commons {
 			drawPlayer(g);
 			drawShot(g);
 			drawBShot(g);
+			drawBombConsumable(g);
 			drawBombing(g);
 			if (level == 3) {
 				g.setColor(Color.gray);
@@ -559,6 +570,63 @@ public class Board extends JPanel implements Runnable, Commons {
 					}
 				}
 			}
+			
+			if (bombc.isVisible()) {
+				int bombcX = bombc.getX();
+				int bombcY = bombc.getY();
+
+				for (Alien alien : aliens) {
+					// alien hit detection for new shot
+					int alienX = alien.getX();
+					int alienY = alien.getY();
+
+					if (alien.isVisible() && bombc.isVisible()) {
+
+						if (bombc.isTouching(alien)) {
+
+							ImageIcon ii = new ImageIcon(explImg);
+							alien.setImage(ii.getImage());
+							alien.setDying(true);
+						   if(exk == 3) {
+							   bombc.die();
+							  
+						    
+						   }
+						   aliencount--;
+						    	
+						}
+					}
+
+					if (bombcY >= GROUND - 10) {
+						bombc.die();
+					}
+					if (boss.isVisible()) {
+						// boss hit detection for new shot
+						if (boss.isVisible() && bombc.isVisible()) {
+							if (bombcX >= (boss.getX()) && bombcX <= (boss.getX() + BOSS_WIDTH)
+									&& bombcY >= (boss.getY()) && bombcY <= (boss.getY() + BOSS_HEIGHT)) {
+
+								Blives--;
+								if (Blives <= 0) {
+									boss.setDying(true);
+								}
+								bombc.die();
+							}
+						}
+					}
+
+				}
+				int y = bombc.getY();
+				Bspeed = 8;
+				y -= Bspeed;
+				// shot border
+				if (y < 0) {
+					bombc.die();
+				} else {
+					bombc.setY(y);
+				}
+			}
+
 
 			// shot
 			if (shot.isVisible()) {
@@ -591,8 +659,7 @@ public class Board extends JPanel implements Runnable, Commons {
 
 					if (alien.isVisible() && shot.isVisible()) {
 
-						if (shotX >= (alienX) && shotX <= (alienX + ALIEN_WIDTH) && shotY >= (alienY)
-								&& shotY <= (alienY + ALIEN_HEIGHT)) {
+						if (shot.isTouching(alien)) {
 
 							ImageIcon ii = new ImageIcon(explImg);
 							alien.setImage(ii.getImage());
@@ -929,6 +996,16 @@ public class Board extends JPanel implements Runnable, Commons {
 					}
 				}
 			}
+			
+			if (key == KeyEvent.VK_B)
+				if (ingame) {
+						System.out.println("Bomb Deployed");
+							if (!bombc.isVisible()) {
+									bombc = new BombShot(x, y);
+									GAME_SOUND.shot();
+								}
+			} 
+
 			if (key == KeyEvent.VK_ESCAPE) {
 				pausedI++;
 				if (pausedI % 2 == 0) {

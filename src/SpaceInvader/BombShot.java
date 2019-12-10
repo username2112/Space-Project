@@ -11,7 +11,15 @@ public class BombShot extends Sprite{
 	   }
 	   
 	   public BombShot(int x, int y) {
+		   width = 8;
+		   height = 8;
 		   initBombShot(x,y);
+		   
+	   }
+	   
+	   private void explode() {
+		   width = 64;
+		   height = 64;
 	   }
 	   
 	   private void initBombShot(int x, int y) {
@@ -20,6 +28,7 @@ public class BombShot extends Sprite{
 	       
 	       setX(x + H_SPACE);
 	       setY(y - V_SPACE);
+	       
 	   }
 
 
