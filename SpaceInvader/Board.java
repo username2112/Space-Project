@@ -32,9 +32,11 @@ public class Board extends JPanel implements Runnable, Commons {
 	// TODO OBJECT/LIST DECLARATIONS
 	private ArrayList<Alien> aliens;
 	private ArrayList<Boss> bosss;
+	private ArrayList<Asteroid> asteroids;
 
 	private Player player;
 	private Shot shot;
+	private Asteroid asteroid;
 	private final int Plives_Init = 3;
 	private int Plives = 3;
 
@@ -175,6 +177,7 @@ public class Board extends JPanel implements Runnable, Commons {
 		// array list declarations
 		bosss = new ArrayList<>();
 		aliens = new ArrayList<>();
+		asteroids = new ArrayList<>();
 		// number of aliens doubles / increment aliencount
 		// alien spawning
 
@@ -182,9 +185,21 @@ public class Board extends JPanel implements Runnable, Commons {
 			aliencount++;
 			for (int j = 0; j <= 1 * level; j++) {
 				// alien spacing
+				int randomx = (int) (Math.random() * BOARD_WIDTH);
+				int randomy = (int) (Math.random() * 50 + 10);
+				if (randomx >= 630) {
+					randomx -= 20;
+				}
+				else if(randomx <= 30)
+				{
+					randomx += 20;
+				}
+				System.out.println(randomy);
 				Alien alien = new Alien(ALIEN_INIT_X + (ALIEN_WIDTH + 4) * j, ALIEN_INIT_Y + 18 * i);
 				lowest_y = alien.getY() + 16;
+				Asteroid a = new Asteroid(randomx, (GROUND / 2) + randomy);
 				aliens.add(alien);
+				asteroids.add(a);
 
 			}
 		}
@@ -251,6 +266,18 @@ public class Board extends JPanel implements Runnable, Commons {
 		if (player.isDying()) {
 			player.die();
 			ingame = false;
+		}
+	}
+	
+	public void drawAsteroid(Graphics g) {
+		Iterator it = asteroids.iterator();
+		for (Asteroid asteroid : asteroids) {
+			if (asteroid.isVisible()) {
+				g.drawImage(asteroid.getImage(), asteroid.getX(), asteroid.getY(), this);
+			}
+			if (asteroid.isDying()) {
+				asteroid.die();
+			}
 		}
 	}
 
@@ -350,6 +377,7 @@ public class Board extends JPanel implements Runnable, Commons {
 
 			// TODO DRAW
 			drawAliens(g);
+			drawAsteroid(g);
 			drawPlayer(g);
 			drawShot(g);
 			drawBShot(g);
@@ -536,6 +564,25 @@ public class Board extends JPanel implements Runnable, Commons {
 			if (shot.isVisible()) {
 				int shotX = shot.getX();
 				int shotY = shot.getY();
+				for (Asteroid asteroid: asteroids) {
+            				//alien hit detection
+                			int asteroidX = asteroid.getX();
+               				int asteroidY = asteroid.getY();
+
+                			if (asteroid.isVisible() && shot.isVisible()) {
+                   				if (shotX >= (asteroidX) && shotX <= (asteroidX + ALIEN_WIDTH) && shotY >= (asteroidY) &&  shotY <= (asteroidY + ALIEN_HEIGHT)) {
+
+							ImageIcon ii = new ImageIcon(explImg);
+							asteroid.setImage(ii.getImage());
+							asteroid.setDying(true);
+							deaths++;
+							shot.die();
+                       
+					    	}
+
+					}
+
+				}
 
 				for (Alien alien : aliens) {
 					// alien hit detection
