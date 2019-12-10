@@ -1,11 +1,11 @@
 # Space-Project
-Space project is an ST Comp sci semester 1 game project attempting to combine elements of both space invaders and bullet hell style of play with a player moving in all directions to avoid bullets while clearing waves of aliens in a space invaders style.
+Space project is an AP Computer Science Special Topics semester 1 game project attempting to combine elements of both space invaders and bullet hell style of play with a player moving in all directions to avoid bullets while clearing waves of aliens in a space invaders style.
 
 if you are trying to download from the merge-requested branch then you will need to copy all the files present in that branch to the empty src of a java project and run space invader.
 
 if you have any asset submissions email Parker at either s-ivesp@bsd405.org or parker.school69@gmail.com
 
-/* Dimentions for sprites:
+	/* Dimentions for sprites:
 	 * player: 32 x 32
 	 * player shot: 8 x 8
 	 * boss: 128 x 128
