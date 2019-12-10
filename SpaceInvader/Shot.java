@@ -42,7 +42,7 @@ public class Shot extends Sprite {
        setImage(ii.getImage());
        if(dir == 1) {//left
            setX(x + H_SPACE);
-           setY(y - V_SPACE);
+           setY(y - V_SPACE);  
            ST = 1;
        } else {//right
            setX(x + H_SPACE);

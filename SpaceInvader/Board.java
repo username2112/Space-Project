@@ -32,11 +32,9 @@ public class Board extends JPanel implements Runnable, Commons {
 	// TODO OBJECT/LIST DECLARATIONS
 	private ArrayList<Alien> aliens;
 	private ArrayList<Boss> bosss;
-	private ArrayList<Asteroid> asteroids;
 
 	private Player player;
 	private Shot shot;
-	private Asteroid asteroid;
 	private final int Plives_Init = 3;
 	private int Plives = 3;
 
@@ -78,7 +76,6 @@ public class Board extends JPanel implements Runnable, Commons {
 	private static long time; // current time
 	private static long oldTime; // time last checked
 	private static long FPS;
-	private static long DFPS;
 	// FAIL
 	private final String explImg = "src\\images\\explosion.png";
 	private String message = "GAME OVER";
@@ -177,7 +174,6 @@ public class Board extends JPanel implements Runnable, Commons {
 		// array list declarations
 		bosss = new ArrayList<>();
 		aliens = new ArrayList<>();
-		asteroids = new ArrayList<>();
 		// number of aliens doubles / increment aliencount
 		// alien spawning
 
@@ -185,21 +181,9 @@ public class Board extends JPanel implements Runnable, Commons {
 			aliencount++;
 			for (int j = 0; j <= 1 * level; j++) {
 				// alien spacing
-				int randomx = (int) (Math.random() * BOARD_WIDTH);
-				int randomy = (int) (Math.random() * 50 + 10);
-				if (randomx >= 630) {
-					randomx -= 20;
-				}
-				else if(randomx <= 30)
-				{
-					randomx += 20;
-				}
-				System.out.println(randomy);
 				Alien alien = new Alien(ALIEN_INIT_X + (ALIEN_WIDTH + 4) * j, ALIEN_INIT_Y + 18 * i);
 				lowest_y = alien.getY() + 16;
-				Asteroid a = new Asteroid(randomx, (GROUND / 2) + randomy);
 				aliens.add(alien);
-				asteroids.add(a);
 
 			}
 		}
@@ -266,18 +250,6 @@ public class Board extends JPanel implements Runnable, Commons {
 		if (player.isDying()) {
 			player.die();
 			ingame = false;
-		}
-	}
-	
-	public void drawAsteroid(Graphics g) {
-		Iterator it = asteroids.iterator();
-		for (Asteroid asteroid : asteroids) {
-			if (asteroid.isVisible()) {
-				g.drawImage(asteroid.getImage(), asteroid.getX(), asteroid.getY(), this);
-			}
-			if (asteroid.isDying()) {
-				asteroid.die();
-			}
 		}
 	}
 
@@ -377,7 +349,6 @@ public class Board extends JPanel implements Runnable, Commons {
 
 			// TODO DRAW
 			drawAliens(g);
-			drawAsteroid(g);
 			drawPlayer(g);
 			drawShot(g);
 			drawBShot(g);
@@ -564,25 +535,6 @@ public class Board extends JPanel implements Runnable, Commons {
 			if (shot.isVisible()) {
 				int shotX = shot.getX();
 				int shotY = shot.getY();
-				for (Asteroid asteroid: asteroids) {
-            				//alien hit detection
-                			int asteroidX = asteroid.getX();
-               				int asteroidY = asteroid.getY();
-
-                			if (asteroid.isVisible() && shot.isVisible()) {
-                   				if (shotX >= (asteroidX) && shotX <= (asteroidX + ALIEN_WIDTH) && shotY >= (asteroidY) &&  shotY <= (asteroidY + ALIEN_HEIGHT)) {
-
-							ImageIcon ii = new ImageIcon(explImg);
-							asteroid.setImage(ii.getImage());
-							asteroid.setDying(true);
-							deaths++;
-							shot.die();
-                       
-					    	}
-
-					}
-
-				}
 
 				for (Alien alien : aliens) {
 					// alien hit detection
@@ -650,26 +602,10 @@ public class Board extends JPanel implements Runnable, Commons {
 					int alienY = alien.getY();
 
 					if (alien.isVisible()) {
-						/*if (playerX >= (alienX) && playerX <= (alienX + ALIEN_WIDTH) && playerY >= (alienY)
-								&& playerY <= (alienY + ALIEN_HEIGHT)) {*/
-						/*
-						System.out.println("player X: " + player.leftX() + " " + player.rightX());
-						System.out.println("Alien X: " + alien.leftX() + " " + alien.rightX());
-						System.out.println("player Y: " + player.topY() + " " + player.bottomY());
-						System.out.println("Alien Y: " + alien.topY() + " " + alien.bottomY());
-						*/
-						
-							if(player.isTouching(alien)) {
-								/*
-								System.err.println(
-								"\nplayer X: \t" + "left: " + player.leftX() + "\t right: " + player.rightX()
-								+"\nAlien X: \t" + "left: " +alien.leftX() + "\t right: " + alien.rightX()
-								+"\nplayer Y: \t"+ "top: " + player.topY() + " \t bottom: " + player.bottomY()
-								+"\nAlien Y: \t" + "top: " + alien.topY()  + "\t bottom: " + alien.bottomY() + "\n\n");
-								*/
+						if (playerX >= (alienX) && playerX <= (alienX + ALIEN_WIDTH) && playerY >= (alienY)
+								&& playerY <= (alienY + ALIEN_HEIGHT)) {
 								player.setDying(true);
 							}
-						//}
 					}
 				}
 				if(boss.isVisible())
@@ -693,6 +629,7 @@ public class Board extends JPanel implements Runnable, Commons {
 					bshot.setY(by);
 				}
 			}
+			
 			// aliens
 			for (Alien alien : aliens) {
 				int x = alien.getX();
