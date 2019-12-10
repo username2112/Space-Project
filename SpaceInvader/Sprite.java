@@ -17,6 +17,11 @@ public class Sprite {
     public Sprite() {
         visible = true;
     }
+    
+    public Sprite(int H, int W) {
+    	width = W;
+    	height = H;
+    }
 
     public void die() {
         visible = false;
@@ -105,4 +110,22 @@ public class Sprite {
     	}
     	return false;
     }
+    public boolean inSpriteRange(Sprite target, int range) {
+       	range = range / 2;   
+    	if(this.rightX() + range >= target.leftX() && this.rightX() + range <= target.rightX() && 	//top right
+       			this.topY() - range >= target.bottomY() && this.topY() - range <= target.topY() ||
+       			
+       	   this.leftX() - range >= target.leftX() && this.leftX() - range <= target.rightX() &&		//top left
+       			this.topY() - range >= target.bottomY() && this.topY() - range <= target.topY() ||
+       			
+       	   this.rightX() + range >= target.leftX() && this.rightX() + range <= target.rightX() && 	//bottom right
+       			this.bottomY() + range >= target.bottomY() && this.bottomY() + range <= target.topY() ||
+       			
+       	   this.leftX() - range >= target.leftX() && this.leftX() - range <= target.rightX() &&		//bottom left
+       			this.bottomY() + range >= target.bottomY() && this.bottomY() + range <= target.topY())
+       	{
+       		return true;
+       	}
+       	return false;
+       }
 }
