@@ -4,65 +4,65 @@ import javax.swing.ImageIcon;
 
 public class Alien extends Sprite {
 
-   private Bomb bomb;
-   private int startX;
-   private final String alienImg = "src\\images\\alien.png";
+	private Bomb bomb;
+	private int startX;
+	private final String alienImg = "src\\images\\alien.png";
 
-   public Alien(int x, int y) {
-       initAlien(x, y);
-       startX = x;
-       height = 32;
-       width = 32;
-   }
+	public Alien(int x, int y) {
+		initAlien(x, y);
+		startX = x;
+		height = 32;
+		width = 32;
+	}
 
-   private void initAlien(int x, int y) {
+	private void initAlien(int x, int y) {
 
-       this.x = x;
-       this.y = y;
+		this.x = x;
+		this.y = y;
 
-       bomb = new Bomb(x, y);
-       ImageIcon ii = new ImageIcon(alienImg);
-       setImage(ii.getImage());
-   }
+		bomb = new Bomb(x, y);
+		ImageIcon ii = new ImageIcon(alienImg);
+		setImage(ii.getImage());
+	}
 
-   public void act(int direction) {
-       
-       this.x += direction;
-   }
+	public void act(int direction) {
 
-   public Bomb getBomb() {
-       
-       return bomb;
-   }
+		this.x += direction;
+	}
 
-   public class Bomb extends Sprite {
+	public Bomb getBomb() {
 
-       private final String bombImg = "src\\images\\bomb.png";
-       private boolean destroyed;
+		return bomb;
+	}
 
-       public Bomb(int x, int y) {
+	public class Bomb extends Sprite {
 
-           initBomb(x, y);
-       }
+		private final String bombImg = "src\\images\\bomb.png";
+		private boolean destroyed;
 
-       private void initBomb(int x, int y) {
+		public Bomb(int x, int y) {
 
-           setDestroyed(true);
-           this.x = x;
-           this.y = y;
-           ImageIcon ii = new ImageIcon(bombImg);
-           setImage(ii.getImage());
+			initBomb(x, y);
+		}
 
-       }
+		private void initBomb(int x, int y) {
 
-       public void setDestroyed(boolean destroyed) {
-       
-           this.destroyed = destroyed;
-       }
+			setDestroyed(true);
+			this.x = x;
+			this.y = y;
+			ImageIcon ii = new ImageIcon(bombImg);
+			setImage(ii.getImage());
 
-       public boolean isDestroyed() {
-       
-           return destroyed;
-       }
-   }
+		}
+
+		public void setDestroyed(boolean destroyed) {
+
+			this.destroyed = destroyed;
+		}
+
+		public boolean isDestroyed() {
+
+			return destroyed;
+		}
+	}
 }
