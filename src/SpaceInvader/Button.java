@@ -6,12 +6,9 @@ import javax.swing.ImageIcon;
 
 public class Button extends Sprite {
 	public boolean isPressed = false;
-	private int startX;
-	private String[] path = { "src\\images\\button0.png", "src\\images\\button1.png", "src\\images\\button2.png" };
 
-	public Button(int x, int y, int type) {
-		makeButton(x, y, type);
-		startX = x;
+	public Button(int x, int y, String buttonImage) {
+		makeButton(x, y, buttonImage);
 	}
 
 	public void checkMouse(Point p, Button b) {
@@ -22,12 +19,11 @@ public class Button extends Sprite {
 		}
 	}
 
-	private void makeButton(int x, int y, int type) {
-
+	private void makeButton(int x, int y, String buttonImage) {
 		this.x = x;
 		this.y = y;
 		this.setVisible(true);
-		ImageIcon ii = new ImageIcon(path[type]);
+		ImageIcon ii = new ImageIcon(buttonImage);
 		setImage(ii.getImage());
 	}
 

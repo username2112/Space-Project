@@ -24,7 +24,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class Board extends JPanel implements Runnable, Commons {
+public class GameBoard extends JPanel implements Runnable, Commons {
 
 	private Dimension d;
 
@@ -87,7 +87,7 @@ public class Board extends JPanel implements Runnable, Commons {
 	private Thread animator2;
 
 	// CONSTRUCTOR
-	public Board() {
+	public GameBoard() {
 		initTS();
 	}
 
@@ -102,7 +102,7 @@ public class Board extends JPanel implements Runnable, Commons {
 		setBackground(Color.black);
 		bInit();
 		setDoubleBuffered(true);
-		GAME_SOUND.Background();
+		GameSounds.background();
 
 	}
 
@@ -110,8 +110,8 @@ public class Board extends JPanel implements Runnable, Commons {
 
 		inhs = false;
 		// array list declarations
-		bGame = new Button(201, 200, 0);
-		highScores = new Button(201, 300, 1);
+		bGame = new Button(201, 200, ImagePaths.getButton0Path());
+		highScores = new Button(201, 300, ImagePaths.getButton1Path());
 		title = new Title(73, 40);
 		this.addMouseListener(new MouseAdapter() {
 			@Override
@@ -156,7 +156,7 @@ public class Board extends JPanel implements Runnable, Commons {
 			num++;
 		}
 		input.close();
-		menu = new Button(201, 500, 2);
+		menu = new Button(201, 500, ImagePaths.getButton2Path());
 		this.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -913,7 +913,7 @@ public class Board extends JPanel implements Runnable, Commons {
 				if (ingame) {
 					if (!shot.isVisible()) {
 						shot = new Shot(x, y, 0);
-						GAME_SOUND.shot();
+						GameSounds.shot();
 					}
 				}
 			}
@@ -921,7 +921,7 @@ public class Board extends JPanel implements Runnable, Commons {
 				if (ingame) {
 					if (!shot.isVisible()) {
 						shot = new Shot(x, y, 1);
-						GAME_SOUND.shot();
+						GameSounds.shot();
 					}
 				}
 			}
@@ -929,7 +929,7 @@ public class Board extends JPanel implements Runnable, Commons {
 				if (ingame) {
 					if (!shot.isVisible()) {
 						shot = new Shot(x, y, 2);
-						GAME_SOUND.shot();
+						GameSounds.shot();
 					}
 				}
 			}

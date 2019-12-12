@@ -2,7 +2,7 @@ package SpaceInvader;
 
 import java.awt.Image;
 
-public class Sprite {
+public abstract class Sprite {
 
 	private boolean visible;
 	private Image image;

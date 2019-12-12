@@ -9,7 +9,7 @@ public class Player extends Sprite implements Commons {
 	private final int START_Y = BOARD_HEIGHT - 200;
 	private final int START_X = BOARD_WIDTH / 2 - 32;
 
-	private final String playerImg = "src\\images\\player.png";
+	private final String playerImg = ImagePaths.getPlayerPath();
 
 	public Player() {
 		initPlayer();

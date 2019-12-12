@@ -4,27 +4,20 @@ import java.util.Random;
 
 import javax.swing.ImageIcon;
 
+@SuppressWarnings("unused")
 public class Boss extends Sprite {
 
-	private int direction = 0;// 0 = rigght 1 = leeft
+	private int direction = 0;// 0 = right 1 = left
 	private Bomb bomb;
-	private int startX;
-	private String[] imgList = new String[6];
-	{
-		imgList[0] = "src\\images\\Boss.png";
-		imgList[1] = "src\\images\\Boss0.png";
-		imgList[2] = "src\\images\\Boss0Glow.png";
-		imgList[3] = "src\\images\\boss1.png";
-		imgList[4] = "src\\images\\boss2.png";
-		imgList[5] = "src\\images\\Cthulhu.png";
-	}
+	private String[] imgList = new String[] { ImagePaths.getBossPath(), ImagePaths.getBoss0Path(),
+			ImagePaths.getBoss0GlowPath(), ImagePaths.getBoss1Path(), ImagePaths.getBoss2Path(),
+			ImagePaths.getCthulhuPath() };
 	public boolean shoot = false;
 	public int Boss_Type;
 	public Boolean topTouch = false;
 
 	public Boss(int x, int y) {
 		initBoss(x, y);
-		startX = x;
 		height = 128;
 		width = 128;
 	}
@@ -147,7 +140,7 @@ public class Boss extends Sprite {
 	}
 
 	public class Bomb extends Sprite {
-		private final String bombImg = "src\\images\\bomb.png";
+		private final String bombImg = ImagePaths.getBombPath();
 		private boolean destroyed;
 
 		public Bomb(int x, int y) {

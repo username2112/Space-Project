@@ -8,13 +8,10 @@ public class SpaceProject extends JFrame implements Commons {
 
 	public SpaceProject() {
 		initUI();
-
 	}
 
 	private void initUI() {
-
-		add(new Board());
-		// add(new TitleScreen());
+		add(new GameBoard());
 		setTitle("Space Project");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(BOARD_WIDTH, BOARD_HEIGHT);
@@ -24,10 +21,7 @@ public class SpaceProject extends JFrame implements Commons {
 	}
 
 	public static void main(String[] args) {
-
-		// EventQueue.invokeLater(() -> {
-		SpaceProject ex = new SpaceProject();
-		ex.setVisible(true);
-		// });
+		SpaceProject spaceProject = new SpaceProject();
+		spaceProject.setVisible(true);
 	}
 }
