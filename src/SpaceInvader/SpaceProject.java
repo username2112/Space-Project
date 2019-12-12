@@ -11,6 +11,7 @@ public class SpaceProject extends JFrame implements Commons {
 	}
 
 	private void initUI() {
+		ImagePaths.setImagePath("src\\images\\AlexSprites\\");
 		add(new GameBoard());
 		setTitle("Space Project");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
