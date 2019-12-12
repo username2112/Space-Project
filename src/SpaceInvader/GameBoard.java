@@ -188,6 +188,27 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			aliencount++;
 			for (int j = 0; j <= 1 * level; j++) {
 				// alien spacing
+				//int randomx = (int) (Math.random() * BOARD_WIDTH);
+				//int randomy = (int) (Math.random() * 50 + 10);
+				//if (randomx >= 630) {
+				//	randomx -= 20;
+				//} else if (randomx <= 30) {
+				//	randomx += 20;
+				//}
+				//System.out.println(randomy);
+				Alien alien = new Alien(ALIEN_INIT_X + (ALIEN_WIDTH + 4) * j, ALIEN_INIT_Y + 18 * i);
+				lowest_y = alien.getY() + 16;
+				//Asteroid a = new Asteroid(randomx, (GROUND / 2) + randomy);
+				aliens.add(alien);
+				//asteroids.add(a);
+
+			}
+		}
+		
+		//asteroids
+		for (int i = 0; i <= 1 * (level / 2); i++) {
+			for (int j = 0; j <= 1 * (level / 2); j++) {
+				// alien spacing
 				int randomx = (int) (Math.random() * BOARD_WIDTH);
 				int randomy = (int) (Math.random() * 50 + 10);
 				if (randomx >= 630) {
@@ -195,11 +216,8 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 				} else if (randomx <= 30) {
 					randomx += 20;
 				}
-				System.out.println(randomy);
-				Alien alien = new Alien(ALIEN_INIT_X + (ALIEN_WIDTH + 4) * j, ALIEN_INIT_Y + 18 * i);
-				lowest_y = alien.getY() + 16;
+				//System.out.println(randomy);
 				Asteroid a = new Asteroid(randomx, (GROUND / 2) + randomy);
-				aliens.add(alien);
 				asteroids.add(a);
 
 			}
@@ -383,6 +401,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			drawShot(g);
 			drawBShot(g);
 			drawBombing(g);
+			
 			if (level == 3) {
 				g.setColor(Color.gray);
 				g.fillRect(BOARD_WIDTH / 2 - ((Blives_Init * 100) / 2) - 3, 3, Blives_Init * 100 + 6, 16);
@@ -404,6 +423,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 				g.fillRect(BOARD_WIDTH / 2 - (Plives * 100 / 2), GROUND + 80, Plives * 100, 10);
 
 			}
+			
 			// display score and level in bottom left
 			Font small = new Font("ZapfDingbats", Font.BOLD, 20);
 			FontMetrics metr = this.getFontMetrics(small);
@@ -415,6 +435,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			g.drawString("Score: " + deaths + "00", metr.stringWidth(message) - 100, GROUND + 50);
 			g.drawString("Level: " + level, metr.stringWidth(message) - 100, GROUND + 30);
 			g.drawString("FPS: " + DFPS, BOARD_WIDTH - metr.stringWidth(message), GROUND + 30);
+			
 		}
 
 		Toolkit.getDefaultToolkit().sync();
