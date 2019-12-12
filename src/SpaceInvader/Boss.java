@@ -16,6 +16,7 @@ public class Boss extends Sprite {
 	public int Boss_Type;
 	public Boolean topTouch = false;
 
+	
 	public Boss(int x, int y) {
 		initBoss(x, y);
 		height = 128;
@@ -29,8 +30,8 @@ public class Boss extends Sprite {
 
 		Random r = new Random();
 		Boss_Type = r.nextInt(2);
-		String bossImg = imgList[r.nextInt(imgList.length - 1)];
-
+//		String bossImg = imgList[r.nextInt(imgList.length - 1)];
+		String bossImg = imgList[0];
 		bomb = new Bomb(x, y);
 
 		if (Boss_Type == 0) {

@@ -5,7 +5,7 @@ public class ImagePaths {
 	public static String imageFolderPath = "src\\images\\";
 
 	private static String alienPath = "alien.png";
-	private static String asteroidPath = "asteroid.png";
+	private static String asteroidPath = "Asteroid.png";
 	private static String bombPath = "bomb.png";
 	private static String boss0GlowPath = "Boss0Glow.png";
 	private static String boss0Path = "Boss0.png";

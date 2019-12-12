@@ -17,7 +17,6 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
-
 import java.util.Scanner;
 
 //visual imports
@@ -37,7 +36,6 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 	private ArrayList<Asteroid> asteroids;
 
 	private Player player;
-	private BombShot bombc;
 	private Shot shot;
 	private Asteroid asteroid;
 	private final int Plives_Init = 3;
@@ -66,7 +64,6 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 	// CORE VARIABLES
 	public static int lowest_y = 0;
 	private int deaths = 0;
-	private int exk = 0;
 	private int aliencount = 2;
 	private int bosscount = 1;
 	private boolean ingame = true; // MAIN LOOP VAR
@@ -92,7 +89,6 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 	private Thread animator2;
 
 	// CONSTRUCTOR
-
 	public GameBoard() {
 		initTS();
 	}
@@ -121,7 +117,6 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 		title = new Title(73, 40);
 		this.addMouseListener(new MouseAdapter() {
 			@Override
-
 			public void mouseClicked(MouseEvent e) {
 				bGame.checkMouse(e.getPoint(), bGame);
 				highScores.checkMouse(e.getPoint(), highScores);
@@ -170,6 +165,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 				menu.checkMouse(e.getPoint(), menu);
 				if (menu.isPressed && (isRunning == false)) {
 					bInit();
+
 				}
 
 			}
@@ -192,21 +188,36 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			aliencount++;
 			for (int j = 0; j <= 1 * level; j++) {
 				// alien spacing
+				//int randomx = (int) (Math.random() * BOARD_WIDTH);
+				//int randomy = (int) (Math.random() * 50 + 10);
+				//if (randomx >= 630) {
+				//	randomx -= 20;
+				//} else if (randomx <= 30) {
+				//	randomx += 20;
+				//}
+				//System.out.println(randomy);
+				Alien alien = new Alien(ALIEN_INIT_X + (ALIEN_WIDTH + 4) * j, ALIEN_INIT_Y + 18 * i);
+				lowest_y = alien.getY() + 16;
+				//Asteroid a = new Asteroid(randomx, (GROUND / 2) + randomy);
+				aliens.add(alien);
+				//asteroids.add(a);
+
+			}
+		}
+		
+		//asteroids
+		for (int i = 0; i <= 1 * (level / 2); i++) {
+			for (int j = 0; j <= 1 * (level / 2); j++) {
+				// alien spacing
 				int randomx = (int) (Math.random() * BOARD_WIDTH);
 				int randomy = (int) (Math.random() * 50 + 10);
 				if (randomx >= 630) {
 					randomx -= 20;
-        }
-				else if(randomx <= 30)
-				{
-
+				} else if (randomx <= 30) {
 					randomx += 20;
 				}
-				System.out.println(randomy);
-				Alien alien = new Alien(ALIEN_INIT_X + (ALIEN_WIDTH + 4) * j, ALIEN_INIT_Y + 18 * i);
-				lowest_y = alien.getY() + 16;
+				//System.out.println(randomy);
 				Asteroid a = new Asteroid(randomx, (GROUND / 2) + randomy);
-				aliens.add(alien);
 				asteroids.add(a);
 
 			}
@@ -220,7 +231,6 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 		player = new Player();
 		shot = new Shot();
 		bshot = new BShot();
-		bombc = new BombShot();
 		boss = new Boss(BOSS_INIT_X, BOSS_INIT_Y);
 
 		// idk why but boss doesn't have this by default
@@ -277,6 +287,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			ingame = false;
 		}
 	}
+
 	public void drawAsteroid(Graphics g) {
 		Iterator<Asteroid> it = asteroids.iterator();
 		for (Asteroid asteroid : asteroids) {
@@ -288,11 +299,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			}
 		}
 	}
-	public void drawBombConsumable(Graphics g) {
-		if (bombc.isVisible()) {
-			g.drawImage(bombc.getImage(), bombc.getX(), bombc.getY(), this);
-		}
-	}
+
 	public void drawShot(Graphics g) {
 		if (shot.isVisible()) {
 			g.drawImage(shot.getImage(), shot.getX(), shot.getY(), this);
@@ -393,8 +400,8 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			drawPlayer(g);
 			drawShot(g);
 			drawBShot(g);
-			drawBombConsumable(g);
 			drawBombing(g);
+			
 			if (level == 3) {
 				g.setColor(Color.gray);
 				g.fillRect(BOARD_WIDTH / 2 - ((Blives_Init * 100) / 2) - 3, 3, Blives_Init * 100 + 6, 16);
@@ -416,6 +423,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 				g.fillRect(BOARD_WIDTH / 2 - (Plives * 100 / 2), GROUND + 80, Plives * 100, 10);
 
 			}
+			
 			// display score and level in bottom left
 			Font small = new Font("ZapfDingbats", Font.BOLD, 20);
 			FontMetrics metr = this.getFontMetrics(small);
@@ -427,6 +435,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			g.drawString("Score: " + deaths + "00", metr.stringWidth(message) - 100, GROUND + 50);
 			g.drawString("Level: " + level, metr.stringWidth(message) - 100, GROUND + 30);
 			g.drawString("FPS: " + DFPS, BOARD_WIDTH - metr.stringWidth(message), GROUND + 30);
+			
 		}
 
 		Toolkit.getDefaultToolkit().sync();
@@ -572,62 +581,6 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 					}
 				}
 			}
-//TODO clean
-			if (bombc.isVisible()) {
-				int bombcX = bombc.getX();
-				int bombcY = bombc.getY();
-
-				for (Alien alien : aliens) {
-					// alien hit detection for new shot
-					int alienX = alien.getX();
-					int alienY = alien.getY();
-
-					if (alien.isVisible() && bombc.isVisible()) {
-
-						if (bombc.isTouching(alien)) {
-
-							ImageIcon ii = new ImageIcon(explImg);
-							alien.setImage(ii.getImage());
-							alien.setDying(true);
-						   if(exk == 3) {
-							   bombc.die();
-							  
-						    
-						   }
-						   aliencount--;
-						    	
-						}
-					}
-
-					if (bombcY >= GROUND - 10) {
-						bombc.die();
-					}
-					if (boss.isVisible()) {
-						// boss hit detection for new shot
-						if (boss.isVisible() && bombc.isVisible()) {
-							if (bombcX >= (boss.getX()) && bombcX <= (boss.getX() + BOSS_WIDTH)
-									&& bombcY >= (boss.getY()) && bombcY <= (boss.getY() + BOSS_HEIGHT)) {
-
-								Blives--;
-								if (Blives <= 0) {
-									boss.setDying(true);
-								}
-								bombc.die();
-							}
-						}
-					}
-
-				}
-				int y = bombc.getY();
-				Bspeed = 8;
-				y -= Bspeed;
-				// shot border
-				if (y < 0) {
-					bombc.die();
-				} else {
-					bombc.setY(y);
-				}
-			}
 
 			// shot
 			if (shot.isVisible()) {
@@ -641,11 +594,13 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 					if (asteroid.isVisible() && shot.isVisible()) {
 						if (shotX >= (asteroidX) && shotX <= (asteroidX + ALIEN_WIDTH) && shotY >= (asteroidY)
 								&& shotY <= (asteroidY + ALIEN_HEIGHT)) {
+
 							ImageIcon ii = new ImageIcon(explImg);
 							asteroid.setImage(ii.getImage());
 							asteroid.setDying(true);
 							deaths++;
 							shot.die();
+
 						}
 
 					}
@@ -747,6 +702,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 							&& playerY <= (boss.getY() + BOSS_HEIGHT)) {
 
 						player.setDying(true);
+
 					}
 
 			}
@@ -787,11 +743,10 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 				}
 				if (x >= BOARD_WIDTH - BORDER_RIGHT && direction != -1) {
 					direction = -1;
-
 					Iterator<Alien> i1 = aliens.iterator();
 					while (i1.hasNext()) {
-					Alien a2 = i1.next();
-					a2.setY(a2.getY());
+						Alien a2 = i1.next();
+						a2.setY(a2.getY());
 					}
 				}
 				if (x <= BORDER_LEFT && direction != 1) {
@@ -803,6 +758,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 					}
 				}
 			}
+
 			Iterator<Alien> it = aliens.iterator();
 			// TODO LOSE CONDITION (ALIENS TOUCH GREEN LINE)
 			while (it.hasNext()) {
@@ -822,6 +778,10 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			// boss shooting
 			if (boss.shoot == true && boss.isVisible() && !bshot.isVisible()) {
 				boss.shoot = false;
+				// System.out.println("Boss(" + boss.x + ", " + boss.y +")" + "\t" + "bShot(" +
+				// bshot.x + ", " + bshot.y +")");
+				// System.err.println("Boss(" + boss.getX() + ", " + boss.getY() +")" + "\t" +
+				// "bShot(" + bshot.x + ", " + bshot.y +")");
 				System.out.println(boss.getWidth());
 				bshot = new BShot(boss.getX(), boss.getY());
 			}
@@ -992,21 +952,10 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 				if (ingame) {
 					if (!shot.isVisible()) {
 						shot = new Shot(x, y, 2);
-
 						GameSounds.shot();
 					}
 				}
 			}
-			
-			if (key == KeyEvent.VK_B)
-				if (ingame) {
-						System.out.println("Bomb Deployed");
-							if (!bombc.isVisible()) {
-									bombc = new BombShot(x, y);
-									GameSounds.shot();
-								}
-			} 
-
 			if (key == KeyEvent.VK_ESCAPE) {
 				pausedI++;
 				if (pausedI % 2 == 0) {
