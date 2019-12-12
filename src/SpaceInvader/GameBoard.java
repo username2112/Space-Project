@@ -26,6 +26,8 @@ import javax.swing.JPanel;
 
 public class GameBoard extends JPanel implements Runnable, Commons {
 
+	private static final long serialVersionUID = -8479829684389979540L;
+
 	private Dimension d;
 
 	// TODO OBJECT/LIST DECLARATIONS
@@ -246,7 +248,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 	}
 
 	public void drawAliens(Graphics g) {
-		Iterator it = aliens.iterator();
+		Iterator<Alien> it = aliens.iterator();
 		for (Alien alien : aliens) {
 			if (alien.isVisible()) {
 				g.drawImage(alien.getImage(), alien.getX(), alien.getY(), this);
@@ -269,7 +271,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 	}
 
 	public void drawAsteroid(Graphics g) {
-		Iterator it = asteroids.iterator();
+		Iterator<Asteroid> it = asteroids.iterator();
 		for (Asteroid asteroid : asteroids) {
 			if (asteroid.isVisible()) {
 				g.drawImage(asteroid.getImage(), asteroid.getX(), asteroid.getY(), this);
@@ -720,26 +722,26 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 				}
 				if (x >= BOARD_WIDTH - BORDER_RIGHT && direction != -1) {
 					direction = -1;
-					Iterator i1 = aliens.iterator();
+					Iterator<Alien> i1 = aliens.iterator();
 					while (i1.hasNext()) {
-						Alien a2 = (Alien) i1.next();
+						Alien a2 = i1.next();
 						a2.setY(a2.getY());
 					}
 				}
 				if (x <= BORDER_LEFT && direction != 1) {
 					direction = 1;
-					Iterator i2 = aliens.iterator();
+					Iterator<Alien> i2 = aliens.iterator();
 					while (i2.hasNext()) {
-						Alien a = (Alien) i2.next();
+						Alien a = i2.next();
 						a.setY(a.getY());
 					}
 				}
 			}
 
-			Iterator it = aliens.iterator();
+			Iterator<Alien> it = aliens.iterator();
 			// TODO LOSE CONDITION (ALIENS TOUCH GREEN LINE)
 			while (it.hasNext()) {
-				Alien alien = (Alien) it.next();
+				Alien alien = it.next();
 				if (alien.isVisible()) {
 					int y = alien.getY();
 					/*
