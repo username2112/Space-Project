@@ -1003,7 +1003,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 						System.out.println("Bomb Deployed");
 							if (!bombc.isVisible()) {
 									bombc = new BombShot(x, y);
-									GAME_SOUND.shot();
+									GameSounds.shot();
 								}
 			} 
 
