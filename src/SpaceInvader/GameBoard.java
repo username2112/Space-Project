@@ -11,13 +11,12 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Random;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
-import java.time.Clock;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Random;
 import java.util.Scanner;
 
 //visual imports
@@ -25,7 +24,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class Board extends JPanel implements Runnable, Commons {
+public class GameBoard extends JPanel implements Runnable, Commons {
+
+	private static final long serialVersionUID = -8479829684389979540L;
 
 	private Dimension d;
 
@@ -88,7 +89,7 @@ public class Board extends JPanel implements Runnable, Commons {
 	private Thread animator2;
 
 	// CONSTRUCTOR
-	public Board() {
+	public GameBoard() {
 		initTS();
 	}
 
@@ -103,17 +104,19 @@ public class Board extends JPanel implements Runnable, Commons {
 		setBackground(Color.black);
 		bInit();
 		setDoubleBuffered(true);
-		GAME_SOUND.Background();
+		GameSounds.background();
 
 	}
+
 	public void bInit() {
-		
+
 		inhs = false;
 		// array list declarations
-		bGame = new Button(201, 200, 0);
-		highScores = new Button(201, 300, 1);
+		bGame = new Button(201, 200, ImagePaths.getButton0Path());
+		highScores = new Button(201, 300, ImagePaths.getButton1Path());
 		title = new Title(73, 40);
 		this.addMouseListener(new MouseAdapter() {
+			@Override
 			public void mouseClicked(MouseEvent e) {
 				bGame.checkMouse(e.getPoint(), bGame);
 				highScores.checkMouse(e.getPoint(), highScores);
@@ -144,7 +147,6 @@ public class Board extends JPanel implements Runnable, Commons {
 
 	public void hsInit() throws FileNotFoundException {
 		inhs = true;
-		
 
 		// TODO add interpretation of the txt file
 		int num = 0;
@@ -156,13 +158,14 @@ public class Board extends JPanel implements Runnable, Commons {
 			num++;
 		}
 		input.close();
-		menu = new Button(201, 500, 2);
+		menu = new Button(201, 500, ImagePaths.getButton2Path());
 		this.addMouseListener(new MouseAdapter() {
+			@Override
 			public void mouseClicked(MouseEvent e) {
 				menu.checkMouse(e.getPoint(), menu);
 				if (menu.isPressed && (isRunning == false)) {
 					bInit();
-					
+
 				}
 
 			}
@@ -189,9 +192,7 @@ public class Board extends JPanel implements Runnable, Commons {
 				int randomy = (int) (Math.random() * 50 + 10);
 				if (randomx >= 630) {
 					randomx -= 20;
-				}
-				else if(randomx <= 30)
-				{
+				} else if (randomx <= 30) {
 					randomx += 20;
 				}
 				System.out.println(randomy);
@@ -247,7 +248,7 @@ public class Board extends JPanel implements Runnable, Commons {
 	}
 
 	public void drawAliens(Graphics g) {
-		Iterator it = aliens.iterator();
+		Iterator<Alien> it = aliens.iterator();
 		for (Alien alien : aliens) {
 			if (alien.isVisible()) {
 				g.drawImage(alien.getImage(), alien.getX(), alien.getY(), this);
@@ -268,9 +269,9 @@ public class Board extends JPanel implements Runnable, Commons {
 			ingame = false;
 		}
 	}
-	
+
 	public void drawAsteroid(Graphics g) {
-		Iterator it = asteroids.iterator();
+		Iterator<Asteroid> it = asteroids.iterator();
 		for (Asteroid asteroid : asteroids) {
 			if (asteroid.isVisible()) {
 				g.drawImage(asteroid.getImage(), asteroid.getX(), asteroid.getY(), this);
@@ -564,21 +565,22 @@ public class Board extends JPanel implements Runnable, Commons {
 			if (shot.isVisible()) {
 				int shotX = shot.getX();
 				int shotY = shot.getY();
-				for (Asteroid asteroid: asteroids) {
-            				//alien hit detection
-                			int asteroidX = asteroid.getX();
-               				int asteroidY = asteroid.getY();
+				for (Asteroid asteroid : asteroids) {
+					// alien hit detection
+					int asteroidX = asteroid.getX();
+					int asteroidY = asteroid.getY();
 
-                			if (asteroid.isVisible() && shot.isVisible()) {
-                   				if (shotX >= (asteroidX) && shotX <= (asteroidX + ALIEN_WIDTH) && shotY >= (asteroidY) &&  shotY <= (asteroidY + ALIEN_HEIGHT)) {
+					if (asteroid.isVisible() && shot.isVisible()) {
+						if (shotX >= (asteroidX) && shotX <= (asteroidX + ALIEN_WIDTH) && shotY >= (asteroidY)
+								&& shotY <= (asteroidY + ALIEN_HEIGHT)) {
 
 							ImageIcon ii = new ImageIcon(explImg);
 							asteroid.setImage(ii.getImage());
 							asteroid.setDying(true);
 							deaths++;
 							shot.die();
-                       
-					    	}
+
+						}
 
 					}
 
@@ -650,34 +652,36 @@ public class Board extends JPanel implements Runnable, Commons {
 					int alienY = alien.getY();
 
 					if (alien.isVisible()) {
-						/*if (playerX >= (alienX) && playerX <= (alienX + ALIEN_WIDTH) && playerY >= (alienY)
-								&& playerY <= (alienY + ALIEN_HEIGHT)) {*/
 						/*
-						System.out.println("player X: " + player.leftX() + " " + player.rightX());
-						System.out.println("Alien X: " + alien.leftX() + " " + alien.rightX());
-						System.out.println("player Y: " + player.topY() + " " + player.bottomY());
-						System.out.println("Alien Y: " + alien.topY() + " " + alien.bottomY());
-						*/
-						
-							if(player.isTouching(alien)) {
-								/*
-								System.err.println(
-								"\nplayer X: \t" + "left: " + player.leftX() + "\t right: " + player.rightX()
-								+"\nAlien X: \t" + "left: " +alien.leftX() + "\t right: " + alien.rightX()
-								+"\nplayer Y: \t"+ "top: " + player.topY() + " \t bottom: " + player.bottomY()
-								+"\nAlien Y: \t" + "top: " + alien.topY()  + "\t bottom: " + alien.bottomY() + "\n\n");
-								*/
-								player.setDying(true);
-							}
-						//}
+						 * if (playerX >= (alienX) && playerX <= (alienX + ALIEN_WIDTH) && playerY >=
+						 * (alienY) && playerY <= (alienY + ALIEN_HEIGHT)) {
+						 */
+						/*
+						 * System.out.println("player X: " + player.leftX() + " " + player.rightX());
+						 * System.out.println("Alien X: " + alien.leftX() + " " + alien.rightX());
+						 * System.out.println("player Y: " + player.topY() + " " + player.bottomY());
+						 * System.out.println("Alien Y: " + alien.topY() + " " + alien.bottomY());
+						 */
+
+						if (player.isTouching(alien)) {
+							/*
+							 * System.err.println( "\nplayer X: \t" + "left: " + player.leftX() +
+							 * "\t right: " + player.rightX() +"\nAlien X: \t" + "left: " +alien.leftX() +
+							 * "\t right: " + alien.rightX() +"\nplayer Y: \t"+ "top: " + player.topY() +
+							 * " \t bottom: " + player.bottomY() +"\nAlien Y: \t" + "top: " + alien.topY() +
+							 * "\t bottom: " + alien.bottomY() + "\n\n");
+							 */
+							player.setDying(true);
+						}
+						// }
 					}
 				}
-				if(boss.isVisible())
+				if (boss.isVisible())
 					if (playerX >= (boss.getX()) && playerX <= (boss.getX() + BOSS_WIDTH) && playerY >= (boss.getY())
 							&& playerY <= (boss.getY() + BOSS_HEIGHT)) {
-	
+
 						player.setDying(true);
-	
+
 					}
 
 			}
@@ -718,26 +722,26 @@ public class Board extends JPanel implements Runnable, Commons {
 				}
 				if (x >= BOARD_WIDTH - BORDER_RIGHT && direction != -1) {
 					direction = -1;
-					Iterator i1 = aliens.iterator();
+					Iterator<Alien> i1 = aliens.iterator();
 					while (i1.hasNext()) {
-						Alien a2 = (Alien) i1.next();
+						Alien a2 = i1.next();
 						a2.setY(a2.getY());
 					}
 				}
 				if (x <= BORDER_LEFT && direction != 1) {
 					direction = 1;
-					Iterator i2 = aliens.iterator();
+					Iterator<Alien> i2 = aliens.iterator();
 					while (i2.hasNext()) {
-						Alien a = (Alien) i2.next();
+						Alien a = i2.next();
 						a.setY(a.getY());
 					}
 				}
 			}
 
-			Iterator it = aliens.iterator();
+			Iterator<Alien> it = aliens.iterator();
 			// TODO LOSE CONDITION (ALIENS TOUCH GREEN LINE)
 			while (it.hasNext()) {
-				Alien alien = (Alien) it.next();
+				Alien alien = it.next();
 				if (alien.isVisible()) {
 					int y = alien.getY();
 					/*
@@ -753,8 +757,10 @@ public class Board extends JPanel implements Runnable, Commons {
 			// boss shooting
 			if (boss.shoot == true && boss.isVisible() && !bshot.isVisible()) {
 				boss.shoot = false;
-				//System.out.println("Boss(" + boss.x + ", " + boss.y +")" + "\t" + "bShot(" + bshot.x + ", " + bshot.y +")");
-				//System.err.println("Boss(" + boss.getX() + ", " + boss.getY() +")" + "\t" + "bShot(" + bshot.x + ", " + bshot.y +")");
+				// System.out.println("Boss(" + boss.x + ", " + boss.y +")" + "\t" + "bShot(" +
+				// bshot.x + ", " + bshot.y +")");
+				// System.err.println("Boss(" + boss.getX() + ", " + boss.getY() +")" + "\t" +
+				// "bShot(" + bshot.x + ", " + bshot.y +")");
 				System.out.println(boss.getWidth());
 				bshot = new BShot(boss.getX(), boss.getY());
 			}
@@ -909,7 +915,7 @@ public class Board extends JPanel implements Runnable, Commons {
 				if (ingame) {
 					if (!shot.isVisible()) {
 						shot = new Shot(x, y, 0);
-						GAME_SOUND.shot();
+						GameSounds.shot();
 					}
 				}
 			}
@@ -917,7 +923,7 @@ public class Board extends JPanel implements Runnable, Commons {
 				if (ingame) {
 					if (!shot.isVisible()) {
 						shot = new Shot(x, y, 1);
-						GAME_SOUND.shot();
+						GameSounds.shot();
 					}
 				}
 			}
@@ -925,7 +931,7 @@ public class Board extends JPanel implements Runnable, Commons {
 				if (ingame) {
 					if (!shot.isVisible()) {
 						shot = new Shot(x, y, 2);
-						GAME_SOUND.shot();
+						GameSounds.shot();
 					}
 				}
 			}
