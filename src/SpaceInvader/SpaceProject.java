@@ -6,6 +6,7 @@ public class SpaceProject extends JFrame implements Commons {
 
 	private static final long serialVersionUID = -3707317083523991011L;
 	public static String texturePackPath = "DefaultTextures";
+	public static SpaceProject spaceProject;
 	
 	public SpaceProject() {
 		initUI();
@@ -19,11 +20,10 @@ public class SpaceProject extends JFrame implements Commons {
 		setSize(BOARD_WIDTH, BOARD_HEIGHT);
 		setLocationRelativeTo(null);
 		setResizable(false);
-
 	}
 
 	public static void main(String[] args) {
-		SpaceProject spaceProject = new SpaceProject();
+		spaceProject = new SpaceProject();
 		spaceProject.setVisible(true);
 	}
 }

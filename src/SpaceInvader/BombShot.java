@@ -20,8 +20,8 @@ public class BombShot extends Sprite{
 	   public void explode() {
 	       ImageIcon ii = new ImageIcon(ImagePaths.getExplosionPath());
 	       setImage(ii.getImage());
-		   width = 64;
-		   height = 64;
+		   width = 180;
+		   height = 180;
 	   }
 	   
 	   private void initBombShot(int x, int y) {
