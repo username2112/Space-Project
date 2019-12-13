@@ -3,7 +3,7 @@ package SpaceInvader;
 import javax.swing.ImageIcon;
 
 public class BombShot extends Sprite{
-	 private final String shotImg = "src\\images\\shot .png";
+	 private final String shotImg = ImagePaths.getShotPath();
 	   private final int H_SPACE = 6;
 	   private final int V_SPACE = 4;
 	   
@@ -17,9 +17,11 @@ public class BombShot extends Sprite{
 		   
 	   }
 	   
-	   private void explode() {
-		   width = 64;
-		   height = 64;
+	   public void explode() {
+	       ImageIcon ii = new ImageIcon(ImagePaths.getExplosionPath());
+	       setImage(ii.getImage());
+		   width = 180;
+		   height = 180;
 	   }
 	   
 	   private void initBombShot(int x, int y) {

@@ -7,6 +7,8 @@ public class Asteroid extends Sprite {
 
 	public Asteroid(int x, int y) {
 		initAlien(x, y);
+		width = 32;
+		height = 32;
 	}
 
 	private void initAlien(int x, int y) {
