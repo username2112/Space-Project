@@ -690,6 +690,10 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 							shot.die();
 
 						}
+						if(player.isTouching(asteroid)) {
+							player.setDying(true);
+							asteroid.die();
+						}
 
 					}
 
@@ -773,7 +777,18 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 						player.setDying(true);
 
 					}
-
+				
+				for (Asteroid asteroid : asteroids) {
+						if(player.isTouching(asteroid)) {
+							asteroid.die();
+							System.out.println("t");
+							Plives--;
+							if(Plives <= 0) {
+								player.setDying(true);
+							}
+						}
+						
+				}
 			}
 
 			if (bshot.isVisible()) {
