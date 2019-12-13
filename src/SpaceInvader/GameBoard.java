@@ -444,6 +444,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			g.drawLine(0, GROUND, BOARD_WIDTH, GROUND);
 
 			// TODO DRAW
+
 			drawAliens(g);
 			drawAsteroid(g);
 			drawPlayer(g);
@@ -949,7 +950,14 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 
 			try {
 				g.setColor(Color.BLACK);
-				g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+				//g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+				Font small = new Font("Helvetica", Font.BOLD, 50);
+				FontMetrics metr = this.getFontMetrics(small);
+				metr = this.getFontMetrics(small);
+				g.setColor(Color.white);
+				g.setFont(small);
+				g.drawString("PAUSED", BOARD_WIDTH / 2 - (metr.stringWidth("PAUSED") / 2),  BOARD_HEIGHT / 2- metr.getHeight());
+
 				Thread.sleep(10);
 				
 			} catch (InterruptedException e) {
