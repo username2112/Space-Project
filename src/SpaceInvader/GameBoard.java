@@ -24,6 +24,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import com.sun.javafx.fxml.expression.Expression;
+
 public class GameBoard extends JPanel implements Runnable, Commons {
 
 	private static final long serialVersionUID = -8479829684389979540L;
@@ -1014,12 +1016,16 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 		@Override
 
 		public void keyReleased(KeyEvent e) {
-			player.keyReleased(e);
+			try {
+				player.keyReleased(e);
+			} catch(Exception ea) {
+				//doesn't give us a bunch of errors when we press a key in the menu
+			}
 		}
 
 		@Override
 		public void keyPressed(KeyEvent e) {
-
+			try {
 			player.keyPressed(e);
 
 			int x = player.getX();
@@ -1072,6 +1078,9 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 					SpaceProject.spaceProject.setVisible(true);
 				}
 			}
+			} catch(Exception ea) {
+				//doesn't give us a bunch of errors when we press a key in the menu
+			}//end of error catch
 		}// end key pressed
 	}// end TAdapter
 }// class closure
