@@ -111,15 +111,17 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 	public void bInit() {
 
 		inhs = false;
+
 		// array list declarations
-		bGame = new Button(201, 200, ImagePaths.getButton0Path());
-		highScores = new Button(201, 300, ImagePaths.getButton1Path());
+		bGame = new Button(201, 200, ImagePaths.getButtonPath());
+		highScores = new Button(201, 300, ImagePaths.getButtonPath());
 		title = new Title(73, 40);
 		this.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				bGame.checkMouse(e.getPoint(), bGame);
 				highScores.checkMouse(e.getPoint(), highScores);
+								
 				if (bGame.isPressed && (isRunning == false && inhs == false)) {
 					gameInit();
 
@@ -129,7 +131,6 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 					try {
 						hsInit();
 					} catch (FileNotFoundException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 
@@ -148,7 +149,6 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 	public void hsInit() throws FileNotFoundException {
 		inhs = true;
 
-		// TODO add interpretation of the txt file
 		int num = 0;
 		Scanner input = new Scanner(new File("src\\High Scores.txt"));
 		while (input.hasNextLine() && num < 3) {
@@ -158,7 +158,10 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			num++;
 		}
 		input.close();
-		menu = new Button(201, 500, ImagePaths.getButton2Path());
+		menu = new Button(201, 500, ImagePaths.getButtonPath());
+		
+		//TODO main menu
+		
 		this.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -187,20 +190,9 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 		for (int i = 0; i <= 1 * level; i++) {
 			aliencount++;
 			for (int j = 0; j <= 1 * level; j++) {
-				// alien spacing
-				//int randomx = (int) (Math.random() * BOARD_WIDTH);
-				//int randomy = (int) (Math.random() * 50 + 10);
-				//if (randomx >= 630) {
-				//	randomx -= 20;
-				//} else if (randomx <= 30) {
-				//	randomx += 20;
-				//}
-				//System.out.println(randomy);
 				Alien alien = new Alien(ALIEN_INIT_X + (ALIEN_WIDTH + 4) * j, ALIEN_INIT_Y + 18 * i);
 				lowest_y = alien.getY() + 16;
-				//Asteroid a = new Asteroid(randomx, (GROUND / 2) + randomy);
 				aliens.add(alien);
-				//asteroids.add(a);
 
 			}
 		}
@@ -216,7 +208,6 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 				} else if (randomx <= 30) {
 					randomx += 20;
 				}
-				//System.out.println(randomy);
 				Asteroid a = new Asteroid(randomx, (GROUND / 2) + randomy);
 				asteroids.add(a);
 
@@ -321,16 +312,23 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 		}
 	}
 
-	public void drawBGame(Graphics g) {
-		if (bGame.isVisible()) {
-			g.drawImage(bGame.getImage(), bGame.getX(), bGame.getY(), this);
-		}
-
-	}
-
 	public void drawTitle(Graphics g) {
 		if (title.isVisible()) {
 			g.drawImage(title.getImage(), title.getX(), title.getY(), this);
+		}
+
+	}
+	
+	public void drawBGame(Graphics g) {
+		if (bGame.isVisible()) {
+			g.drawImage(bGame.getImage(), bGame.getX(), bGame.getY(), this);
+			
+			Font small = new Font("Helvetica", Font.BOLD, 20);
+			FontMetrics metr = this.getFontMetrics(small);
+			metr = this.getFontMetrics(small);
+			g.setColor(Color.white);
+			g.setFont(small);
+			g.drawString("BEGIN GAME", (bGame.getX() + (bGame.getWidth() / 2) - (metr.stringWidth("BEGIN GAME") / 2)), (bGame.getY() + bGame.getHeight() - metr.getHeight()));
 		}
 
 	}
@@ -338,6 +336,13 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 	public void drawHS(Graphics g) {
 		if (highScores.isVisible()) {
 			g.drawImage(highScores.getImage(), highScores.getX(), highScores.getY(), this);
+			Font small = new Font("Helvetica", Font.BOLD, 20);
+			FontMetrics metr = this.getFontMetrics(small);
+			metr = this.getFontMetrics(small);
+			g.setColor(Color.white);
+			g.setFont(small);
+			g.drawString("HIGH SCORES", (highScores.getX() + (highScores.getWidth() / 2) - (metr.stringWidth("HIGH SCORES") / 2)), (highScores.getY() + highScores.getHeight() - metr.getHeight()));
+		
 		}
 
 	}
@@ -345,6 +350,13 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 	public void drawMenu(Graphics g) {
 		if (menu.isVisible()) {
 			g.drawImage(menu.getImage(), menu.getX(), menu.getY(), this);
+			Font small = new Font("Helvetica", Font.BOLD, 20);
+			FontMetrics metr = this.getFontMetrics(small);
+			metr = this.getFontMetrics(small);
+			g.setColor(Color.white);
+			g.setFont(small);
+			g.drawString("MAIN MENU", (menu.getX() + (menu.getWidth() / 2) - (metr.stringWidth("MAIN MENU") / 2)), (menu.getY() + menu.getHeight() - metr.getHeight()));
+		
 		}
 
 	}
@@ -922,7 +934,6 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 		}
 
 		@Override
-
 		public void keyPressed(KeyEvent e) {
 
 			player.keyPressed(e);

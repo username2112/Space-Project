@@ -9,9 +9,8 @@ public class Boss extends Sprite {
 
 	private int direction = 0;// 0 = right 1 = left
 	private Bomb bomb;
-	private String[] imgList = new String[] { ImagePaths.getBossPath(), ImagePaths.getBoss0Path(),
-			ImagePaths.getBoss0GlowPath(), ImagePaths.getBoss1Path(), ImagePaths.getBoss2Path(),
-			ImagePaths.getCthulhuPath() };
+	private String[] imgList = new String[] { ImagePaths.getBoss0Path(), ImagePaths.getBoss1Path(),
+			ImagePaths.getBoss2Path()};
 	public boolean shoot = false;
 	public int Boss_Type;
 	public Boolean topTouch = false;
@@ -30,8 +29,7 @@ public class Boss extends Sprite {
 
 		Random r = new Random();
 		Boss_Type = r.nextInt(2);
-//		String bossImg = imgList[r.nextInt(imgList.length - 1)];
-		String bossImg = imgList[0];
+		String bossImg = imgList[r.nextInt(imgList.length - 1)];
 		bomb = new Bomb(x, y);
 
 		if (Boss_Type == 0) {
