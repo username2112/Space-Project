@@ -375,6 +375,11 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 		}
 
 	}
+	
+	public void drawPause(Graphics g) {
+		g.setColor(Color.black);
+		g.drawRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+	}
 
 	// -----------------\\
 	// TODO CORE SYSTEMS\\
@@ -602,8 +607,8 @@ public class GameBoard extends JPanel implements Runnable, Commons {
  					if (alien.isVisible() && bombc.isVisible()) {	
 
  						if (bombc.isTouching(alien) || alien.isTouching(bombc)) {	
- 							bombc.explode();
  							exk++;
+ 							bombc.explode();
 							alien.setDying(true);
 							alien.die();
 							if(exk >= 2) {	
@@ -656,8 +661,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 
 				// boss hit detection w/ player
 				if (player.isVisible() && bshot.isVisible()) {
-					if (bombX >= (playerX) && bombX <= (playerX + PLAYER_WIDTH) && bombY >= (playerY)
-							&& bombY <= (playerY + PLAYER_HEIGHT)) {
+					if (player.isTouching(bshot) || bshot.isTouching(player)) {
 
 						player.setDying(true);
 						bshot.setDying(true);
@@ -840,7 +844,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			Random generator = new Random();
 
 			// boss shooting
-			if (boss.shoot == true && boss.isVisible() && !bshot.isVisible()) {
+			if ((player.getX() >= boss.getX() - 16 || player.getX() <= boss.getX() + 16 )&& boss.isVisible() && !bshot.isVisible()) {
 				boss.shoot = false;
 				bshot = new BShot(boss.getX(), boss.getY());
 			}
