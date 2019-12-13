@@ -582,7 +582,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 	}
 
 	public void animationCycle() {
-		if (isRunning == true) {
+		if (isRunning == true && !paused) {
 			// if kills = num aliens to destroy
 			if (deaths == NUMBER_OF_ALIENS_TO_DESTROY) {
 				ingame = false;
@@ -609,13 +609,13 @@ public class GameBoard extends JPanel implements Runnable, Commons {
  						if (bombc.isTouching(alien) || alien.isTouching(bombc)) {	
  							exk++;
  							bombc.explode();
-							alien.setDying(true);
-							alien.die();
-							if(exk >= 2) {	
+							if(exk >= 1) {	
 								exk = 0;
 								bombc.setDying(true);	
  						   	}	
 							aliencount--;	
+							alien.setDying(true);
+							alien.die();
  						}	
 					}	
 
@@ -638,7 +638,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 					}	
 
  				}	
- 				if(exk <= 1) {
+ 				if(!(exk >= 1)) {
 					int y = bombc.getY();	
 					Bspeed = 8;	
 					y -= Bspeed;	
@@ -792,10 +792,10 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 				int x = alien.getX();
 				// irregular movement
 				if (x % 28 == 0) {
-					if (alien.getY() < GROUND - 20) {
+					if (alien.getY() < GROUND - 33) {
 						// alien.setY(alien.getY()+ 10);
 						alien.setY(alien.getY() + 10);
-					} else if (alien.getY() >= GROUND - 20)// BOARD_HEIGHT/2
+					} else if (alien.getY() >= GROUND - 33)// BOARD_HEIGHT/2
 					{
 						while (alien.getY() > ALIEN_INIT_Y + 16) {
 							alien.setY(16);
@@ -893,6 +893,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 						b.setDestroyed(true);
 					}
 				}
+			
 			}
 		} else {
 			// this is for transitions from the title screen to hs menu to avoid a crap ton
@@ -924,8 +925,8 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 				checkIfLevelComplete();
 				// visuals
 				repaint();
-				animationCycle();
 			}
+			animationCycle();
 			// timE
 			sleep = DELAY;
 
@@ -996,7 +997,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 
 			if (key == KeyEvent.VK_SPACE) {
 				if (ingame) {
-					if (!shot.isVisible()) {
+					if (!shot.isVisible() && !bombc.isVisible()) {
 						shot = new Shot(x, y, 0);
 						GameSounds.shot();
 					}
@@ -1004,7 +1005,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			}
 			if (key == KeyEvent.VK_Q || key == KeyEvent.VK_V || key == KeyEvent.VK_PAGE_UP) {
 				if (ingame) {
-					if (!shot.isVisible()) {
+					if (!shot.isVisible() && !bombc.isVisible()) {
 						shot = new Shot(x, y, 1);
 						GameSounds.shot();
 					}
@@ -1012,7 +1013,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			}
 			if (key == KeyEvent.VK_E || key == KeyEvent.VK_N || key == KeyEvent.VK_PAGE_DOWN) {
 				if (ingame) {
-					if (!shot.isVisible()) {
+					if (!shot.isVisible() && !bombc.isVisible()) {
 						shot = new Shot(x, y, 2);
 						GameSounds.shot();
 					}
@@ -1020,7 +1021,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			}
 			if (key == KeyEvent.VK_B)	
 				if (ingame) {	
-						if (!bombc.isVisible()) {	
+						if (!bombc.isVisible() && !shot.isVisible()) {	
 							bombc = new BombShot(x, y);	
 							GameSounds.shot();	
 						}	
