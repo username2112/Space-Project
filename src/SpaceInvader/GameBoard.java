@@ -537,26 +537,8 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			pr.println(sci1);
 			pr.println(sci2);
 			
-			restart = new Button(201, (BOARD_HEIGHT / 2 - 100), ImagePaths.getButtonPath());
-			drawRestart(g);
-			while(true) {
-				this.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseClicked(MouseEvent e) {
-						restart.checkMouse(e.getPoint(), restart);
-						if (restart.isPressed && (isRunning == false)) {
-							bInit();
-						}
-	
-					}
-				});
-				if(restart.isPressed) {
-					SpaceProject.spaceProject.dispose();
-					SpaceProject.spaceProject = new SpaceProject();
-					SpaceProject.spaceProject.setVisible(true);
-				}
-			}
-
+			g.drawString("PRESS ESC TO RESTART", (BOARD_WIDTH / 2) - mmetr.stringWidth("PRESS ESC TO RESTART") / 2, mmetr.getHeight() + 10);
+			
 		} else if (sci < level) {
 			// new high score
 
@@ -817,7 +799,6 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 				for (Asteroid asteroid : asteroids) {
 						if(player.isTouching(asteroid)) {
 							asteroid.die();
-							System.out.println("t");
 							Plives--;
 							if(Plives <= 0) {
 								player.setDying(true);
@@ -1084,6 +1065,11 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 					paused = true;
 				} else {
 					paused = false;
+				}
+				if(!player.isVisible()) {
+					SpaceProject.spaceProject.dispose();
+					SpaceProject.spaceProject = new SpaceProject();
+					SpaceProject.spaceProject.setVisible(true);
 				}
 			}
 		}// end key pressed
