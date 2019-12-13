@@ -1,5 +1,7 @@
 package SpaceInvader;
 
+import java.io.File;
+
 public class ImagePaths {
 
 	public static String imageFolderPath = "src\\images\\";

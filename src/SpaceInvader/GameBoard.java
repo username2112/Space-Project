@@ -48,7 +48,6 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 
 	private Button bGame;
 	private Button highScores;
-	private Button resourcePacks;
 	private Title title;
 	private Button menu;
 	// INITIAL VALUES

@@ -5,13 +5,14 @@ import javax.swing.JFrame;
 public class SpaceProject extends JFrame implements Commons {
 
 	private static final long serialVersionUID = -3707317083523991011L;
-
+	public static String texturePackPath = "DefaultTextures";
+	
 	public SpaceProject() {
 		initUI();
 	}
 
 	private void initUI() {
-		ImagePaths.setImagePath("src\\images\\DefaultTextures\\");
+		ImagePaths.setImagePath("src\\images\\"+ texturePackPath +"\\");
 		add(new GameBoard());
 		setTitle("Space Project");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
