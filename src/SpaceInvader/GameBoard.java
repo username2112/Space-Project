@@ -942,11 +942,16 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 
 		long beforeTime, timeDiff, sleep;
 		beforeTime = System.currentTimeMillis();
-
+		
+		Graphics g = this.getGraphics();
+		
 		Thread pause = new Thread(() -> {
 
 			try {
+				g.setColor(Color.BLACK);
+				g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
 				Thread.sleep(10);
+				
 			} catch (InterruptedException e) {
 				System.err.println("pause interrupted");
 			}
@@ -958,14 +963,13 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 				// looping methods
 				checkIfLevelComplete();
 				// visuals
+				animationCycle();
 				repaint();
 			}
-			animationCycle();
+			
 			// timE
 			sleep = DELAY;
-
 			try {
-
 				if (paused) {
 					pause.run();
 				} else {
