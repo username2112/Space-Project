@@ -9,6 +9,8 @@ public class Button extends Sprite {
 
 	public Button(int x, int y, String buttonImage) {
 		makeButton(x, y, buttonImage);
+		width = 256;
+		height = 64;
 	}
 
 	public void checkMouse(Point p, Button b) {
