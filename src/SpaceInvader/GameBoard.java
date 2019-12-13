@@ -70,11 +70,12 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 	private boolean inpause = true;
 	private boolean inhs = false;
 	private boolean isRunning = false;
-	private int level = 1; // LEVELS COMPLETED + 1
+	private int level; // LEVELS COMPLETED + 1
 	private int pausedI = 1;
 	private boolean paused = false;
 	private int DELAY = Commons.DELAY;
 	private int exk = 0;
+	public static Button restart;
 	
 	// TIME / FPS
 	private static long ST = System.currentTimeMillis(); // time at start of run
@@ -108,6 +109,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 		bInit();
 		setDoubleBuffered(true);
 		GameSounds.background();
+		level = 1;
 
 	}
 
@@ -347,6 +349,20 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 		}
 
 	}
+	
+	public void drawRestart(Graphics g) {
+		if (restart.isVisible()) {
+			g.drawImage(restart.getImage(), restart.getX(), restart.getY(), this);
+			
+			Font small = new Font("Helvetica", Font.BOLD, 20);
+			FontMetrics metr = this.getFontMetrics(small);
+			metr = this.getFontMetrics(small);
+			g.setColor(Color.white);
+			g.setFont(small);
+			g.drawString("RESTART", (restart.getX() + (restart.getWidth() / 2) - (metr.stringWidth("RESTART") / 2)), (restart.getY() + restart.getHeight() - metr.getHeight()));
+		}
+
+	}
 
 	public void drawHS(Graphics g) {
 		if (highScores.isVisible()) {
@@ -516,10 +532,30 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 					(BOARD_WIDTH / 2) + 60);
 			g.drawString("3rd: " + sci2, ((BOARD_WIDTH - mmetr.stringWidth("3rd: " + sci2)) / 2) - 5,
 					(BOARD_WIDTH / 2) + 80);
-
+			
 			pr.println(sci);
 			pr.println(sci1);
 			pr.println(sci2);
+			
+			restart = new Button(201, (BOARD_HEIGHT / 2 - 100), ImagePaths.getButtonPath());
+			drawRestart(g);
+			while(true) {
+				this.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						restart.checkMouse(e.getPoint(), restart);
+						if (restart.isPressed && (isRunning == false)) {
+							bInit();
+						}
+	
+					}
+				});
+				if(restart.isPressed) {
+					SpaceProject.spaceProject.dispose();
+					SpaceProject.spaceProject = new SpaceProject();
+					SpaceProject.spaceProject.setVisible(true);
+				}
+			}
 
 		} else if (sci < level) {
 			// new high score
@@ -987,7 +1023,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 		FPS = 1000 / getRunTime();
 		return FPS;
 	}
-
+	
 	// -----------------\\
 	// TODO KEY LISTENER\\
 	// -----------------\\
