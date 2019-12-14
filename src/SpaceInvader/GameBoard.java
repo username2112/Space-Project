@@ -750,13 +750,15 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 					}
 				}
 				for(Asteroid asteroid : asteroids) {
-					int asteroidX = asteroid.getX();
-					int asteroidY = asteroid.getY();
-					if (bombX >= (asteroidX) && bombX <= (asteroidX + ALIEN_WIDTH) && bombY >= (asteroidY)
-							&& bombY <= (asteroidY + ALIEN_HEIGHT)) {
-						
-						asteroid.setDying(true);
-						bshot.die();
+					if(asteroid.isVisible()) {
+						int asteroidX = asteroid.getX();
+						int asteroidY = asteroid.getY();
+						if (bombX >= (asteroidX) && bombX <= (asteroidX + ALIEN_WIDTH) && bombY >= (asteroidY)
+								&& bombY <= (asteroidY + ALIEN_HEIGHT)) {
+							
+							asteroid.setDying(true);
+							bshot.die();
+						}
 					}
 				}
 			}
@@ -929,7 +931,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 
 			// boss shooting
 			if(boss.isVisible() && !bshot.isVisible()) {
-				if ((player.getX() >= boss.getX() || player.getX() <= boss.getX() + 128 )) {
+				if (player.getX() >= boss.getX() || player.getX() <= boss.getX() + 128) {
 					bshot = new BShot(boss.getX(), boss.getY());
 				}
 			}
