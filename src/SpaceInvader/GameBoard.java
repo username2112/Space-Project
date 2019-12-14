@@ -881,10 +881,10 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 				int x = alien.getX();
 				// irregular movement
 				if (x % 28 == 0) {
-					if (alien.getY() < GROUND - 33) {
+					if (alien.getY() < GROUND - 40) {
 						// alien.setY(alien.getY()+ 10);
 						alien.setY(alien.getY() + 10);
-					} else if (alien.getY() >= GROUND - 33)// BOARD_HEIGHT/2
+					} else if (alien.getY() >= GROUND - 40)// BOARD_HEIGHT/2
 					{
 						while (alien.getY() > ALIEN_INIT_Y + 16) {
 							alien.setY(16);
@@ -1103,7 +1103,9 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 					if (ingame) {
 						if (!shot.isVisible() && !bombc.isVisible()) {
 							shot = new Shot(x, y, 0);
-							GameSounds.shot();
+							if(y < GROUND) {
+								GameSounds.shot();
+							}
 						}
 					}
 				}
@@ -1111,7 +1113,9 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 					if (ingame) {
 						if (!shot.isVisible() && !bombc.isVisible()) {
 							shot = new Shot(x, y, 1);
-							GameSounds.shot();
+							if(y < GROUND) {
+								GameSounds.shot();
+							}
 						}
 					}
 				}
@@ -1119,7 +1123,9 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 					if (ingame) {
 						if (!shot.isVisible() && !bombc.isVisible()) {
 							shot = new Shot(x, y, 2);
-							GameSounds.shot();
+							if(y < GROUND) {
+								GameSounds.shot();
+							}
 						}
 					}
 				}
@@ -1128,7 +1134,9 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 							if (!bombc.isVisible() && !shot.isVisible() && bombAmmo > 0) {
 								bombAmmo--;
 								bombc = new BombShot(x, y);	
-								GameSounds.shot();	
+								if(y < GROUND) {
+									GameSounds.shot();
+								}
 							}	
 				} 	
 	
