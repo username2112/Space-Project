@@ -78,6 +78,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 	private int DELAY = Commons.DELAY;
 	private int exk = 0;
 	public static Button restart;
+	public static int bombAmmo = 5;
 	
 	// TIME / FPS
 	private static long ST = System.currentTimeMillis(); // time at start of run
@@ -310,6 +311,20 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 		}
 	}
 	
+	public void drawBombAmmo(Graphics g) {	
+		if (bombAmmo > -1) {
+			g.setColor(Color.gray);
+			g.fillRect(BOARD_WIDTH / 2 - ((5 * 30) / 2) - 3, GROUND + 37, 30 * 5 + 6, 16);
+			g.setColor(Color.green);
+			g.fillRect(BOARD_WIDTH / 2 - ((5 * 30) / 2), GROUND + 40, bombAmmo * 30, 10);
+			g.setColor(Color.gray);
+			g.fillRect(BOARD_WIDTH / 2 - ((5 * 30) / 2) + 20, GROUND + 37, 10, 16);
+			g.fillRect(BOARD_WIDTH / 2 - ((5 * 30) / 2) + 40, GROUND + 37, 10, 16);
+			g.fillRect(BOARD_WIDTH / 2 - ((5 * 30) / 2) + 60, GROUND + 37, 10, 16);
+		}
+		
+	}
+	
 	public void drawShot(Graphics g) {
 		if (shot.isVisible()) {
 			g.drawImage(shot.getImage(), shot.getX(), shot.getY(), this);
@@ -345,7 +360,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			Font small = new Font("Helvetica", Font.BOLD, 20);
 			FontMetrics metr = this.getFontMetrics(small);
 			metr = this.getFontMetrics(small);
-			g.setColor(Color.white);
+			g.setColor(Color.BLACK);
 			g.setFont(small);
 			g.drawString("BEGIN GAME", (bGame.getX() + (bGame.getWidth() / 2) - (metr.stringWidth("BEGIN GAME") / 2)), (bGame.getY() + bGame.getHeight() - metr.getHeight()));
 		}
@@ -359,7 +374,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			Font small = new Font("Helvetica", Font.BOLD, 20);
 			FontMetrics metr = this.getFontMetrics(small);
 			metr = this.getFontMetrics(small);
-			g.setColor(Color.white);
+			g.setColor(Color.BLACK);
 			g.setFont(small);
 			g.drawString("RESTART", (restart.getX() + (restart.getWidth() / 2) - (metr.stringWidth("RESTART") / 2)), (restart.getY() + restart.getHeight() - metr.getHeight()));
 		}
@@ -372,7 +387,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			Font small = new Font("Helvetica", Font.BOLD, 20);
 			FontMetrics metr = this.getFontMetrics(small);
 			metr = this.getFontMetrics(small);
-			g.setColor(Color.white);
+			g.setColor(Color.BLACK);
 			g.setFont(small);
 			g.drawString("HIGH SCORES", (highScores.getX() + (highScores.getWidth() / 2) - (metr.stringWidth("HIGH SCORES") / 2)), (highScores.getY() + highScores.getHeight() - metr.getHeight()));
 		
@@ -386,7 +401,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			Font small = new Font("Helvetica", Font.BOLD, 20);
 			FontMetrics metr = this.getFontMetrics(small);
 			metr = this.getFontMetrics(small);
-			g.setColor(Color.white);
+			g.setColor(Color.BLACK);
 			g.setFont(small);
 			g.drawString("MAIN MENU", (menu.getX() + (menu.getWidth() / 2) - (metr.stringWidth("MAIN MENU") / 2)), (menu.getY() + menu.getHeight() - metr.getHeight()));
 		
@@ -452,6 +467,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			drawBShot(g);
 			drawBombC(g);
 			drawBombing(g);
+			drawBombAmmo(g);
 			
 			if (level == 3) {
 				g.setColor(Color.gray);
@@ -585,6 +601,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 		if (level != 3 && inpause == false) {
 			if (aliencount <= 0) {
 				level++;
+				bombAmmo = 5;
 				if (level < 2147483647) {
 					JOptionPane.showMessageDialog(null, "Level " + (level - 1) + " Completed");
 				}
@@ -593,6 +610,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 		} else if (level == 3)
 			if (aliencount == 0 && bosscount <= 0) {
 				level++;
+				bombAmmo = 5;
 				if (level < 2147483647) {
 					JOptionPane.showMessageDialog(null, "Boss defeated");
 				}
@@ -1071,7 +1089,8 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			}
 			if (key == KeyEvent.VK_B)	
 				if (ingame) {	
-						if (!bombc.isVisible() && !shot.isVisible()) {	
+						if (!bombc.isVisible() && !shot.isVisible() && bombAmmo > 0) {
+							bombAmmo--;
 							bombc = new BombShot(x, y);	
 							GameSounds.shot();	
 						}	
