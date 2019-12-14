@@ -3,10 +3,13 @@ package SpaceInvader;
 //imports
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -21,8 +24,12 @@ import java.util.Scanner;
 
 //visual imports
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import com.sun.javafx.fxml.expression.Expression;
 
@@ -79,6 +86,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 	private int exk = 0;
 	public static Button restart;
 	public static int bombAmmo = 5;
+	private boolean pauseDrawn;
 	
 	// TIME / FPS
 	private static long ST = System.currentTimeMillis(); // time at start of run
@@ -315,14 +323,15 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 	
 	public void drawBombAmmo(Graphics g) {	
 		if (bombAmmo > -1) {
-			g.setColor(Color.gray);
+			g.setColor(Color.black);
 			g.fillRect(BOARD_WIDTH / 2 - ((5 * 30) / 2) - 3, GROUND + 37, 30 * 5 + 6, 16);
-			g.setColor(Color.green);
+			g.setColor(Color.yellow);
 			g.fillRect(BOARD_WIDTH / 2 - ((5 * 30) / 2), GROUND + 40, bombAmmo * 30, 10);
-			g.setColor(Color.gray);
-			g.fillRect(BOARD_WIDTH / 2 - ((5 * 30) / 2) + 20, GROUND + 37, 10, 16);
-			g.fillRect(BOARD_WIDTH / 2 - ((5 * 30) / 2) + 40, GROUND + 37, 10, 16);
-			g.fillRect(BOARD_WIDTH / 2 - ((5 * 30) / 2) + 60, GROUND + 37, 10, 16);
+			g.setColor(Color.black);
+			g.fillRect(BOARD_WIDTH / 2 - ((5 * 30) / 2) + 28, GROUND + 37, 5, 16);
+			g.fillRect(BOARD_WIDTH / 2 - ((5 * 30) / 2) + 58, GROUND + 37, 5, 16);
+			g.fillRect(BOARD_WIDTH / 2 - ((5 * 30) / 2) + 88, GROUND + 37, 5, 16);
+			g.fillRect(BOARD_WIDTH / 2 - ((5 * 30) / 2) + 118, GROUND + 37, 5, 16);
 		}
 		
 	}
@@ -412,9 +421,32 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 	}
 	
 	public void drawPause(Graphics g) {
-		g.setColor(Color.black);
-		g.drawRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+		//ok i know how bad this is but it works so it's fine
+		if(!pauseDrawn) {
+			g.setColor(Color.white);
+			g.fillRect(BOARD_WIDTH / 2 - 128, BOARD_HEIGHT / 2 - 178, 256, 356);
+			g.setColor(Color.black);
+			g.fillRect(BOARD_WIDTH / 2 - 125, BOARD_HEIGHT / 2 - 175, 250, 350);
+			
+			Font big = new Font("Helvetica", Font.BOLD, 50);
+			Font small = new Font("Helvetica", Font.BOLD, 20);
+			
+			FontMetrics metr = this.getFontMetrics(big);
+			metr = this.getFontMetrics(big);
+			g.setColor(Color.white);
+			g.setFont(big);
+			g.drawString("PAUSED", BOARD_WIDTH / 2 - (metr.stringWidth("PAUSED") / 2),  BOARD_HEIGHT / 2- metr.getHeight() - 20);
+	
+			metr = this.getFontMetrics(small);
+			g.setColor(Color.white);
+			g.setFont(small);
+			g.drawString("1: Restart", BOARD_WIDTH / 2 - (metr.stringWidth("1: Restart") / 2),  BOARD_HEIGHT / 2 - (metr.getHeight() * -1) - 50);				
+			g.drawString("2: Texture Pack Input", BOARD_WIDTH / 2 - (metr.stringWidth("2: Texture Pack Input") / 2),  BOARD_HEIGHT / 2 - (metr.getHeight() * -2) - 50);				
+			g.drawString("3: Exit Game", BOARD_WIDTH / 2 - (metr.stringWidth("3: Exit Game") / 2),  BOARD_HEIGHT / 2 - (metr.getHeight() * -3) - 50);		
+			pauseDrawn = true;
+		}
 	}
+
 
 	// -----------------\\
 	// TODO CORE SYSTEMS\\
@@ -471,7 +503,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			drawBombing(g);
 			drawBombAmmo(g);
 			
-			if (level % 3 ==0) {//BSC
+			if (level % 3 ==0) {
 				g.setColor(Color.gray);
 				g.fillRect(BOARD_WIDTH / 2 - ((Blives_Init * 100) / 2) - 3, 3, Blives_Init * 100 + 6, 16);
 				g.setColor(Color.red);
@@ -608,7 +640,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 				}
 				gameInit();
 			}
-		} else if (level % 3 == 0)//BSC
+		} else if (level % 3 == 0)
 			if (aliencount == 0 && bosscount <= 0) {
 				level++;
 				bombAmmo = 5;
@@ -962,21 +994,12 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 
 		long beforeTime, timeDiff, sleep;
 		beforeTime = System.currentTimeMillis();
-		
 		Graphics g = this.getGraphics();
 		
+		
 		Thread pause = new Thread(() -> {
-
 			try {
-				g.setColor(Color.BLACK);
-				//g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
-				Font small = new Font("Helvetica", Font.BOLD, 50);
-				FontMetrics metr = this.getFontMetrics(small);
-				metr = this.getFontMetrics(small);
-				g.setColor(Color.white);
-				g.setFont(small);
-				g.drawString("PAUSED", BOARD_WIDTH / 2 - (metr.stringWidth("PAUSED") / 2),  BOARD_HEIGHT / 2- metr.getHeight());
-
+				drawPause(g);
 				Thread.sleep(10);
 				
 			} catch (InterruptedException e) {
@@ -992,6 +1015,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 				// visuals
 				animationCycle();
 				repaint();
+				pauseDrawn = false;
 			}
 			
 			// timE
@@ -1057,59 +1081,117 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 		@Override
 		public void keyPressed(KeyEvent e) {
 			try {
-			player.keyPressed(e);
-
-			int x = player.getX();
-			int y = player.getY();
-
-			int key = e.getKeyCode();
-
-			if (key == KeyEvent.VK_SPACE) {
-				if (ingame) {
-					if (!shot.isVisible() && !bombc.isVisible()) {
-						shot = new Shot(x, y, 0);
-						GameSounds.shot();
+				player.keyPressed(e);
+	
+				int x = player.getX();
+				int y = player.getY();
+	
+				int key = e.getKeyCode();
+				
+				if (key == KeyEvent.VK_SPACE) {
+					if (ingame) {
+						if (!shot.isVisible() && !bombc.isVisible()) {
+							shot = new Shot(x, y, 0);
+							GameSounds.shot();
+						}
 					}
 				}
-			}
-			if (key == KeyEvent.VK_Q || key == KeyEvent.VK_V || key == KeyEvent.VK_PAGE_UP) {
-				if (ingame) {
-					if (!shot.isVisible() && !bombc.isVisible()) {
-						shot = new Shot(x, y, 1);
-						GameSounds.shot();
+				if (key == KeyEvent.VK_Q || key == KeyEvent.VK_V || key == KeyEvent.VK_PAGE_UP) {
+					if (ingame) {
+						if (!shot.isVisible() && !bombc.isVisible()) {
+							shot = new Shot(x, y, 1);
+							GameSounds.shot();
+						}
 					}
 				}
-			}
-			if (key == KeyEvent.VK_E || key == KeyEvent.VK_N || key == KeyEvent.VK_PAGE_DOWN) {
-				if (ingame) {
-					if (!shot.isVisible() && !bombc.isVisible()) {
-						shot = new Shot(x, y, 2);
-						GameSounds.shot();
+				if (key == KeyEvent.VK_E || key == KeyEvent.VK_N || key == KeyEvent.VK_PAGE_DOWN) {
+					if (ingame) {
+						if (!shot.isVisible() && !bombc.isVisible()) {
+							shot = new Shot(x, y, 2);
+							GameSounds.shot();
+						}
 					}
 				}
-			}
-			if (key == KeyEvent.VK_B)	
-				if (ingame) {	
-						if (!bombc.isVisible() && !shot.isVisible() && bombAmmo > 0) {
-							bombAmmo--;
-							bombc = new BombShot(x, y);	
-							GameSounds.shot();	
-						}	
-			} 	
-
-			if (key == KeyEvent.VK_ESCAPE) {
-				pausedI++;
-				if (pausedI % 2 == 0) {
-					paused = true;
-				} else {
-					paused = false;
+				if (key == KeyEvent.VK_B)	
+					if (ingame) {	
+							if (!bombc.isVisible() && !shot.isVisible() && bombAmmo > 0) {
+								bombAmmo--;
+								bombc = new BombShot(x, y);	
+								GameSounds.shot();	
+							}	
+				} 	
+	
+				if (key == KeyEvent.VK_ESCAPE) {
+					pausedI++;
+					if (pausedI % 2 == 0) {
+						paused = true;
+					} else {
+						paused = false;
+					}
+					if(!player.isVisible()) {
+						SpaceProject.spaceProject.dispose();
+						SpaceProject.spaceProject = new SpaceProject();
+						SpaceProject.spaceProject.setVisible(true);
+					}
 				}
-				if(!player.isVisible()) {
-					SpaceProject.spaceProject.dispose();
-					SpaceProject.spaceProject = new SpaceProject();
-					SpaceProject.spaceProject.setVisible(true);
+				
+				if(paused) {
+					//restart
+					if (key == KeyEvent.VK_1) {
+						SpaceProject.spaceProject.dispose();
+						SpaceProject.spaceProject = new SpaceProject();
+						SpaceProject.spaceProject.setVisible(true);
+					}
+					//texture packs
+					if (key == KeyEvent.VK_2) {
+						JFrame f=new JFrame("Recpurce Packs"); 
+						//submit button
+						JButton b=new JButton("Submit");    
+						b.setBounds(10,60,230, 30); 
+						
+						//enter name label
+						JLabel label = new JLabel();		
+						label.setText("Pack Name :");
+						label.setBounds(10, 10, 100, 50);
+						
+						//empty label which will show event after button clicked
+						JLabel label1 = new JLabel();
+						label1.setBounds(10, 5, 200, 50);
+						
+						//textfield to enter name
+						JTextField textfield= new JTextField();
+						textfield.setBounds(110, 25, 130, 30);
+						
+						//add to frame
+						f.add(label1);
+						f.add(textfield);
+						f.add(label);
+						f.add(b);    
+						f.setSize(270, 150);   
+						f.setLocationRelativeTo(null);
+						f.setLayout(null);    
+						f.setVisible(true);    
+						f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   
+						
+						//action listener
+						b.addActionListener(new ActionListener() {
+					        
+							@Override
+							public void actionPerformed(ActionEvent arg0) {
+									label1.setText("Name has been submitted.");		
+									ImagePaths.setImagePath("src\\images\\"+ textfield.getText() +"\\");
+									f.dispose();
+							}
+			
+					      });
+					}
+					//exit game
+					if (key == KeyEvent.VK_3) {
+						SpaceProject.spaceProject.dispose();
+					}
+					
+					
 				}
-			}
 			} catch(Exception ea) {
 				//doesn't give us a bunch of errors when we press a key in the menu
 			}//end of error catch
