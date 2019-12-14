@@ -47,7 +47,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 	private BShot bshot;
 	private BombShot bombc;
 	private final int Blives_Init = 5;
-	private int Blives = 5;
+	public static int Blives = 5;
 
 	private Button bGame;
 	private Button highScores;
@@ -185,6 +185,8 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 	}
 
 	public void gameInit() {
+		if(level % 3 == 0)
+			bosscount = 1;
 		animator2.stop();
 		isRunning = true;
 		inpause = false;
@@ -469,13 +471,12 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			drawBombing(g);
 			drawBombAmmo(g);
 			
-			if (level == 3) {
+			if (level % 3 ==0) {//BSC
 				g.setColor(Color.gray);
 				g.fillRect(BOARD_WIDTH / 2 - ((Blives_Init * 100) / 2) - 3, 3, Blives_Init * 100 + 6, 16);
 				g.setColor(Color.red);
 
 				// health bar
-				lowest_y = boss.getY() + 105;
 				bosss.add(boss);
 				drawBoss(g);
 				if (bosscount == 1) {
@@ -607,7 +608,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 				}
 				gameInit();
 			}
-		} else if (level == 3)
+		} else if (level % 3 == 0)//BSC
 			if (aliencount == 0 && bosscount <= 0) {
 				level++;
 				bombAmmo = 5;
@@ -818,7 +819,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 					}
 				
 				for (Asteroid asteroid : asteroids) {
-						if(player.isTouching(asteroid)) {
+						if(player.isTouching(asteroid) && asteroid.isVisible()) {
 							asteroid.die();
 							Plives--;
 							if(Plives <= 0) {

@@ -20,6 +20,7 @@ public class Boss extends Sprite {
 		initBoss(x, y);
 		height = 128;
 		width = 128;
+		GameBoard.Blives = 5;
 	}
 
 	private void initBoss(int x, int y) {
