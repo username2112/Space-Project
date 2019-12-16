@@ -589,8 +589,8 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			pr.println(sci1);
 			pr.println(sci2);
 			
-			g.drawString("PRESS ESC TO RESTART", (BOARD_WIDTH / 2) - mmetr.stringWidth("PRESS ESC TO RESTART") / 2, mmetr.getHeight() + 10);
-			
+			g.drawString("PRESS R TO RESTART", (BOARD_WIDTH / 2) - mmetr.stringWidth("PRESS R TO RESTART") / 2, mmetr.getHeight() + 10);
+			g.drawString("PRESS ESC TO EXIT", (BOARD_WIDTH / 2) - mmetr.stringWidth("PRESS ESC TO EXIT") / 2, mmetr.getHeight() + 30);			
 		} else if (sci < level) {
 			// new high score
 
@@ -1149,10 +1149,16 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 					}
 					if(!player.isVisible()) {
 						SpaceProject.spaceProject.dispose();
+					}
+				}
+				if (key == KeyEvent.VK_R) {
+					if(!player.isVisible()) {
+						SpaceProject.spaceProject.dispose();
 						SpaceProject.spaceProject = new SpaceProject();
 						SpaceProject.spaceProject.setVisible(true);
 					}
 				}
+
 				
 				if(paused) {
 					//restart
