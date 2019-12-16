@@ -3,10 +3,13 @@ package SpaceInvader;
 //imports
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -21,8 +24,14 @@ import java.util.Scanner;
 
 //visual imports
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import com.sun.javafx.fxml.expression.Expression;
 
 public class GameBoard extends JPanel implements Runnable, Commons {
 
@@ -45,7 +54,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 	private BShot bshot;
 	private BombShot bombc;
 	private final int Blives_Init = 5;
-	private int Blives = 5;
+	public static int Blives = 5;
 
 	private Button bGame;
 	private Button highScores;
@@ -76,6 +85,8 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 	private int DELAY = Commons.DELAY;
 	private int exk = 0;
 	public static Button restart;
+	public static int bombAmmo;
+	private boolean pauseDrawn;
 	
 	// TIME / FPS
 	private static long ST = System.currentTimeMillis(); // time at start of run
@@ -110,6 +121,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 		setDoubleBuffered(true);
 		GameSounds.background();
 		level = 1;
+		bombAmmo = 5;
 
 	}
 
@@ -182,6 +194,8 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 	}
 
 	public void gameInit() {
+		if(level % 3 == 0)
+			bosscount = 1;
 		animator2.stop();
 		isRunning = true;
 		inpause = false;
@@ -195,7 +209,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 		for (int i = 0; i <= 1 * level; i++) {
 			aliencount++;
 			for (int j = 0; j <= 1 * level; j++) {
-				Alien alien = new Alien(ALIEN_INIT_X + (ALIEN_WIDTH + 4) * j, ALIEN_INIT_Y + 18 * i);
+				Alien alien = new Alien(ALIEN_INIT_X + (ALIEN_WIDTH + 4) * j, ALIEN_INIT_Y + 30 * i);
 				lowest_y = alien.getY() + 16;
 				aliens.add(alien);
 
@@ -205,7 +219,6 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 		//asteroids
 		for (int i = 0; i <= 1 * (level / 2); i++) {
 			for (int j = 0; j <= 1 * (level / 2); j++) {
-				// alien spacing
 				int randomx = (int) (Math.random() * BOARD_WIDTH);
 				int randomy = (int) (Math.random() * 50 + 10);
 				if (randomx >= 630) {
@@ -308,6 +321,21 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 		}
 	}
 	
+	public void drawBombAmmo(Graphics g) {	
+		if (bombAmmo > -1) {
+			g.setColor(Color.black);
+			g.fillRect(BOARD_WIDTH / 2 - ((5 * 30) / 2) - 3, GROUND + 37, 30 * 5 + 6, 16);
+			g.setColor(Color.yellow);
+			g.fillRect(BOARD_WIDTH / 2 - ((5 * 30) / 2), GROUND + 40, bombAmmo * 30, 10);
+			g.setColor(Color.black);
+			g.fillRect(BOARD_WIDTH / 2 - ((5 * 30) / 2) + 28, GROUND + 37, 5, 16);
+			g.fillRect(BOARD_WIDTH / 2 - ((5 * 30) / 2) + 58, GROUND + 37, 5, 16);
+			g.fillRect(BOARD_WIDTH / 2 - ((5 * 30) / 2) + 88, GROUND + 37, 5, 16);
+			g.fillRect(BOARD_WIDTH / 2 - ((5 * 30) / 2) + 118, GROUND + 37, 5, 16);
+		}
+		
+	}
+	
 	public void drawShot(Graphics g) {
 		if (shot.isVisible()) {
 			g.drawImage(shot.getImage(), shot.getX(), shot.getY(), this);
@@ -343,7 +371,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			Font small = new Font("Helvetica", Font.BOLD, 20);
 			FontMetrics metr = this.getFontMetrics(small);
 			metr = this.getFontMetrics(small);
-			g.setColor(Color.white);
+			g.setColor(Color.BLACK);
 			g.setFont(small);
 			g.drawString("BEGIN GAME", (bGame.getX() + (bGame.getWidth() / 2) - (metr.stringWidth("BEGIN GAME") / 2)), (bGame.getY() + bGame.getHeight() - metr.getHeight()));
 		}
@@ -357,7 +385,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			Font small = new Font("Helvetica", Font.BOLD, 20);
 			FontMetrics metr = this.getFontMetrics(small);
 			metr = this.getFontMetrics(small);
-			g.setColor(Color.white);
+			g.setColor(Color.BLACK);
 			g.setFont(small);
 			g.drawString("RESTART", (restart.getX() + (restart.getWidth() / 2) - (metr.stringWidth("RESTART") / 2)), (restart.getY() + restart.getHeight() - metr.getHeight()));
 		}
@@ -370,7 +398,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			Font small = new Font("Helvetica", Font.BOLD, 20);
 			FontMetrics metr = this.getFontMetrics(small);
 			metr = this.getFontMetrics(small);
-			g.setColor(Color.white);
+			g.setColor(Color.BLACK);
 			g.setFont(small);
 			g.drawString("HIGH SCORES", (highScores.getX() + (highScores.getWidth() / 2) - (metr.stringWidth("HIGH SCORES") / 2)), (highScores.getY() + highScores.getHeight() - metr.getHeight()));
 		
@@ -384,7 +412,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			Font small = new Font("Helvetica", Font.BOLD, 20);
 			FontMetrics metr = this.getFontMetrics(small);
 			metr = this.getFontMetrics(small);
-			g.setColor(Color.white);
+			g.setColor(Color.BLACK);
 			g.setFont(small);
 			g.drawString("MAIN MENU", (menu.getX() + (menu.getWidth() / 2) - (metr.stringWidth("MAIN MENU") / 2)), (menu.getY() + menu.getHeight() - metr.getHeight()));
 		
@@ -393,9 +421,32 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 	}
 	
 	public void drawPause(Graphics g) {
-		g.setColor(Color.black);
-		g.drawRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+		//ok i know how bad this is but it works so it's fine
+		if(!pauseDrawn) {
+			g.setColor(Color.white);
+			g.fillRect(BOARD_WIDTH / 2 - 128, BOARD_HEIGHT / 2 - 178, 256, 356);
+			g.setColor(Color.black);
+			g.fillRect(BOARD_WIDTH / 2 - 125, BOARD_HEIGHT / 2 - 175, 250, 350);
+			
+			Font big = new Font("Helvetica", Font.BOLD, 50);
+			Font small = new Font("Helvetica", Font.BOLD, 20);
+			
+			FontMetrics metr = this.getFontMetrics(big);
+			metr = this.getFontMetrics(big);
+			g.setColor(Color.white);
+			g.setFont(big);
+			g.drawString("PAUSED", BOARD_WIDTH / 2 - (metr.stringWidth("PAUSED") / 2),  BOARD_HEIGHT / 2- metr.getHeight() - 20);
+	
+			metr = this.getFontMetrics(small);
+			g.setColor(Color.white);
+			g.setFont(small);
+			g.drawString("1: Restart", BOARD_WIDTH / 2 - (metr.stringWidth("1: Restart") / 2),  BOARD_HEIGHT / 2 - (metr.getHeight() * -1) - 50);				
+			g.drawString("2: Texture Pack Input", BOARD_WIDTH / 2 - (metr.stringWidth("2: Texture Pack Input") / 2),  BOARD_HEIGHT / 2 - (metr.getHeight() * -2) - 50);				
+			g.drawString("3: Exit Game", BOARD_WIDTH / 2 - (metr.stringWidth("3: Exit Game") / 2),  BOARD_HEIGHT / 2 - (metr.getHeight() * -3) - 50);		
+			pauseDrawn = true;
+		}
 	}
+
 
 	// -----------------\\
 	// TODO CORE SYSTEMS\\
@@ -442,6 +493,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			g.drawLine(0, GROUND, BOARD_WIDTH, GROUND);
 
 			// TODO DRAW
+
 			drawAliens(g);
 			drawAsteroid(g);
 			drawPlayer(g);
@@ -449,14 +501,14 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			drawBShot(g);
 			drawBombC(g);
 			drawBombing(g);
+			drawBombAmmo(g);
 			
-			if (level == 3) {
+			if (level % 3 ==0) {
 				g.setColor(Color.gray);
 				g.fillRect(BOARD_WIDTH / 2 - ((Blives_Init * 100) / 2) - 3, 3, Blives_Init * 100 + 6, 16);
 				g.setColor(Color.red);
 
 				// health bar
-				lowest_y = boss.getY() + 105;
 				bosss.add(boss);
 				drawBoss(g);
 				if (bosscount == 1) {
@@ -582,14 +634,16 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 		if (level != 3 && inpause == false) {
 			if (aliencount <= 0) {
 				level++;
+				bombAmmo = 5;
 				if (level < 2147483647) {
 					JOptionPane.showMessageDialog(null, "Level " + (level - 1) + " Completed");
 				}
 				gameInit();
 			}
-		} else if (level == 3)
+		} else if (level % 3 == 0)
 			if (aliencount == 0 && bosscount <= 0) {
 				level++;
+				bombAmmo = 5;
 				if (level < 2147483647) {
 					JOptionPane.showMessageDialog(null, "Boss defeated");
 				}
@@ -619,9 +673,6 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 
  				for (Alien alien : aliens) {	
 					// alien hit detection for new shot	
-					int alienX = alien.getX();	
-					int alienY = alien.getY();	
-
  					if (alien.isVisible() && bombc.isVisible()) {	
 
  						if (bombc.isTouching(alien) || alien.isTouching(bombc)) {	
@@ -639,7 +690,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 
  					if (bombcY >= GROUND - 10) {	
 						bombc.setDying(true);	
-					}	
+					}
 					if (boss.isVisible()) {	
 						// boss hit detection for new shot	
 						if (boss.isVisible() && bombc.isVisible()) {	
@@ -655,7 +706,22 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 						}	
 					}	
 
- 				}	
+ 				}
+	 			for(Asteroid asteroid : asteroids) {
+	 				if(asteroid.isVisible()) {
+						int asteroidX = asteroid.getX();
+						int asteroidY = asteroid.getY();
+						if (bombcX >= (asteroidX) && bombcX <= (asteroidX + ALIEN_WIDTH) && bombcY >= (asteroidY)
+								&& bombcY <= (asteroidY + ALIEN_HEIGHT)) {
+							bombc.explode();
+							bombc.setDying(true);
+							asteroid.die();
+							deaths++;
+							shot.die();
+						}
+	 				}
+ 				}
+ 				
  				if(!(exk >= 1)) {
 					int y = bombc.getY();	
 					Bspeed = 8;	
@@ -674,9 +740,6 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 				int bombX = bshot.getX();
 				int bombY = bshot.getY();
 
-				int playerX = player.getX();
-				int playerY = player.getY();
-
 				// boss hit detection w/ player
 				if (player.isVisible() && bshot.isVisible()) {
 					if (player.isTouching(bshot) || bshot.isTouching(player)) {
@@ -686,6 +749,18 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 
 					}
 				}
+				for(Asteroid asteroid : asteroids) {
+					if(asteroid.isVisible()) {
+						int asteroidX = asteroid.getX();
+						int asteroidY = asteroid.getY();
+						if (bombX >= (asteroidX) && bombX <= (asteroidX + ALIEN_WIDTH) && bombY >= (asteroidY)
+								&& bombY <= (asteroidY + ALIEN_HEIGHT)) {
+							
+							asteroid.setDying(true);
+							bshot.die();
+						}
+					}
+				}
 			}
 
 			// shot
@@ -693,28 +768,11 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 				int shotX = shot.getX();
 				int shotY = shot.getY();
 				for (Asteroid asteroid : asteroids) {
-					// alien hit detection
-					int asteroidX = asteroid.getX();
-					int asteroidY = asteroid.getY();
-
 					if (asteroid.isVisible() && shot.isVisible()) {
-						if (shotX >= (asteroidX) && shotX <= (asteroidX + ALIEN_WIDTH) && shotY >= (asteroidY)
-								&& shotY <= (asteroidY + ALIEN_HEIGHT)) {
-
-							ImageIcon ii = new ImageIcon(explImg);
-							asteroid.setImage(ii.getImage());
-							asteroid.setDying(true);
-							deaths++;
+						if (shot.isTouching(asteroid)) {
 							shot.die();
-
 						}
-						if(player.isTouching(asteroid)) {
-							player.setDying(true);
-							asteroid.die();
-						}
-
 					}
-
 				}
 
 				for (Alien alien : aliens) {
@@ -797,14 +855,13 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 					}
 				
 				for (Asteroid asteroid : asteroids) {
-						if(player.isTouching(asteroid)) {
+						if(player.isTouching(asteroid) && asteroid.isVisible()) {
 							asteroid.die();
 							Plives--;
 							if(Plives <= 0) {
 								player.setDying(true);
 							}
 						}
-						
 				}
 			}
 
@@ -865,9 +922,6 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 				Alien alien = it.next();
 				if (alien.isVisible()) {
 					int y = alien.getY();
-					/*
-					 * if (y > GROUND - ALIEN_HEIGHT) { ingame = false; message = "Invasion!"; }
-					 */
 					alien.act(direction);
 				}
 			}
@@ -876,9 +930,10 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			Random generator = new Random();
 
 			// boss shooting
-			if ((player.getX() >= boss.getX() - 16 || player.getX() <= boss.getX() + 16 )&& boss.isVisible() && !bshot.isVisible()) {
-				boss.shoot = false;
-				bshot = new BShot(boss.getX(), boss.getY());
+			if(boss.isVisible() && !bshot.isVisible()) {
+				if (player.getX() >= boss.getX() || player.getX() <= boss.getX() + 128) {
+					bshot = new BShot(boss.getX(), boss.getY());
+				}
 			}
 
 			// will alien bomb?
@@ -918,6 +973,16 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 					}
 
 				}
+				for(Asteroid asteroid : asteroids) {
+					int asteroidX = asteroid.getX();
+					int asteroidY = asteroid.getY();
+					if(asteroid.isVisible() && !b.isDestroyed()) {
+						if (bombX >= (asteroidX) && bombX <= (asteroidX + asteroid.height) && bombY >= (asteroidY)
+								&& bombY <= (asteroidY + asteroid.height)) {
+							b.setDestroyed(true);
+						}
+					}
+				}
 				// bomb movement
 				if (!b.isDestroyed()) {
 					b.setY(b.getY() + 1);
@@ -940,11 +1005,14 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 
 		long beforeTime, timeDiff, sleep;
 		beforeTime = System.currentTimeMillis();
-
+		Graphics g = this.getGraphics();
+		
+		
 		Thread pause = new Thread(() -> {
-
 			try {
+				drawPause(g);
 				Thread.sleep(10);
+				
 			} catch (InterruptedException e) {
 				System.err.println("pause interrupted");
 			}
@@ -956,14 +1024,14 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 				// looping methods
 				checkIfLevelComplete();
 				// visuals
+				animationCycle();
 				repaint();
+				pauseDrawn = false;
 			}
-			animationCycle();
+			
 			// timE
 			sleep = DELAY;
-
 			try {
-
 				if (paused) {
 					pause.run();
 				} else {
@@ -1014,64 +1082,130 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 		@Override
 
 		public void keyReleased(KeyEvent e) {
-			player.keyReleased(e);
+			try {
+				player.keyReleased(e);
+			} catch(Exception ea) {
+				//doesn't give us a bunch of errors when we press a key in the menu
+			}
 		}
 
 		@Override
 		public void keyPressed(KeyEvent e) {
-
-			player.keyPressed(e);
-
-			int x = player.getX();
-			int y = player.getY();
-
-			int key = e.getKeyCode();
-
-			if (key == KeyEvent.VK_SPACE) {
-				if (ingame) {
-					if (!shot.isVisible() && !bombc.isVisible()) {
-						shot = new Shot(x, y, 0);
-						GameSounds.shot();
+			try {
+				player.keyPressed(e);
+	
+				int x = player.getX();
+				int y = player.getY();
+	
+				int key = e.getKeyCode();
+				
+				if (key == KeyEvent.VK_SPACE) {
+					if (ingame) {
+						if (!shot.isVisible() && !bombc.isVisible()) {
+							shot = new Shot(x, y, 0);
+							GameSounds.shot();
+						}
 					}
 				}
-			}
-			if (key == KeyEvent.VK_Q || key == KeyEvent.VK_V || key == KeyEvent.VK_PAGE_UP) {
-				if (ingame) {
-					if (!shot.isVisible() && !bombc.isVisible()) {
-						shot = new Shot(x, y, 1);
-						GameSounds.shot();
+				if (key == KeyEvent.VK_Q || key == KeyEvent.VK_V || key == KeyEvent.VK_PAGE_UP) {
+					if (ingame) {
+						if (!shot.isVisible() && !bombc.isVisible()) {
+							shot = new Shot(x, y, 1);
+							GameSounds.shot();
+						}
 					}
 				}
-			}
-			if (key == KeyEvent.VK_E || key == KeyEvent.VK_N || key == KeyEvent.VK_PAGE_DOWN) {
-				if (ingame) {
-					if (!shot.isVisible() && !bombc.isVisible()) {
-						shot = new Shot(x, y, 2);
-						GameSounds.shot();
+				if (key == KeyEvent.VK_E || key == KeyEvent.VK_N || key == KeyEvent.VK_PAGE_DOWN) {
+					if (ingame) {
+						if (!shot.isVisible() && !bombc.isVisible()) {
+							shot = new Shot(x, y, 2);
+							GameSounds.shot();
+						}
 					}
 				}
-			}
-			if (key == KeyEvent.VK_B)	
-				if (ingame) {	
-						if (!bombc.isVisible() && !shot.isVisible()) {	
-							bombc = new BombShot(x, y);	
-							GameSounds.shot();	
-						}	
-			} 	
-
-			if (key == KeyEvent.VK_ESCAPE) {
-				pausedI++;
-				if (pausedI % 2 == 0) {
-					paused = true;
-				} else {
-					paused = false;
+				if (key == KeyEvent.VK_B)	
+					if (ingame) {	
+							if (!bombc.isVisible() && !shot.isVisible() && bombAmmo > 0) {
+								bombAmmo--;
+								bombc = new BombShot(x, y);	
+								GameSounds.shot();	
+							}	
+				} 	
+	
+				if (key == KeyEvent.VK_ESCAPE) {
+					pausedI++;
+					if (pausedI % 2 == 0) {
+						paused = true;
+					} else {
+						paused = false;
+					}
+					if(!player.isVisible()) {
+						SpaceProject.spaceProject.dispose();
+						SpaceProject.spaceProject = new SpaceProject();
+						SpaceProject.spaceProject.setVisible(true);
+					}
 				}
-				if(!player.isVisible()) {
-					SpaceProject.spaceProject.dispose();
-					SpaceProject.spaceProject = new SpaceProject();
-					SpaceProject.spaceProject.setVisible(true);
+				
+				if(paused) {
+					//restart
+					if (key == KeyEvent.VK_1) {
+						SpaceProject.spaceProject.dispose();
+						SpaceProject.spaceProject = new SpaceProject();
+						SpaceProject.spaceProject.setVisible(true);
+					}
+					//texture packs
+					if (key == KeyEvent.VK_2) {
+						JFrame f=new JFrame("Recpurce Packs"); 
+						//submit button
+						JButton b=new JButton("Submit");    
+						b.setBounds(10,60,230, 30); 
+						
+						//enter name label
+						JLabel label = new JLabel();		
+						label.setText("Pack Name :");
+						label.setBounds(10, 10, 100, 50);
+						
+						//empty label which will show event after button clicked
+						JLabel label1 = new JLabel();
+						label1.setBounds(10, 5, 200, 50);
+						
+						//textfield to enter name
+						JTextField textfield= new JTextField();
+						textfield.setBounds(110, 25, 130, 30);
+						
+						//add to frame
+						f.add(label1);
+						f.add(textfield);
+						f.add(label);
+						f.add(b);    
+						f.setSize(270, 150);   
+						f.setLocationRelativeTo(null);
+						f.setLayout(null);    
+						f.setVisible(true);    
+						f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   
+						
+						//action listener
+						b.addActionListener(new ActionListener() {
+					        
+							@Override
+							public void actionPerformed(ActionEvent arg0) {
+									label1.setText("Name has been submitted.");		
+									ImagePaths.setImagePath("src\\images\\"+ textfield.getText() +"\\");
+									f.dispose();
+							}
+			
+					      });
+					}
+					//exit game
+					if (key == KeyEvent.VK_3) {
+						SpaceProject.spaceProject.dispose();
+					}
+					
+					
 				}
-			}
+			} catch(Exception ea) {
+				//doesn't give us a bunch of errors when we press a key in the menu
+			}//end of error catch
 		}// end key pressed
 	}// end TAdapter
 }// class closure
