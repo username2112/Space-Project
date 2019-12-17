@@ -589,8 +589,8 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			pr.println(sci1);
 			pr.println(sci2);
 			
-			g.drawString("PRESS ESC TO RESTART", (BOARD_WIDTH / 2) - mmetr.stringWidth("PRESS ESC TO RESTART") / 2, mmetr.getHeight() + 10);
-			
+			g.drawString("PRESS R TO RESTART", (BOARD_WIDTH / 2) - mmetr.stringWidth("PRESS R TO RESTART") / 2, mmetr.getHeight() + 10);
+			g.drawString("PRESS ESC TO EXIT", (BOARD_WIDTH / 2) - mmetr.stringWidth("PRESS ESC TO EXIT") / 2, mmetr.getHeight() + 30);			
 		} else if (sci < level) {
 			// new high score
 
@@ -603,7 +603,8 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			g.drawString("NEW HIGH SCORE: " + level,
 					((BOARD_WIDTH - mmetr.stringWidth("NEW HIGH SCORE: " + level)) / 2) - 5, (BOARD_WIDTH / 2) + 13);
 			// SET NEW 2ND TO CURRENT FIRST
-			// SET NEW 3RD TO CURRENT 2ND
+			g.drawString("PRESS R TO RESTART", (BOARD_WIDTH / 2) - mmetr.stringWidth("PRESS R TO RESTART") / 2, mmetr.getHeight() + 10);
+			g.drawString("PRESS ESC TO EXIT", (BOARD_WIDTH / 2) - mmetr.stringWidth("PRESS ESC TO EXIT") / 2, mmetr.getHeight() + 30);		
 		} else if (sci1 < level) {
 			// new high score
 			pr.println(sci);
@@ -614,7 +615,8 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			g.setFont(ssmall);
 			g.drawString("NEW 2ND PLACE: " + level,
 					((BOARD_WIDTH - mmetr.stringWidth("NEW 2ND PLACE: " + level)) / 2) - 5, (BOARD_WIDTH / 2) + 13);
-			// SET 3RD TO CURRENT 2ND
+			g.drawString("PRESS R TO RESTART", (BOARD_WIDTH / 2) - mmetr.stringWidth("PRESS R TO RESTART") / 2, mmetr.getHeight() + 10);
+			g.drawString("PRESS ESC TO EXIT", (BOARD_WIDTH / 2) - mmetr.stringWidth("PRESS ESC TO EXIT") / 2, mmetr.getHeight() + 30);		
 
 		} else if (sci2 < level) {
 			// new high score
@@ -626,6 +628,8 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			g.setFont(ssmall);
 			g.drawString("NEW 3RD PLACE: " + level,
 					((BOARD_WIDTH - mmetr.stringWidth("NEW 3RD PLACE: " + level)) / 2) - 5, (BOARD_WIDTH / 2) + 13);
+			g.drawString("PRESS R TO RESTART", (BOARD_WIDTH / 2) - mmetr.stringWidth("PRESS R TO RESTART") / 2, mmetr.getHeight() + 10);
+			g.drawString("PRESS ESC TO EXIT", (BOARD_WIDTH / 2) - mmetr.stringWidth("PRESS ESC TO EXIT") / 2, mmetr.getHeight() + 30);		
 		}
 	}
 
@@ -881,10 +885,10 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 				int x = alien.getX();
 				// irregular movement
 				if (x % 28 == 0) {
-					if (alien.getY() < GROUND - 33) {
+					if (alien.getY() < GROUND - 40) {
 						// alien.setY(alien.getY()+ 10);
 						alien.setY(alien.getY() + 10);
-					} else if (alien.getY() >= GROUND - 33)// BOARD_HEIGHT/2
+					} else if (alien.getY() >= GROUND - 40)// BOARD_HEIGHT/2
 					{
 						while (alien.getY() > ALIEN_INIT_Y + 16) {
 							alien.setY(16);
@@ -1103,7 +1107,9 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 					if (ingame) {
 						if (!shot.isVisible() && !bombc.isVisible()) {
 							shot = new Shot(x, y, 0);
-							GameSounds.shot();
+							if(y < GROUND) {
+								GameSounds.shot();
+							}
 						}
 					}
 				}
@@ -1111,7 +1117,9 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 					if (ingame) {
 						if (!shot.isVisible() && !bombc.isVisible()) {
 							shot = new Shot(x, y, 1);
-							GameSounds.shot();
+							if(y < GROUND) {
+								GameSounds.shot();
+							}
 						}
 					}
 				}
@@ -1119,7 +1127,9 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 					if (ingame) {
 						if (!shot.isVisible() && !bombc.isVisible()) {
 							shot = new Shot(x, y, 2);
-							GameSounds.shot();
+							if(y < GROUND) {
+								GameSounds.shot();
+							}
 						}
 					}
 				}
@@ -1128,7 +1138,9 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 							if (!bombc.isVisible() && !shot.isVisible() && bombAmmo > 0) {
 								bombAmmo--;
 								bombc = new BombShot(x, y);	
-								GameSounds.shot();	
+								if(y < GROUND) {
+									GameSounds.shot();
+								}
 							}	
 				} 	
 	
@@ -1141,10 +1153,16 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 					}
 					if(!player.isVisible()) {
 						SpaceProject.spaceProject.dispose();
+					}
+				}
+				if (key == KeyEvent.VK_R) {
+					if(!player.isVisible()) {
+						SpaceProject.spaceProject.dispose();
 						SpaceProject.spaceProject = new SpaceProject();
 						SpaceProject.spaceProject.setVisible(true);
 					}
 				}
+
 				
 				if(paused) {
 					//restart
