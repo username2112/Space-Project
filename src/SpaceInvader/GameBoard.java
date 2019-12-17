@@ -603,7 +603,8 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			g.drawString("NEW HIGH SCORE: " + level,
 					((BOARD_WIDTH - mmetr.stringWidth("NEW HIGH SCORE: " + level)) / 2) - 5, (BOARD_WIDTH / 2) + 13);
 			// SET NEW 2ND TO CURRENT FIRST
-			// SET NEW 3RD TO CURRENT 2ND
+			g.drawString("PRESS R TO RESTART", (BOARD_WIDTH / 2) - mmetr.stringWidth("PRESS R TO RESTART") / 2, mmetr.getHeight() + 10);
+			g.drawString("PRESS ESC TO EXIT", (BOARD_WIDTH / 2) - mmetr.stringWidth("PRESS ESC TO EXIT") / 2, mmetr.getHeight() + 30);		
 		} else if (sci1 < level) {
 			// new high score
 			pr.println(sci);
@@ -614,7 +615,8 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			g.setFont(ssmall);
 			g.drawString("NEW 2ND PLACE: " + level,
 					((BOARD_WIDTH - mmetr.stringWidth("NEW 2ND PLACE: " + level)) / 2) - 5, (BOARD_WIDTH / 2) + 13);
-			// SET 3RD TO CURRENT 2ND
+			g.drawString("PRESS R TO RESTART", (BOARD_WIDTH / 2) - mmetr.stringWidth("PRESS R TO RESTART") / 2, mmetr.getHeight() + 10);
+			g.drawString("PRESS ESC TO EXIT", (BOARD_WIDTH / 2) - mmetr.stringWidth("PRESS ESC TO EXIT") / 2, mmetr.getHeight() + 30);		
 
 		} else if (sci2 < level) {
 			// new high score
@@ -626,6 +628,8 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			g.setFont(ssmall);
 			g.drawString("NEW 3RD PLACE: " + level,
 					((BOARD_WIDTH - mmetr.stringWidth("NEW 3RD PLACE: " + level)) / 2) - 5, (BOARD_WIDTH / 2) + 13);
+			g.drawString("PRESS R TO RESTART", (BOARD_WIDTH / 2) - mmetr.stringWidth("PRESS R TO RESTART") / 2, mmetr.getHeight() + 10);
+			g.drawString("PRESS ESC TO EXIT", (BOARD_WIDTH / 2) - mmetr.stringWidth("PRESS ESC TO EXIT") / 2, mmetr.getHeight() + 30);		
 		}
 	}
 
