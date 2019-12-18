@@ -18,9 +18,14 @@ public class ImagePaths {
 	private static String titlePath = "Misc\\title.png";
 	private static String buttonPath = "Misc\\button.png";
 	private static String explosionPath = "Misc\\explosion.png";
+	private static String bombcPath = "Player\\bombc.png";
 	
 	public static String getAlienPath() {
 		return imageFolderPath + alienPath;
+	}
+	
+	public static String getBombcPath() {
+		return imageFolderPath + bombcPath;
 	}
 
 	public static String getAsteroidPath() {
