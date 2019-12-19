@@ -478,6 +478,14 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			drawBGame(g);
 			drawTitle(g);
 			drawHS(g);
+			Font small = new Font("ZapfDingbats", Font.BOLD, 20);
+			FontMetrics metr = this.getFontMetrics(small);
+			g.setColor(Color.white);
+			g.drawString("CONTROLS:", (bGame.getX() + (bGame.getWidth() / 2) - (metr.stringWidth("CONTROLS:") / 2)), BOARD_HEIGHT / 2 + 100);
+			g.drawString("W / A / S / D - MOVE", (bGame.getX() + (bGame.getWidth() / 2) - (metr.stringWidth("W / A / S / D - MOVE") / 2)), BOARD_HEIGHT / 2 + 150);
+			g.drawString("Q / E / SPACE - SHOOT", (bGame.getX() + (bGame.getWidth() / 2) - (metr.stringWidth("Q / E / SPACE - SHOOT") / 2)), BOARD_HEIGHT / 2 + 175);
+			g.drawString("B - BOMB SHOT", (bGame.getX() + (bGame.getWidth() / 2) - (metr.stringWidth("B - BOMB SHOT") / 2)), BOARD_HEIGHT / 2 + 200);
+		
 		} else if (ingame) {
 			// manage fps
 			time = getTime();
