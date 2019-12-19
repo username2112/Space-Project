@@ -11,8 +11,8 @@ public interface Commons {
 	 */
 
 	// window dimensions
-	public static final int BOARD_WIDTH = 658;
-	public static final int BOARD_HEIGHT = 650;
+	public static final int BOARD_WIDTH = 658; //658
+	public static final int BOARD_HEIGHT = 650; //650
 
 	// safe zone
 	public static final int GROUND = 500;
