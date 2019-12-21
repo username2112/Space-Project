@@ -1,6 +1,9 @@
-package SpaceInvader;
+package SpaceInvader.Sprites.Enemies;
 
 import javax.swing.ImageIcon;
+
+import SpaceInvader.Sprites.Sprite;
+import SpaceInvader.Systems.ImagePaths;
 
 public class Alien extends Sprite {
 

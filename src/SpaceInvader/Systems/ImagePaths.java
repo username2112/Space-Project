@@ -1,4 +1,4 @@
-package SpaceInvader;
+package SpaceInvader.Systems;
 
 import java.io.File;
 
