@@ -119,10 +119,10 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 		setBackground(Color.black);
 		bInit();
 		setDoubleBuffered(true);
-		GameSounds.background();
+		//GameSounds.background();
 		level = 1;
 		bombAmmo = 5;
-
+		Plives = Plives_Init;
 	}
 
 	public void bInit() {
