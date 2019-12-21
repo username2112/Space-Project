@@ -1,5 +1,5 @@
 
-package SpaceInvader;
+package SpaceInvader.Systems;
 
 public interface Commons {
 

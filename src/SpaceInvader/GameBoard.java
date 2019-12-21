@@ -33,15 +33,18 @@ import javax.swing.JTextField;
 
 import com.sun.javafx.fxml.expression.Expression;
 
-import SpaceInvader.Sprites.Button;
-import SpaceInvader.Sprites.Player;
-import SpaceInvader.Sprites.Title;
 import SpaceInvader.Sprites.Enemies.Alien;
 import SpaceInvader.Sprites.Enemies.Asteroid;
 import SpaceInvader.Sprites.Enemies.Boss;
+import SpaceInvader.Sprites.Menu.Button;
+import SpaceInvader.Sprites.Menu.Title;
+import SpaceInvader.Sprites.Player.Player;
 import SpaceInvader.Sprites.Shots.BShot;
 import SpaceInvader.Sprites.Shots.BombShot;
 import SpaceInvader.Sprites.Shots.Shot;
+import SpaceInvader.Systems.Commons;
+import SpaceInvader.Systems.GameSounds;
+import SpaceInvader.Systems.ImagePaths;
 
 public class GameBoard extends JPanel implements Runnable, Commons {
 

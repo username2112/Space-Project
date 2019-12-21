@@ -1,8 +1,10 @@
-package SpaceInvader.Sprites;
+package SpaceInvader.Sprites.Menu;
 
 import java.awt.Point;
 
 import javax.swing.ImageIcon;
+
+import SpaceInvader.Sprites.Sprite;
 
 public class Button extends Sprite {
 	public boolean isPressed = false;

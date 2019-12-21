@@ -2,8 +2,8 @@ package SpaceInvader.Sprites.Enemies;
 
 import javax.swing.ImageIcon;
 
-import SpaceInvader.ImagePaths;
 import SpaceInvader.Sprites.Sprite;
+import SpaceInvader.Systems.ImagePaths;
 
 public class Asteroid extends Sprite {
 	private final String alienImg = ImagePaths.getAsteroidPath();

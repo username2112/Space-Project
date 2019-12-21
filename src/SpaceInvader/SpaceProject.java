@@ -2,6 +2,9 @@ package SpaceInvader;
 
 import javax.swing.JFrame;
 
+import SpaceInvader.Systems.Commons;
+import SpaceInvader.Systems.ImagePaths;
+
 public class SpaceProject extends JFrame implements Commons {
 
 	private static final long serialVersionUID = -3707317083523991011L;
