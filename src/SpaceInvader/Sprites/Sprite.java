@@ -1,4 +1,4 @@
-package SpaceInvader;
+package SpaceInvader.Sprites;
 
 import java.awt.Image;
 
@@ -26,7 +26,7 @@ public abstract class Sprite {
 		return visible;
 	}
 
-	protected void setVisible(boolean visible) {
+	public void setVisible(boolean visible) {
 		this.visible = visible;
 	}
 
@@ -72,6 +72,7 @@ public abstract class Sprite {
 		return x;
 	}
 
+	
 	// hit detection\\
 
 	public int rightX() {
