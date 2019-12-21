@@ -33,6 +33,16 @@ import javax.swing.JTextField;
 
 import com.sun.javafx.fxml.expression.Expression;
 
+import SpaceInvader.Sprites.Button;
+import SpaceInvader.Sprites.Player;
+import SpaceInvader.Sprites.Title;
+import SpaceInvader.Sprites.Enemies.Alien;
+import SpaceInvader.Sprites.Enemies.Asteroid;
+import SpaceInvader.Sprites.Enemies.Boss;
+import SpaceInvader.Sprites.Shots.BShot;
+import SpaceInvader.Sprites.Shots.BombShot;
+import SpaceInvader.Sprites.Shots.Shot;
+
 public class GameBoard extends JPanel implements Runnable, Commons {
 
 	private static final long serialVersionUID = -8479829684389979540L;
@@ -989,8 +999,8 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 					int asteroidX = asteroid.getX();
 					int asteroidY = asteroid.getY();
 					if(asteroid.isVisible() && !b.isDestroyed()) {
-						if (bombX >= (asteroidX) && bombX <= (asteroidX + asteroid.height) && bombY >= (asteroidY)
-								&& bombY <= (asteroidY + asteroid.height)) {
+						if (bombX >= (asteroidX) && bombX <= (asteroidX + asteroid.getHeight()) && bombY >= (asteroidY)
+								&& bombY <= (asteroidY + asteroid.getHeight())) {
 							b.setDestroyed(true);
 						}
 					}

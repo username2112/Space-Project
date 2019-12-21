@@ -1,4 +1,4 @@
-package SpaceInvader;
+package SpaceInvader.Sprites;
 
 import java.awt.Point;
 

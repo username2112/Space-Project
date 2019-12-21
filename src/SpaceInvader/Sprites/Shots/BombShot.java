@@ -1,6 +1,9 @@
-package SpaceInvader;
+package SpaceInvader.Sprites.Shots;
 
 import javax.swing.ImageIcon;
+
+import SpaceInvader.ImagePaths;
+import SpaceInvader.Sprites.Sprite;
 
 public class BombShot extends Sprite{
 	 private final String shotImg = ImagePaths.getBombcPath();

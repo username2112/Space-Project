@@ -1,8 +1,11 @@
-package SpaceInvader;
+package SpaceInvader.Sprites;
 
 import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
+
+import SpaceInvader.Commons;
+import SpaceInvader.ImagePaths;
 
 public class Player extends Sprite implements Commons {
 

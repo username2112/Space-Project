@@ -1,6 +1,10 @@
-package SpaceInvader;
+package SpaceInvader.Sprites.Shots;
 
 import javax.swing.ImageIcon;
+
+import SpaceInvader.Commons;
+import SpaceInvader.ImagePaths;
+import SpaceInvader.Sprites.Sprite;
 
 public class Shot extends Sprite {
 

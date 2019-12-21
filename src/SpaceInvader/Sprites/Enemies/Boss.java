@@ -1,8 +1,13 @@
-package SpaceInvader;
+package SpaceInvader.Sprites.Enemies;
 
 import java.util.Random;
 
 import javax.swing.ImageIcon;
+
+import SpaceInvader.Commons;
+import SpaceInvader.GameBoard;
+import SpaceInvader.ImagePaths;
+import SpaceInvader.Sprites.Sprite;
 
 @SuppressWarnings("unused")
 public class Boss extends Sprite {

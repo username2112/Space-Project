@@ -1,6 +1,8 @@
-package SpaceInvader;
+package SpaceInvader.Sprites;
 
 import javax.swing.ImageIcon;
+
+import SpaceInvader.ImagePaths;
 
 public class Title extends Sprite {
 
