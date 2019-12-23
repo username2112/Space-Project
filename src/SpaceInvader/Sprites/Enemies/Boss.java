@@ -1,8 +1,13 @@
-package SpaceInvader;
+package SpaceInvader.Sprites.Enemies;
 
 import java.util.Random;
 
 import javax.swing.ImageIcon;
+
+import SpaceInvader.GameBoard;
+import SpaceInvader.Sprites.Sprite;
+import SpaceInvader.Systems.Commons;
+import SpaceInvader.Systems.ImagePaths;
 
 @SuppressWarnings("unused")
 public class Boss extends Sprite {
@@ -32,7 +37,7 @@ public class Boss extends Sprite {
 		Boss_Type = r.nextInt(2);
 		String bossImg = imgList[r.nextInt(imgList.length)];
 		bomb = new Bomb(x, y);
-
+		bossImg = imgList[1];
 		if (Boss_Type == 0) {
 			ImageIcon ii = new ImageIcon(bossImg);
 			setImage(ii.getImage());

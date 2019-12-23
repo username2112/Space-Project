@@ -1,23 +1,27 @@
-package SpaceInvader;
+package SpaceInvader.Sprites.Shots;
 
 import javax.swing.ImageIcon;
 
-public class BShotBomb extends Sprite {
+import SpaceInvader.Sprites.Sprite;
+import SpaceInvader.Systems.ImagePaths;
+
+public class BShot extends Sprite {
 
 	private final String shotImg = ImagePaths.getSBombPath();
 	private final int H_SPACE = 64;
 	private final int V_SPACE = 64;
 
-	public BShotBomb() {
+	public BShot() {
 	}
 
-	public BShotBomb(int x, int y) {
+	public BShot(int x, int y) {
 		initShot(x, y);
 		height = 16;
 		width = 16;
 	}
 
 	private void initShot(int x, int y) {
+
 		ImageIcon ii = new ImageIcon(shotImg);
 		setImage(ii.getImage());
 
