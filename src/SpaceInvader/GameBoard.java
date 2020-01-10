@@ -71,6 +71,8 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 
 	private Button bGame;
 	private Button highScores;
+	private Button ammo;
+	private Button health;
 	private Title title;
 	private Button menu;
 	// INITIAL VALUES
@@ -153,7 +155,20 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			public void mouseClicked(MouseEvent e) {
 				bGame.checkMouse(e.getPoint(), bGame);
 				highScores.checkMouse(e.getPoint(), highScores);
-								
+				
+				if(shopping) {
+					health.checkMouse(e.getPoint(), health);
+					ammo.checkMouse(e.getPoint(), ammo);
+					
+					if (health.isPressed) {
+						Plives = 3;
+					}
+					
+					if (ammo.isPressed) {
+						bombAmmo = 5;
+					}
+				}
+				
 				if (bGame.isPressed && (isRunning == false && inhs == false)) {
 					gameInit();
 
@@ -420,7 +435,19 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 		}
 
 	}
-
+	
+	public void drawAmmoBox(Graphics g) {
+		if (ammo.isVisible()) {
+			g.drawImage(ammo.getImage(), ammo.getX(), ammo.getY(), this);
+		}
+	}
+	
+	public void drawHealthBox(Graphics g) {
+		if (health.isVisible()) {
+			g.drawImage(health.getImage(), health.getX(), health.getY(), this);
+		}
+	}
+	
 	public void drawMenu(Graphics g) {
 		if (menu.isVisible()) {
 			g.drawImage(menu.getImage(), menu.getX(), menu.getY(), this);
@@ -478,6 +505,11 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			g.drawString("SHOP", BOARD_WIDTH / 2 - (metr.stringWidth("SHOP") / 2),  metr.getHeight() + 50);
 			
 			//draw buttons here
+			//TODO SOMETHING
+			health = new Button(BOARD_WIDTH / 2 - 64, BOARD_HEIGHT / 2 - 150, ImagePaths.getHealthPath());
+			ammo = new Button(BOARD_WIDTH / 2 - 64, BOARD_HEIGHT / 2, ImagePaths.getAmmoPath());
+			drawAmmoBox(g);
+			drawHealthBox(g);
 			
 			shopDrawn = true;
 		}
@@ -1058,9 +1090,10 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 		
 		Thread pause = new Thread(() -> {
 			try {
-				drawPause(g);
 				if(shopping) {
 					drawShop(g);
+				} else {
+					drawPause(g);
 				}
 				Thread.sleep(10);
 			} catch (InterruptedException e) {
@@ -1077,6 +1110,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 				animationCycle();
 				repaint();
 				pauseDrawn = false;
+				shopDrawn = false;
 			}
 			
 			// timE
@@ -1196,6 +1230,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 						paused = true;
 					} else {
 						paused = false;
+						shopping = false;
 					}
 					if(!player.isVisible()) {
 						SpaceProject.spaceProject.dispose();
@@ -1277,6 +1312,28 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 						SpaceProject.spaceProject.dispose();
 					}
 					
+					if (shopping) {
+						addMouseListener(new MouseAdapter() {
+							@Override
+							public void mouseClicked(MouseEvent e) {
+								bGame.checkMouse(e.getPoint(), bGame);
+								highScores.checkMouse(e.getPoint(), highScores);
+								
+								if(shopping) {
+									health.checkMouse(e.getPoint(), health);
+									ammo.checkMouse(e.getPoint(), ammo);
+									
+									if (health.isPressed) {
+										Plives = 3;
+									}
+									
+									if (ammo.isPressed) {
+										bombAmmo = 5;
+									}
+								}
+							}
+						});
+					}
 					
 				}
 			} catch(Exception ea) {
