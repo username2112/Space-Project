@@ -160,8 +160,10 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 					health.checkMouse(e.getPoint(), health);
 					ammo.checkMouse(e.getPoint(), ammo);
 					
+					//System.out.println(health.isPressed);	
 					if (health.isPressed) {
 						Plives = 3;
+						//System.out.println("c");
 					}
 					
 					if (ammo.isPressed) {
@@ -1311,30 +1313,24 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 					if (key == KeyEvent.VK_4) {
 						SpaceProject.spaceProject.dispose();
 					}
-					
-					if (shopping) {
+					/*
+					if(shopping) {
+						System.out.println("t");
 						addMouseListener(new MouseAdapter() {
-							@Override
-							public void mouseClicked(MouseEvent e) {
-								bGame.checkMouse(e.getPoint(), bGame);
-								highScores.checkMouse(e.getPoint(), highScores);
-								
-								if(shopping) {
-									health.checkMouse(e.getPoint(), health);
-									ammo.checkMouse(e.getPoint(), ammo);
-									
-									if (health.isPressed) {
-										Plives = 3;
-									}
-									
-									if (ammo.isPressed) {
-										bombAmmo = 5;
-									}
-								}
+						@Override
+						public void mouseClicked(MouseEvent e) {
+							health.checkMouse(e.getPoint(), health);
+							ammo.checkMouse(e.getPoint(), ammo);
+							if (health.isPressed) {
+								Plives = 3;
+								System.out.println("t");
+							}
+							
+							if (ammo.isPressed) {
+								bombAmmo = 5;								}
 							}
 						});
-					}
-					
+					}*/
 				}
 			} catch(Exception ea) {
 				//doesn't give us a bunch of errors when we press a key in the menu
