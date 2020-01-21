@@ -31,8 +31,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.sun.javafx.fxml.expression.Expression;
-
 import SpaceInvader.Sprites.Enemies.Alien;
 import SpaceInvader.Sprites.Enemies.Asteroid;
 import SpaceInvader.Sprites.Enemies.Boss;
@@ -612,7 +610,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			g.drawString("Aliens Remaining: " + aliencount, metr.stringWidth(message) - 100, GROUND + 70);
 			g.drawString("Score: " + deaths + "00", metr.stringWidth(message) - 100, GROUND + 50);
 			g.drawString("Level: " + level, metr.stringWidth(message) - 100, GROUND + 30);
-			g.drawString("FPS: " + DFPS, BOARD_WIDTH - metr.stringWidth(message), GROUND + 30);
+			g.drawString("FPS: " + FPS, BOARD_WIDTH - metr.stringWidth(message), GROUND + 30);
 			
 		}
 
@@ -1313,24 +1311,6 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 					if (key == KeyEvent.VK_4) {
 						SpaceProject.spaceProject.dispose();
 					}
-					/*
-					if(shopping) {
-						System.out.println("t");
-						addMouseListener(new MouseAdapter() {
-						@Override
-						public void mouseClicked(MouseEvent e) {
-							health.checkMouse(e.getPoint(), health);
-							ammo.checkMouse(e.getPoint(), ammo);
-							if (health.isPressed) {
-								Plives = 3;
-								System.out.println("t");
-							}
-							
-							if (ammo.isPressed) {
-								bombAmmo = 5;								}
-							}
-						});
-					}*/
 				}
 			} catch(Exception ea) {
 				//doesn't give us a bunch of errors when we press a key in the menu
