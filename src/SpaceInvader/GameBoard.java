@@ -68,7 +68,10 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 	private BombShot bombc;
 	private final int Blives_Init = 5;
 	public static int Blives = 5;
+	
 
+
+	private Background background1;
 	private Button bGame;
 	private Button highScores;
 	private Title title;
@@ -91,7 +94,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 	private boolean ingame = true; // MAIN LOOP VAR
 	private boolean inpause = true;
 	private boolean inhs = false;
-	private boolean isRunning = false;
+	private boolean isRunning = false; 
 	private int level; // LEVELS COMPLETED + 1
 	private int pausedI = 1;
 	private boolean paused = false;
@@ -349,6 +352,10 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 		
 	}
 	
+	public void drawBackgrounds(int startlocation) {
+		
+	}
+	
 	public void drawShot(Graphics g) {
 		if (shot.isVisible()) {
 			g.drawImage(shot.getImage(), shot.getX(), shot.getY(), this);
@@ -523,6 +530,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			drawBombC(g);
 			drawBombing(g);
 			drawBombAmmo(g);
+			//drawBackgrounds(650);
 			
 			if (level % 3 ==0) {
 				g.setColor(Color.gray);
