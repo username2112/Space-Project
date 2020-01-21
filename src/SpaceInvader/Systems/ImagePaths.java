@@ -8,7 +8,7 @@ public class ImagePaths {
 
 	private static String alienPath = "Hostiles\\alien.png";
 	private static String asteroidPath = "Hostiles\\Asteroid.png";
-	private static String bombPath = "Hostiles\\bomb.png"; //alien bomb
+	private static String bombPath = "Hostiles\\bomb.png"; // alien bomb
 	private static String boss0Path = "Hostiles\\Boss0.png";
 	private static String boss1Path = "Hostiles\\Boss1.png";
 	private static String boss2Path = "Hostiles\\Boss2.png";
@@ -19,6 +19,7 @@ public class ImagePaths {
 	private static String buttonPath = "Misc\\button.png";
 	private static String explosionPath = "Misc\\explosion.png";
 	private static String bombcPath = "Player\\bombc.png";
+
 	private static String ammoPath = "Misc\\ammokit.png";
 	private static String healthPath = "Misc\\healthbox.png";
 	
@@ -34,7 +35,13 @@ public class ImagePaths {
 		return imageFolderPath + healthPath;
 	}
 	
-	public static String getBombcPath() {
+  private static String backgroundPath = "Misc\\starsbg.png";
+
+	public static String getAlienPath() {
+		return imageFolderPath + alienPath;
+	}
+
+  public static String getBombcPath() {
 		return imageFolderPath + bombcPath;
 	}
 
@@ -45,7 +52,11 @@ public class ImagePaths {
 	public static String getExplosionPath() {
 		return imageFolderPath + explosionPath;
 	}
-	
+
+	public static String getBackgroundPath() {
+		return imageFolderPath + backgroundPath;
+	}
+
 	public static String getBombPath() {
 		return imageFolderPath + bombPath;
 	}
