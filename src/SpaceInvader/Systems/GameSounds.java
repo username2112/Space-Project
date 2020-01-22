@@ -13,7 +13,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 public class GameSounds {
 
 	public static String background = "src\\sound\\TTT.wav";
-	public static String shot = "src\\sound\\3543.wav";
+	public static String shot = "src\\sound\\Player shot.wav";
 
 	static Clip clip;
 
