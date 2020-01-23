@@ -43,6 +43,7 @@ import SpaceInvader.Sprites.Shots.Shot;
 import SpaceInvader.Systems.Commons;
 import SpaceInvader.Systems.GameSounds;
 import SpaceInvader.Systems.ImagePaths;
+import SpaceInvader.Background;
 
 public class GameBoard extends JPanel implements Runnable, Commons {
 
@@ -103,6 +104,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 	private int shopI;
 	private boolean shopDrawn;
 	private boolean shopping;
+	public Background background;
 	// TIME / FPS
 	private static long ST = System.currentTimeMillis(); // time at start of run
 	private static long time; // current time
@@ -271,6 +273,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 		shot = new Shot();
 		bshot = new BShot();
 		bombc = new BombShot();
+		background = new Background();
 		boss = new Boss(BOSS_INIT_X, BOSS_INIT_Y);
 
 		// idk why but boss doesn't have this by default
@@ -436,6 +439,19 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 
 	}
 	
+	public void drawBackground(Graphics g) { 
+			/*
+			j = 0;
+			for(int i = <array>.length; i >= 0; i--) {
+				temparray[j] = array[i];
+				j++;
+			}
+			return temparray[];
+			*/
+			g.drawImage(background.getImage(), Background.back1.getX(), Background.back1.getY(), this);
+			g.drawImage(background.getImage(), Background.back2.getX(), Background.back2.getY(), this);
+	}
+	
 	public void drawAmmoBox(Graphics g) {
 		if (ammo.isVisible()) {
 			g.drawImage(ammo.getImage(), ammo.getX(), ammo.getY(), this);
@@ -566,10 +582,12 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			} else {
 				DFPS = FPS;
 			}
+			
+			drawBackground(g);
+			
 			g.drawLine(0, GROUND, BOARD_WIDTH, GROUND);
 
 			// TODO DRAW
-
 			drawAliens(g);
 			drawAsteroid(g);
 			drawPlayer(g);
@@ -611,7 +629,6 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			g.drawString("Score: " + deaths + "00", metr.stringWidth(message) - 100, GROUND + 50);
 			g.drawString("Level: " + level, metr.stringWidth(message) - 100, GROUND + 30);
 			g.drawString("FPS: " + FPS, BOARD_WIDTH - metr.stringWidth(message), GROUND + 30);
-			
 		}
 
 		Toolkit.getDefaultToolkit().sync();
@@ -745,6 +762,8 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 
 			// boss
 			boss.act();
+			
+			background.act();
 			
 			// bomb consumable
 			if (bombc.isVisible()) {	
