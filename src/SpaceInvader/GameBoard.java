@@ -31,6 +31,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import SpaceInvader.Sprites.Background;
 import SpaceInvader.Sprites.Enemies.Alien;
 import SpaceInvader.Sprites.Enemies.Asteroid;
 import SpaceInvader.Sprites.Enemies.Boss;
@@ -43,7 +44,6 @@ import SpaceInvader.Sprites.Shots.Shot;
 import SpaceInvader.Systems.Commons;
 import SpaceInvader.Systems.GameSounds;
 import SpaceInvader.Systems.ImagePaths;
-import SpaceInvader.Background;
 
 public class GameBoard extends JPanel implements Runnable, Commons {
 
@@ -447,14 +447,6 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 	}
 	
 	public void drawBackground(Graphics g) { 
-			/*
-			j = 0;
-			for(int i = <array>.length; i >= 0; i--) {
-				temparray[j] = array[i];
-				j++;
-			}
-			return temparray[];
-			*/
 			g.drawImage(background.getImage(), Background.back1.getX(), Background.back1.getY(), this);
 			g.drawImage(background.getImage(), Background.back2.getX(), Background.back2.getY(), this);
 	}
