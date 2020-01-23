@@ -361,7 +361,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 		if (bombAmmo > -1) {
 			g.setColor(Color.black);
 			g.fillRect(BOARD_WIDTH / 2 - ((5 * 30) / 2) - 3, GROUND + 37, 30 * 5 + 6, 16);
-			g.setColor(Color.yellow);
+			g.setColor(Color.CYAN);
 			g.fillRect(BOARD_WIDTH / 2 - ((5 * 30) / 2), GROUND + 40, bombAmmo * 30, 10);
 			g.setColor(Color.black);
 			g.fillRect(BOARD_WIDTH / 2 - ((5 * 30) / 2) + 28, GROUND + 37, 5, 16);
@@ -553,7 +553,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 		// draw line on screen
 		g.setColor(Color.black);
 		g.fillRect(0, 0, d.width, d.height);
-		g.setColor(Color.green);
+		g.setColor(Color.CYAN);
 		if (inhs) {
 			// TODO
 			Font small = new Font("ZapfDingbats", Font.BOLD, 20);
