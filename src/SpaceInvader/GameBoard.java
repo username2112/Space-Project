@@ -67,7 +67,10 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 	private BombShot bombc;
 	private final int Blives_Init = 5;
 	public static int Blives = 5;
+	
 
+
+	private Background background1;
 	private Button bGame;
 	private Button highScores;
 	private Button ammo;
@@ -92,7 +95,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 	private boolean ingame = true; // MAIN LOOP VAR
 	private boolean inpause = true;
 	private boolean inhs = false;
-	private boolean isRunning = false;
+	private boolean isRunning = false; 
 	private int level; // LEVELS COMPLETED + 1
 	private int pausedI = 1;
 	private boolean paused = false;
@@ -358,7 +361,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 		if (bombAmmo > -1) {
 			g.setColor(Color.black);
 			g.fillRect(BOARD_WIDTH / 2 - ((5 * 30) / 2) - 3, GROUND + 37, 30 * 5 + 6, 16);
-			g.setColor(Color.yellow);
+			g.setColor(Color.CYAN);
 			g.fillRect(BOARD_WIDTH / 2 - ((5 * 30) / 2), GROUND + 40, bombAmmo * 30, 10);
 			g.setColor(Color.black);
 			g.fillRect(BOARD_WIDTH / 2 - ((5 * 30) / 2) + 28, GROUND + 37, 5, 16);
@@ -538,7 +541,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 		// draw line on screen
 		g.setColor(Color.black);
 		g.fillRect(0, 0, d.width, d.height);
-		g.setColor(Color.green);
+		g.setColor(Color.CYAN);
 		if (inhs) {
 			// TODO
 			Font small = new Font("ZapfDingbats", Font.BOLD, 20);
@@ -588,6 +591,7 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 			drawBombC(g);
 			drawBombing(g);
 			drawBombAmmo(g);
+			//drawBackgrounds(650);
 			
 			if (level % 3 ==0) {
 				g.setColor(Color.gray);
