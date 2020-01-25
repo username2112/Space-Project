@@ -372,10 +372,6 @@ public class GameBoard extends JPanel implements Runnable, Commons {
 		
 	}
 	
-	public void drawBackgrounds(int startlocation) {
-		
-	}
-	
 	public void drawShot(Graphics g) {
 		if (shot.isVisible()) {
 			g.drawImage(shot.getImage(), shot.getX(), shot.getY(), this);
