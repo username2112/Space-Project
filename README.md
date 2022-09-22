@@ -3,7 +3,7 @@ Space project is an AP Computer Science Special Topics game project attempting t
 
 if you are trying to download from the merge-requested branch then you will need to copy all the files present in that branch to the empty src of a java project and run space invader.
 
-if you have any asset submissions email Parker at either s-ivesp@bsd405.org or parker.school69@gmail.com
+if you have any asset submissions email Parker or Mohammed at either s-ivesp@bsd405.org or parker.school69@gmail.com or mohammedm78692@gmail.com
 
 	/* Dimentions for sprites:
 	 * player: 32 x 32
