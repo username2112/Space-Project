@@ -1,5 +1,5 @@
 # Space-Project
-Space project is an AP Computer Science Special Topics game project attempting to combine elements of both space invaders and bullet hell style of play with a player moving in all directions to avoid bullets while clearing waves of aliens in a space invaders style.
+Space project is a Computer Science Special Topics game project attempting to combine elements of both space invaders and bullet hell style of play with a player moving in all directions to avoid bullets while clearing waves of aliens in a space invaders style.
 
 if you are trying to download from the merge-requested branch then you will need to copy all the files present in that branch to the empty src of a java project and run space invader.
 
